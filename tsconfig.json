@@ -14,23 +14,20 @@
       "@app/*": [
         "app/*"
       ],
-      "@shared/*": [
-        "shared/*"
-      ],
-      "@entities/*": [
-        "entities/*"
-      ],
-      "@features/*": [
-        "features/*"
+      "@pages/*": [
+        "pages/*"
       ],
       "@widgets/*": [
         "widgets/*"
       ],
-      "@pages/*": [
-        "pages/*"
+      "@features/*": [
+        "features/*"
       ],
-      "@processes/*": [
-        "processes/*"
+      "@entities/*": [
+        "entities/*"
+      ],
+      "@shared/*": [
+        "shared/*"
       ]
     }
   }
