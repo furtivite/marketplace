@@ -25,7 +25,7 @@ export const Typography: React.FC<TypographyProps> = ({ children, as = 'div', ty
   return React.createElement(
     as,
     {
-      className: clsx('sans', typeClassMap[type], className),
+      className: clsx('sans', className, typeClassMap[type]),
       ...rest,
     },
     children,
