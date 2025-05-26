@@ -1,7 +1,10 @@
 import * as React from "react";
+import {Typography, TYPOGRAPHY_TYPES} from "../shared/ui/Typography";
 
-const App: React.FC = () => {
-  return <h1 className="text-3xl font-bold text-blue-600">Tailwind работает</h1>;
+export const App: React.FC = () => {
+  return (
+    <Typography type={TYPOGRAPHY_TYPES.H1} as="h1" className="text-primary-400">
+      Tailwind работает
+    </Typography>
+  );
 };
-
-export { App };
