@@ -14,13 +14,27 @@ const config: StorybookConfig = {
   docs: {
     autodocs: 'tag',
   },
-  viteFinal: (config) => {
+
+  viteFinal: async (config) => {
     config.resolve ??= {};
     config.resolve.alias = {
       ...(config.resolve.alias ?? {}),
       '@': resolve(__dirname, '../src'),
       '@shared': resolve(__dirname, '../src/shared'),
+      '@tools': resolve(__dirname, '../tools'),
     };
+
+    // @ts-expect-error tailwindcss is CommonJS with default export
+    const tailwindcss = (await import('tailwindcss')).default;
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const tailwindConfig = require('../tailwind.storybook.config.cjs');
+
+    config.css = {
+      postcss: {
+        plugins: [tailwindcss(tailwindConfig)],
+      },
+    };
+
     return config;
   },
 };
