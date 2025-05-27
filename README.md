@@ -1,54 +1,95 @@
-# React + TypeScript + Vite
+# 🛒 Marketplace
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A frontend platform built with **Vite + React + TypeScript**, following the **Feature-Sliced Design (FSD)** architecture. Styled using **Tailwind CSS v3** with a custom color palette and documented via **Storybook** with `autodocs`.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tech Stack
 
-## Expanding the ESLint configuration
+- **Vite** — blazing fast build tool and dev server
+- **React** + **TypeScript**
+- **Tailwind CSS v3** — utility-first styling with custom theming
+- **Feature-Sliced Design (FSD)** — scalable architecture pattern
+- **Storybook** with `autodocs` — interactive component documentation
+- **ESLint + Prettier** — consistent code formatting and linting
+- **Path Aliases** — clean and convenient module imports
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 📦 Installation
+
+```bash
+pnpm install
+# or
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🧪 Start the Dev Server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+pnpm dev
+# or
+npm run dev
 ```
+
+Runs at: [http://localhost:5173](http://localhost:5173)
+
+## 📘 Launch Storybook
+
+```bash
+pnpm storybook
+# or
+npm run storybook
+```
+
+Runs at: [http://localhost:6006](http://localhost:6006)
+
+---
+
+## 🧱 Project Structure
+
+```
+marketplace/
+├── app/            # Entry point, providers, routing
+├── shared/         # Reusable utils, components, types
+├── public/         # Static assets
+├── index.html      # HTML template
+└── vite.config.ts  # Vite + Tailwind configuration
+```
+
+---
+
+## 🖌 Tailwind Configuration
+
+Custom theme setup:
+
+- Colors are defined in `colors.cjs` (shades 100–900)
+- Extended typography styles
+- Tailwind setup in `vite.config.ts`:
+
+```ts
+css: {
+  postcss: {
+    plugins: [tailwindcss()],
+  },
+}
+```
+
+---
+
+## 🎯 Code Style Notes
+
+- Use `React.useX` syntax (`useState`, `useEffect`, etc.)
+- Use `clsx` for className merging
+- `Typography` defaults to `<div />`
+- MUI `Grid` v2 syntax: `size={{ xs: 12, sm: 6 }}`
+
+---
+
+## 📄 License
+
+Distributed under the **MIT** License. Feel free to use, modify, and distribute.
+
+---
+
+> _Crafted with 💙 for a modern, maintainable UI project._
