@@ -71,9 +71,9 @@ export default {
     "900": "#0C1024"
   },
   "white": {
+    "0": "#FFFFFF",
     "100": "#F6F6F6",
-    "200": "#E9E9EB",
-    "default": "#FFFFFF"
+    "200": "#E9E9EB"
   },
   "primary": {
     "100": "#E8EFFD",

@@ -31,10 +31,10 @@ export function Button(props: ButtonAsLinkProps | ButtonAsButtonProps) {
     'inline-flex items-center justify-center font-semibold rounded-[4px] transition-colors focus:outline-none disabled:opacity-50 disabled:pointer-events-none';
 
   const variants: Record<ButtonVariant, string> = {
-    default: 'bg-neutral-900 text-white hover:bg-neutral-800',
-    outline: 'border border-outline border-neutral-200 text-neutral-500 bg-white',
-    white: 'bg-white text-neutral-900',
-    'outline-black': 'border border-neutral-900 text-neutral-900 bg-white',
+    default: 'bg-neutral-900 text-white-0 hover:bg-neutral-800',
+    outline: 'border border-outline border-neutral-200 text-neutral-500 bg-white-0',
+    white: 'bg-white-0 text-neutral-900',
+    'outline-black': 'border border-neutral-900 text-neutral-900 bg-white-0',
   };
 
   const sizes = isSmall
