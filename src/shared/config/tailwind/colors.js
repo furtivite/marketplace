@@ -54,6 +54,7 @@ export const baseColors = {
         900: '#0C1024',
     },
     white: {
+        0: '#FFFFFF',
         100: '#F6F6F6',
         200: '#E9E9EB',
     },

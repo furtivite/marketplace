@@ -72,7 +72,8 @@ export default {
   },
   "white": {
     "100": "#F6F6F6",
-    "200": "#E9E9EB"
+    "200": "#E9E9EB",
+    "default": "#FFFFFF"
   },
   "primary": {
     "100": "#E8EFFD",
