@@ -16,7 +16,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
   return (
     <div className={clsx('flex flex-col gap-1', className)}>
       {label && (
-        <label htmlFor={inputId} className="text-sm font-medium text-neutral-500">
+        <label htmlFor={inputId} className="text-[14px] leading-[175%] font-medium text-neutral-500">
           {label}
         </label>
       )}
@@ -24,7 +24,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
         id={inputId}
         ref={ref}
         className={clsx(
-          'w-full rounded-md px-4 text-base text-neutral-800 placeholder-neutral-300 outline-none ring-1',
+          'w-full rounded-md px-4 text-[14px] leading-[175%] font-medium text-neutral-800 placeholder-neutral-300 outline-none ring-1',
           error
             ? 'ring-red-500 focus:ring-red-500'
             : 'ring-neutral-200 focus:ring-neutral-400',

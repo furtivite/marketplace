@@ -15,7 +15,7 @@ export const TextField = React.forwardRef<HTMLTextAreaElement, TextFieldProps>((
   return (
     <div className={clsx('flex flex-col gap-1', className)}>
       {label && (
-        <label htmlFor={textareaId} className="text-sm font-medium text-neutral-500">
+        <label htmlFor={textareaId} className="text-[14px] leading-[175%] font-medium text-neutral-500">
           {label}
         </label>
       )}
@@ -23,7 +23,7 @@ export const TextField = React.forwardRef<HTMLTextAreaElement, TextFieldProps>((
         id={textareaId}
         ref={ref}
         className={clsx(
-          'w-full rounded-md px-4 py-3 min-h-[128px] text-base text-neutral-800 placeholder-neutral-300 outline-none ring-1 resize-none',
+          'w-full rounded-md px-4 py-3 min-h-[128px] text-[14px] leading-[175%] font-medium text-neutral-800 placeholder-neutral-300 outline-none ring-1 resize-none',
           error
             ? 'ring-red-500 focus:ring-red-500'
             : 'ring-neutral-200 focus:ring-neutral-400',

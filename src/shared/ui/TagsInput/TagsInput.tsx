@@ -13,7 +13,7 @@ type TagsInputProps = {
 export const TagsInput: React.FC<TagsInputProps> = ({ label, error = false, tags, onRemove, className }) => {
   return (
     <div className={clsx('flex flex-col gap-1', className)}>
-      {label && <label className="text-sm font-medium text-neutral-500">{label}</label>}
+      {label && <label className="text-[14px] leading-[175%] font-medium text-neutral-500">{label}</label>}
       <div
         className={clsx(
           'w-full min-h-[45px] rounded-md px-4 py-3 text-base text-neutral-800 outline-none ring-1',
