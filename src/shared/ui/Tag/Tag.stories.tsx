@@ -8,6 +8,8 @@ const meta: Meta<typeof Tag> = {
   argTypes: {
     children: { control: 'text' },
     isSmall: { control: 'boolean' },
+    isFilled: { control: 'boolean' },
+    inInputWrapper: { control: 'boolean' },
     onRemove: { action: 'removed' },
   },
 };
@@ -19,6 +21,8 @@ export const Default: Story = {
   args: {
     children: 'Frontend',
     isSmall: false,
+    isFilled: false,
+    inInputWrapper: false,
   },
 };
 
@@ -26,5 +30,25 @@ export const Small: Story = {
   args: {
     children: 'UI/UX',
     isSmall: true,
+    isFilled: false,
+    inInputWrapper: false,
+  },
+};
+
+export const Filled: Story = {
+  args: {
+    children: 'TypeScript',
+    isSmall: false,
+    isFilled: true,
+    inInputWrapper: false,
+  },
+};
+
+export const InInputWrapper: Story = {
+  args: {
+    children: 'React',
+    isSmall: false,
+    isFilled: true,
+    inInputWrapper: true,
   },
 };
