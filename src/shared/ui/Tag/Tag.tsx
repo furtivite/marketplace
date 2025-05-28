@@ -10,7 +10,7 @@ interface TagProps extends React.HTMLAttributes<HTMLDivElement> {
   inInputWrapper?: boolean;
 }
 
-export const Tag = ({
+export const Tag: React.FC<TagProps> = ({
   children,
   onRemove,
   isSmall = false,
@@ -18,7 +18,7 @@ export const Tag = ({
   inInputWrapper = false,
   className,
   ...rest
-}: TagProps) => {
+}) => {
   return (
     <div
       tabIndex={0}
