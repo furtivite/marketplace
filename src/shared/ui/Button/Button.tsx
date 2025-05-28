@@ -18,7 +18,7 @@ type ButtonAsButtonProps = CommonProps & React.ButtonHTMLAttributes<HTMLButtonEl
   href?: undefined;
 };
 
-export function Button(props: ButtonAsLinkProps | ButtonAsButtonProps) {
+export const Button: React.FC<ButtonAsLinkProps | ButtonAsButtonProps> = (props) => {
   const {
     children,
     className,
