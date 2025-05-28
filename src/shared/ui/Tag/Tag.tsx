@@ -6,16 +6,28 @@ interface TagProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   onRemove: () => void;
   isSmall?: boolean;
+  isFilled?: boolean;
+  inInputWrapper?: boolean;
 }
 
-export const Tag = ({ children, onRemove, isSmall = false, className, ...rest }: TagProps) => {
+export const Tag = ({
+  children,
+  onRemove,
+  isSmall = false,
+  isFilled = false,
+  inInputWrapper = false,
+  className,
+  ...rest
+}: TagProps) => {
   return (
     <div
       tabIndex={0}
       className={clsx(
         'inline-flex items-center px-4 border rounded-full text-sm font-medium',
-        'border-neutral-200 text-neutral-900 hover:bg-neutral-100 transition-colors',
+        isFilled ? 'bg-neutral-200' : 'hover:bg-neutral-100',
+        'border-neutral-200 text-neutral-900 transition-colors',
         isSmall ? 'h-9' : 'h-11',
+        inInputWrapper && 'max-h-[103px]',
         className,
       )}
       {...rest}
