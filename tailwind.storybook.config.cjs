@@ -7,9 +7,12 @@ module.exports = {
     './.storybook/**/*.{ts,tsx}',
   ],
   safelist: [
-    { pattern: /bg-(primary|outline)-[1-9]00/ },
-    { pattern: /text-(primary|outline)-[1-9]00/ },
-    { pattern: /border-(primary|outline)-[1-9]00/ },
+    { pattern: /^(bg|text|border|fill)-(yellow|red|green|blue|neutral|white|primary)-(100|200|300|400|500|600|700|800|900)$/ },
+    { pattern: /^(bg|text|border|fill)-white-0$/ },
+    { pattern: /^(top|bottom|left|right)-0$/ },
+    { pattern: /^(top|left|right)-1\/2$/ },
+    { pattern: /^-?translate-(x|y)-(full|1\/2)$/ },
+    { pattern: /^m[trbl]-2$/ },
   ],
   theme: {
     extend: {
