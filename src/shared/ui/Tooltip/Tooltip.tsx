@@ -1,3 +1,4 @@
+// Tooltip.tsx
 import * as React from 'react';
 import clsx from 'clsx';
 
@@ -8,11 +9,18 @@ interface TooltipProps {
   text: string;
   position?: Position;
   adaptive?: boolean;
+  insetArrow?: boolean;
 }
 
 let tooltipIdCounter = 0;
 
-export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = 'top', adaptive = true }) => {
+export const Tooltip: React.FC<TooltipProps> = ({
+                                                  children,
+                                                  text,
+                                                  position = 'top',
+                                                  adaptive = true,
+                                                  insetArrow = false,
+                                                }) => {
   const [visible, setVisible] = React.useState(false);
   const [actualPosition, setActualPosition] = React.useState<Position>(position);
   const [measured, setMeasured] = React.useState(false);
@@ -29,14 +37,14 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = 'to
 
       const containerRect = containerRef.current.getBoundingClientRect();
       const tooltipRect = tooltipRef.current.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
       const space = {
         top: containerRect.top,
-        bottom: viewportHeight - containerRect.bottom,
+        bottom: vh - containerRect.bottom,
         left: containerRect.left,
-        right: viewportWidth - containerRect.right,
+        right: vw - containerRect.right,
       };
 
       const fits: Record<Position, boolean> = {
@@ -47,23 +55,17 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = 'to
       };
 
       const fallbackMap = {
-        top: ['bottom', 'left', 'right'],
+        top:    ['bottom', 'left', 'right'],
         bottom: ['top', 'left', 'right'],
-        left: ['right', 'top', 'bottom'],
-        right: ['left', 'top', 'bottom'],
+        left:   ['right', 'top', 'bottom'],
+        right:  ['left', 'top', 'bottom'],
       } as const;
 
-      const fallbackOrder = fallbackMap[position];
+      const alt = adaptive && !fits[position]
+        ? (fallbackMap[position].find(p => fits[p]) as Position)
+        : position;
 
-      if (!adaptive) {
-        setActualPosition(position);
-      } else if (!fits[position]) {
-        const fallback = fallbackOrder.find((p) => fits[p]);
-        setActualPosition(fallback ?? position);
-      } else {
-        setActualPosition(position);
-      }
-
+      setActualPosition(alt);
       setMeasured(true);
     });
 
@@ -72,34 +74,52 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = 'to
 
   const arrowBase = 'absolute w-0 h-0 border-8 border-transparent';
 
-  const arrowPosition = {
-    top: 'top-full left-4 border-t-gray-900',
-    bottom: 'bottom-full left-4 border-b-gray-900',
-    left: 'left-full top-2 border-l-gray-900',
-    right: 'right-full top-2 border-r-gray-900',
-  }[actualPosition];
+  const arrowInside: Record<Position, string> = {
+    top:    '-bottom-4 left-1/2 -translate-x-1/2 border-t-gray-900',
+    bottom: 'top-0 left-1/2 -translate-x-1/2 border-b-gray-900',
+    left:   'right-0 top-1/2 -translate-y-1/2 border-l-gray-900',
+    right:  'left-0 top-1/2 -translate-y-1/2 border-r-gray-900',
+  };
 
-  const tooltipPosition = {
-    top: 'top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-2',
-    bottom: 'bottom-0 left-1/2 -translate-x-1/2 translate-y-full mt-2',
-    left: 'left-0 top-1/2 -translate-x-full -translate-y-1/2 mr-2',
-    right: 'right-0 top-1/2 translate-x-full -translate-y-1/2 ml-2',
-  }[actualPosition];
+  const arrowOutside: Record<Position, string> = {
+    top:    'top-full left-1/2 -translate-x-1/2 border-t-gray-900',
+    bottom: 'bottom-full left-1/2 -translate-x-1/2 border-b-gray-900',
+    left:   'left-full top-1/2 -translate-y-1/2 border-l-gray-900',
+    right:  'right-full top-1/2 -translate-y-1/2 border-r-gray-900',
+  };
+
+  const arrowPosition = insetArrow
+    ? arrowInside[actualPosition]
+    : arrowOutside[actualPosition];
+
+  const tooltipPosition: Record<Position, string> = {
+    top:    insetArrow ? '-top-2 left-1/2 -translate-x-1/2 -translate-y-full' : 'top-0 left-1/2 -translate-x-1/2 -translate-y-full',
+    bottom: 'bottom-0 left-1/2 -translate-x-1/2 translate-y-full',
+    left:   'left-0 top-1/2 -translate-x-full -translate-y-1/2',
+    right:  'right-0 top-1/2 translate-x-full -translate-y-1/2',
+  };
 
   return (
     <div
-      className="relative inline-block"
+      className={clsx(
+        'relative',
+        insetArrow ? 'w-full' : 'inline-block'
+      )}
       ref={containerRef}
       onMouseEnter={() => {
         setMeasured(false);
         setVisible(true);
       }}
-      onMouseLeave={() => setVisible(false)}
+      onMouseLeave={() => {
+        setVisible(false);
+      }}
       onFocus={() => {
         setMeasured(false);
         setVisible(true);
       }}
-      onBlur={() => setVisible(false)}
+      onBlur={() => {
+        setVisible(false);
+      }}
       aria-describedby={tooltipId.current}
       tabIndex={0}
     >
@@ -110,8 +130,8 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = 'to
           id={tooltipId.current}
           ref={tooltipRef}
           className={clsx(
-            'absolute z-10 px-3 py-1 text-sm text-white-0 bg-gray-900 rounded shadow transition-opacity duration-200 max-w-[420px] w-max',
-            measured ? tooltipPosition : 'invisible'
+            'absolute z-10 px-3 py-1 text-sm text-white-0 bg-gray-900 rounded shadow max-w-[420px] w-max',
+            measured ? tooltipPosition[actualPosition] : 'invisible'
           )}
         >
           {text}
