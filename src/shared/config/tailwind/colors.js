@@ -41,6 +41,7 @@ export const baseColors = {
         600: '#5E8CF3',
         700: '#477CF1',
         800: '#306CEF',
+        900: '#4078FF',
     },
     neutral: {
         100: '#E6E7E8',
