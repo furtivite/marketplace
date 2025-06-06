@@ -13,6 +13,9 @@ module.exports = {
     { pattern: /^(top|left|right)-1\/2$/ },
     { pattern: /^-?translate-(x|y)-(full|1\/2)$/ },
     { pattern: /^m[trbl]-2$/ },
+    'w-full',
+    'w-max',
+    'max-w-[420px]',
   ],
   theme: {
     extend: {
