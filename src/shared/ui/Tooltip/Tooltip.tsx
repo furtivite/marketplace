@@ -1,21 +1,82 @@
 import * as React from 'react';
 import clsx from 'clsx';
 
+type Position = 'top' | 'bottom' | 'left' | 'right';
+
 interface TooltipProps {
   children: React.ReactNode;
   text: string;
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  position?: Position;
 }
 
 let tooltipIdCounter = 0;
 
 export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = 'top' }) => {
   const [visible, setVisible] = React.useState(false);
+  const [actualPosition, setActualPosition] = React.useState<Position>(position);
+  const tooltipRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const tooltipId = React.useRef(`tooltip-${++tooltipIdCounter}`);
+
+  React.useEffect(() => {
+    if (!visible || !tooltipRef.current || !containerRef.current) return;
+
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const tooltipRect = tooltipRef.current.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    const space = {
+      top: containerRect.top,
+      bottom: viewportHeight - containerRect.bottom,
+      left: containerRect.left,
+      right: viewportWidth - containerRect.right,
+    };
+
+    const fits: Record<Position, boolean> = {
+      top: space.top >= tooltipRect.height + 8,
+      bottom: space.bottom >= tooltipRect.height + 8,
+      left: space.left >= tooltipRect.width + 8,
+      right: space.right >= tooltipRect.width + 8,
+    };
+
+    const fallbackMap = {
+      top: ['bottom', 'left', 'right'],
+      bottom: ['top', 'left', 'right'],
+      left: ['right', 'top', 'bottom'],
+      right: ['left', 'top', 'bottom'],
+    } as const;
+
+    const fallbackOrder = fallbackMap[position];
+
+    if (!fits[position]) {
+      const fallback = fallbackOrder.find((p) => fits[p]);
+      if (fallback) setActualPosition(fallback);
+    } else {
+      setActualPosition(position);
+    }
+  }, [visible, position]);
+
+  const arrowBase = 'absolute w-0 h-0 border-8 border-transparent';
+
+  const arrowPosition = {
+    top: 'top-full left-4 border-t-gray-900',
+    bottom: 'bottom-full left-4 border-b-gray-900',
+    left: 'left-full top-2 border-l-gray-900',
+    right: 'right-full top-2 border-r-gray-900',
+  }[actualPosition];
+
+  const tooltipPosition = {
+    top: 'top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-2',
+    bottom: 'bottom-0 left-1/2 -translate-x-1/2 translate-y-full mt-2',
+    left: 'left-0 top-1/2 -translate-x-full -translate-y-1/2 mr-2',
+    right: 'right-0 top-1/2 translate-x-full -translate-y-1/2 ml-2',
+  }[actualPosition];
 
   return (
     <div
       className="relative inline-block"
+      ref={containerRef}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
       onFocus={() => setVisible(true)}
@@ -28,22 +89,14 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = 'to
         <div
           role="tooltip"
           id={tooltipId.current}
+          ref={tooltipRef}
           className={clsx(
-            'absolute z-10 px-3 py-1 text-sm text-white-0 bg-gray-900 rounded shadow transition-opacity duration-200',
-            {
-              'top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-2 after:top-full after:left-1/2 after:-translate-x-1/2 after:border-t-gray-900':
-                position === 'top',
-              'bottom-0 left-1/2 -translate-x-1/2 translate-y-full mt-2 after:bottom-full after:left-1/2 after:-translate-x-1/2 after:border-b-gray-900':
-                position === 'bottom',
-              'left-0 top-1/2 -translate-x-full -translate-y-1/2 mr-2 after:left-full after:top-1/2 after:-translate-y-1/2 after:border-l-gray-900':
-                position === 'left',
-              'right-0 top-1/2 translate-x-full -translate-y-1/2 ml-2 after:right-full after:top-1/2 after:-translate-y-1/2 after:border-r-gray-900':
-                position === 'right',
-            },
-            'after:content-[" "] after:absolute after:border-8 after:border-transparent'
+            'absolute z-10 px-3 py-1 text-sm text-white-0 bg-gray-900 rounded shadow transition-opacity duration-200 max-w-[420px] w-max',
+            tooltipPosition
           )}
         >
           {text}
+          <span className={clsx(arrowBase, arrowPosition)} />
         </div>
       )}
     </div>
