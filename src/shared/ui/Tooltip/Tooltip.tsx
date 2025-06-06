@@ -72,7 +72,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
   }, [visible, position, adaptive]);
 
   const baseArrow = 'absolute w-0 h-0 border-8 border-transparent';
-  const edgeOffset = '-ml-[1px]'; // or -mr-[1px] depending on direction
 
   const arrow = {
     top: 'top-full left-1/2 -translate-x-1/2 border-t-gray-900',
