@@ -24,7 +24,7 @@ export const Avatar: React.FC<AvatarProps> = ({ name, surname, image, type = 'ci
       {...rest}
     >
       {image ? (
-        <img src={image} alt={alt} className={clsx('w-full h-full object-cover', shapeClass)} />
+        <img src={image} alt={alt} width={48} height={48} className={clsx('object-cover', shapeClass)} />
       ) : (
         <span>{initials}</span>
       )}
