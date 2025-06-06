@@ -29,7 +29,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = 'to
           role="tooltip"
           id={tooltipId.current}
           className={clsx(
-            'absolute z-10 px-3 py-1 text-sm text-white bg-gray-900 rounded shadow transition-opacity duration-200',
+            'absolute z-10 px-3 py-1 text-sm text-white-0 bg-gray-900 rounded shadow transition-opacity duration-200',
             {
               'top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-2 after:top-full after:left-1/2 after:-translate-x-1/2 after:border-t-gray-900':
                 position === 'top',
