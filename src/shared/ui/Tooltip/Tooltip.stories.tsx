@@ -8,13 +8,6 @@ const meta: Meta<typeof Tooltip> = {
   args: {
     text: 'Tooltip text',
     position: 'top',
-    adaptive: true,
-  },
-  argTypes: {
-    adaptive: {
-      control: 'boolean',
-      defaultValue: true,
-    },
   },
 };
 
@@ -22,48 +15,33 @@ export default meta;
 type Story = StoryObj<typeof Tooltip>;
 
 export const Top: Story = {
-  render: (args) => (
-    <div className="flex justify-center w-full">
-      <Tooltip {...args}>
-        <button className="p-2 bg-blue-500 text-white rounded">Hover me</button>
-      </Tooltip>
-    </div>
-  ),
+  args: {
+    position: 'top',
+    children: <button className="p-2 bg-blue-500 text-white-0 rounded">Hover me</button>,
+  },
 };
 
 export const Bottom: Story = {
-  render: (args) => (
-    <div className="flex justify-center w-full">
-      <Tooltip {...args}>
-        <button className="p-2 bg-blue-500 text-white rounded">Hover me</button>
-      </Tooltip>
-    </div>
-  ),
+  args: {
+    position: 'bottom',
+    children: <button className="p-2 bg-blue-500 text-white-0 rounded">Hover me</button>,
+  },
 };
 
 export const Left: Story = {
-  render: (args) => (
-    <div className="flex justify-end w-full pl-36">
-      <Tooltip {...args}>
-        <button className="p-2 bg-blue-500 text-white rounded">Hover me</button>
-      </Tooltip>
-    </div>
-  ),
   args: {
     position: 'left',
-    adaptive: false,
+    children: (
+      <div className="w-full min-w-96 flex justify-end pl-24">
+        <button className="p-2 bg-blue-500 text-white-0 rounded">Hover me</button>
+      </div>
+    ),
   },
 };
 
 export const Right: Story = {
-  render: (args) => (
-    <div className="flex justify-center w-full">
-      <Tooltip {...args}>
-        <button className="p-2 bg-blue-500 text-white rounded">Hover me</button>
-      </Tooltip>
-    </div>
-  ),
   args: {
     position: 'right',
+    children: <button className="p-2 bg-blue-500 text-white-0 rounded">Hover me</button>,
   },
 };
