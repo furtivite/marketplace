@@ -1,4 +1,3 @@
-// Tooltip.tsx
 import * as React from 'react';
 import clsx from 'clsx';
 
@@ -54,72 +53,64 @@ export const Tooltip: React.FC<TooltipProps> = ({
         right: space.right >= tooltipRect.width + 8,
       };
 
-      const fallbackMap = {
-        top:    ['bottom', 'left', 'right'],
+      const fallbackMap: Record<Position, Position[]> = {
+        top: ['bottom', 'left', 'right'],
         bottom: ['top', 'left', 'right'],
-        left:   ['right', 'top', 'bottom'],
-        right:  ['left', 'top', 'bottom'],
-      } as const;
+        left: ['right', 'top', 'bottom'],
+        right: ['left', 'top', 'bottom'],
+      };
 
-      const alt = adaptive && !fits[position]
-        ? (fallbackMap[position].find(p => fits[p]) as Position)
+      const resolved = adaptive && !fits[position]
+        ? fallbackMap[position].find(p => fits[p]) ?? position
         : position;
 
-      setActualPosition(alt);
+      setActualPosition(resolved);
       setMeasured(true);
     });
 
     return () => cancelAnimationFrame(id);
   }, [visible, position, adaptive]);
 
-  const arrowBase = 'absolute w-0 h-0 border-8 border-transparent';
+  const baseArrow = 'absolute w-0 h-0 border-8 border-transparent';
+  const edgeOffset = '-ml-[1px]'; // or -mr-[1px] depending on direction
 
-  const arrowInside: Record<Position, string> = {
-    top:    '-bottom-4 left-1/2 -translate-x-1/2 border-t-gray-900',
-    bottom: 'top-0 left-1/2 -translate-x-1/2 border-b-gray-900',
-    left:   'right-0 top-1/2 -translate-y-1/2 border-l-gray-900',
-    right:  'left-0 top-1/2 -translate-y-1/2 border-r-gray-900',
-  };
-
-  const arrowOutside: Record<Position, string> = {
-    top:    'top-full left-1/2 -translate-x-1/2 border-t-gray-900',
+  const arrow = {
+    top: 'top-full left-1/2 -translate-x-1/2 border-t-gray-900',
     bottom: 'bottom-full left-1/2 -translate-x-1/2 border-b-gray-900',
-    left:   'left-full top-1/2 -translate-y-1/2 border-l-gray-900',
-    right:  'right-full top-1/2 -translate-y-1/2 border-r-gray-900',
+    left: 'left-full top-1/2 -translate-y-1/2 border-l-gray-900 -ml-[1px]',
+    right: 'right-full top-1/2 -translate-y-1/2 border-r-gray-900 -mr-[1px]',
   };
 
-  const arrowPosition = insetArrow
-    ? arrowInside[actualPosition]
-    : arrowOutside[actualPosition];
+  const arrowInset = {
+    top: '-bottom-4 left-1/2 -translate-x-1/2 border-t-gray-900',
+    bottom: 'top-0 left-1/2 -translate-x-1/2 border-b-gray-900',
+    left: 'right-0 top-1/2 -translate-y-1/2 border-l-gray-900',
+    right: 'left-0 top-1/2 -translate-y-1/2 border-r-gray-900',
+  };
 
-  const tooltipPosition: Record<Position, string> = {
-    top:    insetArrow ? '-top-2 left-1/2 -translate-x-1/2 -translate-y-full' : 'top-0 left-1/2 -translate-x-1/2 -translate-y-full',
+  const tooltipPos: Record<Position, string> = {
+    top: insetArrow
+      ? '-top-2 left-1/2 -translate-x-1/2 -translate-y-full'
+      : 'top-0 left-1/2 -translate-x-1/2 -translate-y-full',
     bottom: 'bottom-0 left-1/2 -translate-x-1/2 translate-y-full',
-    left:   'left-0 top-1/2 -translate-x-full -translate-y-1/2',
-    right:  'right-0 top-1/2 translate-x-full -translate-y-1/2',
+    left: 'left-0 top-1/2 -translate-x-full -translate-y-1/2',
+    right: 'right-0 top-1/2 translate-x-full -translate-y-1/2',
   };
 
   return (
     <div
-      className={clsx(
-        'relative',
-        insetArrow ? 'w-full' : 'inline-block'
-      )}
+      className={clsx('relative', insetArrow ? 'w-full' : 'inline-block')}
       ref={containerRef}
       onMouseEnter={() => {
         setMeasured(false);
         setVisible(true);
       }}
-      onMouseLeave={() => {
-        setVisible(false);
-      }}
+      onMouseLeave={() => setVisible(false)}
       onFocus={() => {
         setMeasured(false);
         setVisible(true);
       }}
-      onBlur={() => {
-        setVisible(false);
-      }}
+      onBlur={() => setVisible(false)}
       aria-describedby={tooltipId.current}
       tabIndex={0}
     >
@@ -131,11 +122,16 @@ export const Tooltip: React.FC<TooltipProps> = ({
           ref={tooltipRef}
           className={clsx(
             'absolute z-10 px-3 py-1 text-sm text-white-0 bg-gray-900 rounded shadow max-w-[420px] w-max',
-            measured ? tooltipPosition[actualPosition] : 'invisible'
+            measured ? tooltipPos[actualPosition] : 'invisible'
           )}
         >
           {text}
-          <span className={clsx(arrowBase, arrowPosition)} />
+          <span
+            className={clsx(
+              baseArrow,
+              insetArrow ? arrowInset[actualPosition] : arrow[actualPosition]
+            )}
+          />
         </div>
       )}
     </div>
