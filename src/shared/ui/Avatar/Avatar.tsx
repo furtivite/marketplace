@@ -22,13 +22,17 @@ export const Avatar: React.FC<AvatarProps> = ({ name, surname, image, type = 'ci
         shapeClass,
         className,
       )}
+      aria-label={alt}
       {...rest}
     >
       {image ? (
-        <img src={image} alt={alt} width={48} height={48} className={clsx('object-cover', shapeClass)} />
+        <img src={image} alt='' width={48} height={48} className={clsx('object-cover', shapeClass)} />
       ) : (
-        <Typography type={TYPOGRAPHY_TYPES.BODY_REGULAR} as='span'>{initials}</Typography>
+        <Typography type={TYPOGRAPHY_TYPES.BODY_REGULAR} as="span" aria-hidden="true">
+          {initials}
+        </Typography>
       )}
     </div>
   );
 };
+
