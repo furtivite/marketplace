@@ -1,10 +1,12 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
 
 import CheckIcon from '@/shared/assets/icons/check.svg?react';
 import InfoIcon from '@/shared/assets/icons/info.svg?react';
 import WarningIcon from '@/shared/assets/icons/warning.svg?react';
 import CloseIcon from '@/shared/assets/icons/close.svg?react';
+
 
 type AlertType = 'error' | 'success' | 'info';
 
@@ -82,7 +84,7 @@ export const Alert: React.FC<AlertProps> = ({
           })}
         />
       </span>
-      <span className="flex-1 text-sm">{message}</span>
+      <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} as='span' className={'flex-1'}>{message}</Typography>
       <button
         className={clsx(
           'ml-3 p-1 rounded focus:outline-none focus-visible:ring-2 transition',
