@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { NotificationBar } from './NotificationBar.tsx';
 
 const meta: Meta<typeof NotificationBar> = {
-  title: 'Widgets/Header/NotificationBar',
+  title: 'Widgets/Layout/NotificationBar',
   component: NotificationBar,
   tags: ['autodocs'],
 };
