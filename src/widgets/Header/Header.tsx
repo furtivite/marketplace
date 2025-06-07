@@ -6,6 +6,7 @@ import { HeaderMenu } from './ui/HeaderMenu';
 
 import CartIcon from '../../shared/assets/icons/cart.svg?react';
 import UserIcon from '../../shared/assets/icons/user.svg?react';
+import SearchIcon from '../../shared/assets/icons/search.svg?react';
 
 
 export const Header: React.FC = () => {
@@ -18,7 +19,10 @@ export const Header: React.FC = () => {
         </div>
 
         <div className="flex justify-end items-center gap-8">
-          <Input placeholder="Search products" />
+          <Input
+            placeholder="Search products"
+            startIcon={<SearchIcon className="w-5 h-5 text-neutral-400" />}
+          />
           <a href="/cart" aria-label="Cart">
             <CartIcon className="w-6 h-6 text-neutral-700 hover:text-primary-700" />
           </a>
