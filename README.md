@@ -1,95 +1,78 @@
-# 🛒 Marketplace
+# Marketplace Project
 
-A frontend platform built with **Vite + React + TypeScript**, following the **Feature-Sliced Design (FSD)** architecture. Styled using **Tailwind CSS v3** with a custom color palette and documented via **Storybook** with `autodocs`.
+This project is a React-based frontend application using TypeScript, Tailwind CSS, and Storybook for UI component development and testing.
 
----
+## Prerequisites
 
-## 🚀 Tech Stack
+- Node.js (v16 or newer recommended)
+- npm or yarn package manager
 
-- **Vite** — blazing fast build tool and dev server
-- **React** + **TypeScript**
-- **Tailwind CSS v3** — utility-first styling with custom theming
-- **Feature-Sliced Design (FSD)** — scalable architecture pattern
-- **Storybook** with `autodocs` — interactive component documentation
-- **ESLint + Prettier** — consistent code formatting and linting
-- **Path Aliases** — clean and convenient module imports
+## Installation
 
----
-
-## 📦 Installation
+Clone the repository and install dependencies:
 
 ```bash
-pnpm install
-# or
+git clone <repo-url>
+cd marketplace
 npm install
+# or
+yarn install
 ```
 
-## 🧪 Start the Dev Server
+## Running the Demo
+
+To start the demo application in development mode with hot reloading:
 
 ```bash
-pnpm dev
-# or
 npm run dev
+# or
+yarn dev
 ```
 
-Runs at: [http://localhost:5173](http://localhost:5173)
+Open your browser at [http://localhost:3000](http://localhost:3000) (or the port shown in terminal).
 
-## 📘 Launch Storybook
+## Running Storybook
+
+Storybook is used to browse and test UI components in isolation.
 
 ```bash
-pnpm storybook
-# or
 npm run storybook
+# or
+yarn storybook
 ```
 
-Runs at: [http://localhost:6006](http://localhost:6006)
+Then open [http://localhost:6006](http://localhost:6006).
 
----
+## Building for Production
 
-## 🧱 Project Structure
+To build the production-ready demo app:
 
-```
-marketplace/
-├── app/            # Entry point, providers, routing
-├── shared/         # Reusable utils, components, types
-├── public/         # Static assets
-├── index.html      # HTML template
-└── vite.config.ts  # Vite + Tailwind configuration
+```bash
+npm run build
+# or
+yarn build
 ```
 
----
+## Running Production Build Locally
 
-## 🖌 Tailwind Configuration
+To preview the production build locally:
 
-Custom theme setup:
-
-- Colors are defined in `colors.cjs` (shades 100–900)
-- Extended typography styles
-- Tailwind setup in `vite.config.ts`:
-
-```ts
-css: {
-  postcss: {
-    plugins: [tailwindcss()],
-  },
-}
+```bash
+npm run preview
+# or
+yarn preview
 ```
 
----
+## Project Structure
 
-## 🎯 Code Style Notes
+- `src/` — source code including React components, hooks, and styles
+- `public/` — static assets
+- `.storybook/` — Storybook config files
 
-- Use `React.useX` syntax (`useState`, `useEffect`, etc.)
-- Use `clsx` for className merging
-- `Typography` defaults to `<div />`
-- MUI `Grid` v2 syntax: `size={{ xs: 12, sm: 6 }}`
+## Technologies
 
----
-
-## 📄 License
-
-Distributed under the **MIT** License. Feel free to use, modify, and distribute.
-
----
-
-> _Crafted with 💙 for a modern, maintainable UI project._
+- React 18
+- TypeScript
+- Tailwind CSS
+- Storybook
+- Vite (build tool and dev server)
