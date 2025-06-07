@@ -1,16 +1,7 @@
 import * as React from 'react';
 import { Typography, TYPOGRAPHY_TYPES } from '../../../../shared/ui/Typography';
 import { Container } from '../../../../shared/ui/Container';
-
-type LinkType = {
-  text: string;
-  href: string;
-};
-
-type SpecialOfferProps = {
-  text: string;
-  link?: LinkType;
-};
+import type { SpecialOfferProps } from '../types';
 
 export const NotificationBar: React.FC<SpecialOfferProps> = ({ text, link }) => {
   return (
