@@ -1,5 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
 
 type Position = 'top' | 'bottom' | 'left' | 'right';
 
@@ -113,7 +114,9 @@ export const Tooltip: React.FC<TooltipProps> = ({
       aria-describedby={tooltipId.current}
       tabIndex={0}
     >
-      {children}
+      <Typography as="div" type={TYPOGRAPHY_TYPES.LABEL}>
+        {children}
+      </Typography>
       {visible && (
         <div
           role="tooltip"
