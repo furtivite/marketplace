@@ -1,16 +1,15 @@
-// src/widgets/Header/ui/SpecialOffer.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
-import { SpecialOffer } from './SpecialOffer';
+import { NotificationBar } from './NotificationBar.tsx';
 
-const meta: Meta<typeof SpecialOffer> = {
-  title: 'Widgets/Header/SpecialOffer',
-  component: SpecialOffer,
+const meta: Meta<typeof NotificationBar> = {
+  title: 'Widgets/Header/NotificationBar',
+  component: NotificationBar,
   tags: ['autodocs'],
 };
 
 export default meta;
 
-type Story = StoryObj<typeof SpecialOffer>;
+type Story = StoryObj<typeof NotificationBar>;
 
 export const TextOnly: Story = {
   args: {

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Typography, TYPOGRAPHY_TYPES } from '../../../shared/ui/Typography';
-import { Container } from '../../../shared/ui/Container';
+import { Typography, TYPOGRAPHY_TYPES } from '../../../../shared/ui/Typography';
+import { Container } from '../../../../shared/ui/Container';
 
 type LinkType = {
   text: string;
@@ -12,7 +12,7 @@ type SpecialOfferProps = {
   link?: LinkType;
 };
 
-export const SpecialOffer: React.FC<SpecialOfferProps> = ({ text, link }) => {
+export const NotificationBar: React.FC<SpecialOfferProps> = ({ text, link }) => {
   return (
     <div className="bg-neutral-900 text-white-0">
       <Container className="flex justify-center">
