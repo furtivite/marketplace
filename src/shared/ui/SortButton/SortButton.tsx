@@ -1,5 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import {Typography, TYPOGRAPHY_TYPES} from "../Typography";
+
 import ChevronDownIcon from '@/shared/assets/icons/chevron-down.svg?react';
 
 type SortOrder = 'asc' | 'desc';
@@ -38,9 +40,9 @@ export const SortButton: React.FC<SortButtonProps> = ({
       tabIndex={0}
       onClick={() => onChange(nextOrder)}
     >
-      <span className="mr-1">
+      <Typography as='span' type={TYPOGRAPHY_TYPES.LABEL_UPPERCASE} className="mr-1">
         {order === 'asc' ? 'Ascending' : 'Descending'}
-      </span>
+      </Typography>
       <span
         className={clsx(
           'transition-transform duration-200',
