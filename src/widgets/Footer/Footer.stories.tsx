@@ -12,5 +12,13 @@ export default meta;
 type Story = StoryObj<typeof Footer>;
 
 export const Primary: Story = {
-  args: {},
+  args: {
+    hasNewsletter: false,
+  },
+};
+
+export const WithNewsletter: Story = {
+  args: {
+    hasNewsletter: true,
+  },
 };

@@ -1,5 +1,13 @@
 import * as React from 'react';
+import { Newsletter } from "./ui/Newsletter";
 
-export const Footer: React.FC = () => {
-  return <footer>Footer</footer>;
-};
+interface FooterProps {
+  hasNewsletter?: boolean;
+}
+
+export const Footer: React.FC<FooterProps> = ({ hasNewsletter = false }) => (
+  <footer>
+    {hasNewsletter && Newsletter && <Newsletter />}
+    Footer
+  </footer>
+);
