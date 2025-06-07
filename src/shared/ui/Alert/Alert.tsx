@@ -7,7 +7,6 @@ import InfoIcon from '@/shared/assets/icons/info.svg?react';
 import WarningIcon from '@/shared/assets/icons/warning.svg?react';
 import CloseIcon from '@/shared/assets/icons/close.svg?react';
 
-
 type AlertType = 'error' | 'success' | 'info';
 
 interface AlertProps {
@@ -31,7 +30,6 @@ export const Alert: React.FC<AlertProps> = ({
                                             }) => {
   const [visible, setVisible] = React.useState(true);
 
-  // Автоматическое скрытие по таймеру
   React.useEffect(() => {
     if (!autoHideDuration) return;
     const timer = setTimeout(() => {
@@ -41,7 +39,6 @@ export const Alert: React.FC<AlertProps> = ({
     return () => clearTimeout(timer);
   }, [autoHideDuration, onClose]);
 
-  // Закрытие по ESC
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -74,6 +71,7 @@ export const Alert: React.FC<AlertProps> = ({
       )}
       role="alert"
       aria-live="assertive"
+      aria-atomic="true"
     >
       <span className="flex-shrink-0">
         <Icon
@@ -84,8 +82,11 @@ export const Alert: React.FC<AlertProps> = ({
           })}
         />
       </span>
-      <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} as='span' className={'flex-1'}>{message}</Typography>
+      <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} as='span' className={'flex-1'}>
+        {message}
+      </Typography>
       <button
+        type="button"
         className={clsx(
           'ml-3 p-1 rounded focus:outline-none focus-visible:ring-2 transition',
           type === 'info'
@@ -94,7 +95,6 @@ export const Alert: React.FC<AlertProps> = ({
         )}
         aria-label="Close"
         onClick={handleClose}
-        tabIndex={0}
       >
         <CloseIcon
           className={clsx(
