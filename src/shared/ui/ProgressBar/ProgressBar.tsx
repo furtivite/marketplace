@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Tooltip } from '../Tooltip';
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
 
 interface ProgressBarProps {
   label: string;
@@ -12,7 +13,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ label, value }) => {
 
   return (
     <div className="w-full">
-      <div className="text-sm font-medium text-neutral-700 mb-2">{label}</div>
+      <Typography as="div" type={TYPOGRAPHY_TYPES.LABEL} className="text-neutral-700 mb-2">
+        {label}
+      </Typography>
       <Tooltip text={`${safeValue}%`} position="top" adaptive insetArrow>
         <div className="relative w-full bg-primary-100 rounded-full h-3">
           <div
