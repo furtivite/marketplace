@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 import CheckIcon from '@/shared/assets/icons/check.svg?react';
 import InfoIcon from '@/shared/assets/icons/info.svg?react';
-import AlertIcon from '@/shared/assets/icons/alert.svg?react';
+import WarningIcon from '@/shared/assets/icons/warning.svg?react';
 import CloseIcon from '@/shared/assets/icons/close.svg?react';
 
 type AlertType = 'error' | 'success' | 'info';
@@ -16,7 +16,7 @@ interface AlertProps {
 }
 
 const ICONS: Record<AlertType, React.FC<React.SVGProps<SVGSVGElement>>> = {
-  error: AlertIcon,
+  error: WarningIcon,
   success: CheckIcon,
   info: InfoIcon,
 };
@@ -52,7 +52,7 @@ export const Alert: React.FC<AlertProps> = ({
         {
           'bg-red-100 border border-red-200 text-red-800': type === 'error',
           'bg-green-100 border border-green-200 text-green-800': type === 'success',
-          'bg-neutral-900 border border-neutral-900 text-white': type === 'info',
+          'bg-neutral-900 border border-neutral-900 text-white-0': type === 'info',
           'opacity-0 translate-y-4 pointer-events-none': !visible,
           'opacity-100 translate-y-0': visible,
         },
@@ -64,20 +64,29 @@ export const Alert: React.FC<AlertProps> = ({
         <Icon className={clsx('w-5 h-5', {
           'text-red-700': type === 'error',
           'text-green-700': type === 'success',
-          'text-white': type === 'info',
+          'text-white-0': type === 'info',
         })}/>
       </span>
       <span className="flex-1 text-sm">{message}</span>
       <button
         className={clsx(
-          'ml-3 p-1 rounded hover:bg-black/10 focus:outline-none transition',
-          type === 'info' ? 'text-white' : 'text-inherit',
+          'ml-3 p-1 rounded focus:outline-none transition',
+          type === 'info'
+            ? 'text-white-0 hover:bg-white/10'
+            : 'text-inherit hover:bg-black/10',
         )}
         aria-label="Close"
         onClick={handleClose}
         tabIndex={0}
       >
-        <CloseIcon className="w-4 h-4" />
+        <CloseIcon
+          className={clsx(
+            'w-4 h-4 transition-opacity',
+            type === 'info'
+              ? 'text-white-0 hover:opacity-80'
+              : 'text-inherit hover:opacity-70'
+          )}
+        />
       </button>
     </div>
   );
