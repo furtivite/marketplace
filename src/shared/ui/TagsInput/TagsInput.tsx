@@ -1,6 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { Tag } from "../Tag";
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
 
 type TagsInputProps = {
   label?: string;
@@ -13,7 +14,11 @@ type TagsInputProps = {
 export const TagsInput: React.FC<TagsInputProps> = ({ label, error = false, tags, onRemove, className }) => {
   return (
     <div className={clsx('flex flex-col gap-1', className)}>
-      {label && <label className="text-[14px] leading-[175%] font-medium text-neutral-500">{label}</label>}
+      {label && (
+        <Typography as="span" type={TYPOGRAPHY_TYPES.BODY_MEDIUM} className="text-neutral-500">
+          {label}
+        </Typography>
+      )}
       <div
         className={clsx(
           'w-full min-h-[45px] rounded-md px-4 py-3 text-base text-neutral-800 outline-none ring-1',
