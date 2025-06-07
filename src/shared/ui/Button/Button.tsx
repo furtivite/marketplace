@@ -1,5 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
 
 type ButtonVariant = 'default' | 'outline' | 'white' | 'outline-black';
 
@@ -61,7 +62,7 @@ export const Button: React.FC<ButtonAsLinkProps | ButtonAsButtonProps> = (props)
       type={props.type ?? 'button'}
       className={finalClassName}
     >
-      {children}
+      <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} as='span'>{children}</Typography>
     </button>
   );
 }
