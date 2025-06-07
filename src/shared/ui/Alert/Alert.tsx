@@ -29,14 +29,27 @@ export const Alert: React.FC<AlertProps> = ({
                                             }) => {
   const [visible, setVisible] = React.useState(true);
 
+  // Автоматическое скрытие по таймеру
   React.useEffect(() => {
     if (!autoHideDuration) return;
     const timer = setTimeout(() => {
       setVisible(false);
-      setTimeout(onClose, 300); // 300ms — твоя анимация
+      setTimeout(onClose, 300);
     }, autoHideDuration);
     return () => clearTimeout(timer);
   }, [autoHideDuration, onClose]);
+
+  // Закрытие по ESC
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setVisible(false);
+        setTimeout(onClose, 300);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const handleClose = React.useCallback(() => {
     setVisible(false);
@@ -61,16 +74,18 @@ export const Alert: React.FC<AlertProps> = ({
       aria-live="assertive"
     >
       <span className="flex-shrink-0">
-        <Icon className={clsx('w-5 h-5', {
-          'text-red-700': type === 'error',
-          'text-green-700': type === 'success',
-          'text-white-0': type === 'info',
-        })}/>
+        <Icon
+          className={clsx('w-5 h-5', {
+            'text-red-700': type === 'error',
+            'text-green-700': type === 'success',
+            'text-white-0': type === 'info',
+          })}
+        />
       </span>
       <span className="flex-1 text-sm">{message}</span>
       <button
         className={clsx(
-          'ml-3 p-1 rounded focus:outline-none transition',
+          'ml-3 p-1 rounded focus:outline-none focus-visible:ring-2 transition',
           type === 'info'
             ? 'text-white-0 hover:bg-white/10'
             : 'text-inherit hover:bg-black/10',
