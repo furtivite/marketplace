@@ -29,7 +29,9 @@ export const Button: React.FC<ButtonAsLinkProps | ButtonAsButtonProps> = (props)
   } = props;
 
   const base =
-    'inline-flex items-center justify-center font-semibold rounded-[4px] transition-colors focus:outline-none disabled:opacity-50 disabled:pointer-events-none';
+    'inline-flex items-center justify-center font-semibold rounded-[4px] transition-colors ' +
+    'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 ' +
+    'disabled:opacity-50 disabled:pointer-events-none';
 
   const variants: Record<ButtonVariant, string> = {
     default: 'bg-neutral-900 text-white-0 hover:bg-neutral-800',
@@ -45,11 +47,14 @@ export const Button: React.FC<ButtonAsLinkProps | ButtonAsButtonProps> = (props)
   const finalClassName = clsx(base, variants[variant], sizes, className);
 
   if (typeof props.href === 'string') {
+    const isExternal = props.href.startsWith('http');
     return (
       <a
         {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
         href={props.href}
         className={finalClassName}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noopener noreferrer' : undefined}
       >
         {children}
       </a>
@@ -65,4 +70,4 @@ export const Button: React.FC<ButtonAsLinkProps | ButtonAsButtonProps> = (props)
       <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} as='span'>{children}</Typography>
     </button>
   );
-}
+};
