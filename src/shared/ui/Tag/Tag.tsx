@@ -1,5 +1,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
+
 import CloseIcon from '@/shared/assets/icons/close.svg?react';
 
 interface TagProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -32,7 +34,9 @@ export const Tag: React.FC<TagProps> = ({
       )}
       {...rest}
     >
-      <span className="mr-2">{children}</span>
+      <Typography as="span" type={TYPOGRAPHY_TYPES.LABEL} className="mr-2">
+        {children}
+      </Typography>
       <button
         type="button"
         onClick={onRemove}
