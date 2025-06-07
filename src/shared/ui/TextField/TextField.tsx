@@ -1,5 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import {Typography, TYPOGRAPHY_TYPES} from "../Typography";
 
 type TextFieldProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
   label?: string;
@@ -15,9 +16,9 @@ export const TextField = React.forwardRef<HTMLTextAreaElement, TextFieldProps>((
   return (
     <div className={clsx('flex flex-col gap-1', className)}>
       {label && (
-        <label htmlFor={textareaId} className="text-[14px] leading-[175%] font-medium text-neutral-500">
+        <Typography as="label" type={TYPOGRAPHY_TYPES.BODY_MEDIUM} htmlFor={textareaId} className="text-neutral-500">
           {label}
-        </label>
+        </Typography>
       )}
       <textarea
         id={textareaId}
