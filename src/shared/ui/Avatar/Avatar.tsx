@@ -1,5 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
 
 interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string;
@@ -26,7 +27,7 @@ export const Avatar: React.FC<AvatarProps> = ({ name, surname, image, type = 'ci
       {image ? (
         <img src={image} alt={alt} width={48} height={48} className={clsx('object-cover', shapeClass)} />
       ) : (
-        <span>{initials}</span>
+        <Typography type={TYPOGRAPHY_TYPES.BODY_REGULAR} as='span'>{initials}</Typography>
       )}
     </div>
   );
