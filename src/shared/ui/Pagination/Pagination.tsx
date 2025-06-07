@@ -1,5 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
 
 import ChevronLeftIcon from '@/shared/assets/icons/chevron-left.svg?react';
 import ChevronRightIcon from '@/shared/assets/icons/chevron-right.svg?react';
@@ -81,13 +82,9 @@ export const Pagination: React.FC<PaginationProps> = ({
 
       {pages.map((p, i) =>
         p === 'ellipsis' ? (
-          <span
-            key={`ellipsis-${i}`}
-            className="mx-1 px-2 text-neutral-300 select-none"
-            aria-hidden="true"
-          >
+          <Typography as="span" key={`ellipsis-${i}`} type={TYPOGRAPHY_TYPES.BODY_MEDIUM} className="mx-1 px-2 text-neutral-300 select-none" aria-hidden="true">
             ...
-          </span>
+          </Typography>
         ) : (
           <button
             type="button"
@@ -107,7 +104,9 @@ export const Pagination: React.FC<PaginationProps> = ({
             disabled={disabled || page === p}
             tabIndex={0}
           >
-            {p}
+            <Typography as="span" type={TYPOGRAPHY_TYPES.LABEL}>
+              {p}
+            </Typography>
           </button>
         )
       )}
