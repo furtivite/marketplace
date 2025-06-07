@@ -1,5 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
@@ -16,9 +17,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
   return (
     <div className={clsx('flex flex-col gap-1', className)}>
       {label && (
-        <label htmlFor={inputId} className="text-[14px] leading-[175%] font-medium text-neutral-500">
+        <Typography as="label" type={TYPOGRAPHY_TYPES.BODY_MEDIUM} htmlFor={inputId} className="text-neutral-500">
           {label}
-        </label>
+        </Typography>
       )}
       <input
         id={inputId}
