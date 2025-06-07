@@ -10,6 +10,7 @@ const meta: Meta<typeof Tag> = {
     isSmall: { control: 'boolean' },
     isFilled: { control: 'boolean' },
     inInputWrapper: { control: 'boolean' },
+    inList: { control: 'boolean' }, // добавлен контрол для inList
     onRemove: { action: 'removed' },
   },
 };
@@ -23,6 +24,7 @@ export const Default: Story = {
     isSmall: false,
     isFilled: false,
     inInputWrapper: false,
+    inList: false, // по умолчанию false
   },
 };
 
@@ -32,6 +34,7 @@ export const Small: Story = {
     isSmall: true,
     isFilled: false,
     inInputWrapper: false,
+    inList: false,
   },
 };
 
@@ -41,6 +44,7 @@ export const Filled: Story = {
     isSmall: false,
     isFilled: true,
     inInputWrapper: false,
+    inList: false,
   },
 };
 
@@ -50,5 +54,6 @@ export const InInputWrapper: Story = {
     isSmall: false,
     isFilled: true,
     inInputWrapper: true,
+    inList: false,
   },
 };

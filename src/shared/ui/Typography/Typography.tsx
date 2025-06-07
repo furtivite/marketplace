@@ -2,11 +2,23 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { TYPOGRAPHY_TYPES, type TypographyType } from './const';
 
-interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
+type TypographyCommonProps = {
   children: React.ReactNode;
-  as?: keyof React.JSX.IntrinsicElements;
   type: TypographyType;
-}
+  className?: string;
+};
+
+type TypographyAsLabelProps = TypographyCommonProps & {
+  as: 'label';
+  htmlFor: string;
+} & React.LabelHTMLAttributes<HTMLLabelElement>;
+
+type TypographyAsOtherProps = TypographyCommonProps & {
+  as?: Exclude<keyof React.JSX.IntrinsicElements, 'label'>;
+  htmlFor?: never;
+} & React.HTMLAttributes<HTMLElement>;
+
+type TypographyProps = TypographyAsLabelProps | TypographyAsOtherProps;
 
 const typeClassMap: Record<TypographyType, string> = {
   [TYPOGRAPHY_TYPES.H1]: 'text-[40px] leading-[150%] font-semibold',
@@ -21,7 +33,14 @@ const typeClassMap: Record<TypographyType, string> = {
   [TYPOGRAPHY_TYPES.LABEL_UPPERCASE]: 'text-[12px] leading-[24px] font-medium uppercase',
 };
 
-export const Typography: React.FC<TypographyProps> = ({ children, as = 'div', type, className, ...rest }) => {
+export const Typography: React.FC<TypographyProps> = ({
+                                                        children,
+                                                        as = 'div',
+                                                        type,
+                                                        className,
+                                                        ...rest
+                                                      }) => {
+  // rest: для label — содержит htmlFor, для других — нет htmlFor
   return React.createElement(
     as,
     {

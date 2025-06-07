@@ -1,6 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { Tag } from "../Tag";
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
 
 type TagsInputProps = {
   label?: string;
@@ -11,10 +12,21 @@ type TagsInputProps = {
 };
 
 export const TagsInput: React.FC<TagsInputProps> = ({ label, error = false, tags, onRemove, className }) => {
+  const listId = React.useId();
+  const errorId = React.useId();
+
   return (
     <div className={clsx('flex flex-col gap-1', className)}>
-      {label && <label className="text-[14px] leading-[175%] font-medium text-neutral-500">{label}</label>}
+      {label && (
+        <Typography as="label" htmlFor={listId} type={TYPOGRAPHY_TYPES.BODY_MEDIUM} className="text-neutral-500">
+          {label}
+        </Typography>
+      )}
       <div
+        id={listId}
+        role="list"
+        aria-invalid={error}
+        aria-describedby={error ? errorId : undefined}
         className={clsx(
           'w-full min-h-[45px] rounded-md px-4 py-3 text-base text-neutral-800 outline-none ring-1',
           'flex flex-wrap items-start gap-2',
@@ -22,11 +34,16 @@ export const TagsInput: React.FC<TagsInputProps> = ({ label, error = false, tags
         )}
       >
         {tags.map((tag) => (
-          <Tag key={tag} onRemove={() => onRemove(tag)} isFilled inInputWrapper>
+          <Tag key={tag} onRemove={() => onRemove(tag)} isFilled inInputWrapper role="listitem" inList>
             {tag}
           </Tag>
         ))}
       </div>
+      {error && (
+        <Typography as="div" id={errorId} type={TYPOGRAPHY_TYPES.LABEL} className="text-red-600 mt-1 sr-only">
+          Ошибка: неверный ввод
+        </Typography>
+      )}
     </div>
   );
 };

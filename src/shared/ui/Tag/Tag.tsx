@@ -1,5 +1,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
+import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
+
 import CloseIcon from '@/shared/assets/icons/close.svg?react';
 
 interface TagProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -8,20 +10,22 @@ interface TagProps extends React.HTMLAttributes<HTMLDivElement> {
   isSmall?: boolean;
   isFilled?: boolean;
   inInputWrapper?: boolean;
+  inList?: boolean; // Новый опциональный проп
 }
 
 export const Tag: React.FC<TagProps> = ({
-  children,
-  onRemove,
-  isSmall = false,
-  isFilled = false,
-  inInputWrapper = false,
-  className,
-  ...rest
-}) => {
+                                          children,
+                                          onRemove,
+                                          isSmall = false,
+                                          isFilled = false,
+                                          inInputWrapper = false,
+                                          inList = false,
+                                          className,
+                                          ...rest
+                                        }) => {
   return (
     <div
-      tabIndex={0}
+      role={inList ? 'listitem' : undefined}
       className={clsx(
         'inline-flex items-center px-4 border rounded-full text-sm font-medium',
         isFilled ? 'bg-neutral-200' : 'hover:bg-neutral-100',
@@ -32,7 +36,9 @@ export const Tag: React.FC<TagProps> = ({
       )}
       {...rest}
     >
-      <span className="mr-2">{children}</span>
+      <Typography as="span" type={TYPOGRAPHY_TYPES.LABEL} className="mr-2">
+        {children}
+      </Typography>
       <button
         type="button"
         onClick={onRemove}
