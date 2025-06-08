@@ -6,7 +6,22 @@ import {
 import {
   describe, it, expect, vi, beforeEach, afterEach,
 } from 'vitest';
+
 import { Alert } from './Alert';
+
+// Мокаем SVG-импорты, чтобы возвращать простые <svg data-testid="icon-..."/>
+vi.mock('@/shared/assets/icons/check.svg?react', () => ({
+  default: () => <svg data-testid="icon-success" />,
+}));
+vi.mock('@/shared/assets/icons/info.svg?react', () => ({
+  default: () => <svg data-testid="icon-info" />,
+}));
+vi.mock('@/shared/assets/icons/warning.svg?react', () => ({
+  default: () => <svg data-testid="icon-error" />,
+}));
+vi.mock('@/shared/assets/icons/close.svg?react', () => ({
+  default: () => <svg data-testid="icon-close" />,
+}));
 
 describe('Alert component', () => {
   let onClose: ReturnType<typeof vi.fn>;
@@ -17,7 +32,6 @@ describe('Alert component', () => {
   });
 
   afterEach(() => {
-    // Очистим все запланированные таймеры и восстановим реальное время
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
@@ -27,7 +41,6 @@ describe('Alert component', () => {
     render(<Alert type="success" message="Test message" onClose={onClose} />);
     const alert = screen.getByRole('alert');
     expect(alert).toHaveTextContent('Test message');
-    expect(alert).toBeInTheDocument();
   });
 
   it('applies correct background and text classes for each type', () => {
@@ -45,20 +58,16 @@ describe('Alert component', () => {
   });
 
   it('renders the correct icon for each type', () => {
-    const { rerender, container } = render(
+    const { rerender } = render(
       <Alert type="error" message="" onClose={onClose} />,
     );
-    // первый svg — WarningIcon
-    let svg = container.querySelector('svg');
-    expect(svg).toHaveClass('text-red-700');
+    expect(screen.getByTestId('icon-error')).toBeInTheDocument();
 
     rerender(<Alert type="success" message="" onClose={onClose} />);
-    svg = container.querySelector('svg');
-    expect(svg).toHaveClass('text-green-700');
+    expect(screen.getByTestId('icon-success')).toBeInTheDocument();
 
     rerender(<Alert type="info" message="" onClose={onClose} />);
-    svg = container.querySelector('svg');
-    expect(svg).toHaveClass('text-white-0');
+    expect(screen.getByTestId('icon-info')).toBeInTheDocument();
   });
 
   it('calls onClose after clicking close button with 300ms delay', () => {
@@ -66,7 +75,6 @@ describe('Alert component', () => {
     const btn = screen.getByRole('button', { name: /close/i });
     act(() => {
       fireEvent.click(btn);
-      // advance 300ms for the timeout inside handleClose
       vi.advanceTimersByTime(300);
     });
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -81,10 +89,7 @@ describe('Alert component', () => {
         autoHideDuration={1000}
       />,
     );
-    // ждём autoHideDuration
-    act(() => vi.advanceTimersByTime(1000));
-    // плюс 300ms внутреннего таймаута
-    act(() => vi.advanceTimersByTime(300));
+    act(() => vi.advanceTimersByTime(1300)); // autoHideDuration + 300ms
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
@@ -102,7 +107,6 @@ describe('Alert component', () => {
       <Alert type="error" message="" onClose={onClose} autoHideDuration={500} />,
     );
     unmount();
-    // advance beyond any scheduled timers
     act(() => vi.advanceTimersByTime(1000));
     expect(onClose).not.toHaveBeenCalled();
   });

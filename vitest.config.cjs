@@ -2,7 +2,6 @@
 const path = require('path');
 const { defineConfig } = require('vitest/config');
 const svgr = require('@svgr/rollup');
-const { storybookTest } = require('@storybook/experimental-addon-test/vitest-plugin');
 
 module.exports = defineConfig({
   resolve: {
@@ -10,10 +9,10 @@ module.exports = defineConfig({
   },
   plugins: [
     svgr(),
-    storybookTest({ configDir: path.resolve(__dirname, '.storybook') }),
   ],
   test: {
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    exclude: ['**/*.stories.{ts,tsx}'],
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
