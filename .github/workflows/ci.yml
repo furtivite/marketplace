@@ -46,7 +46,7 @@ jobs:
       - name: Build and start app in background
         run: |
           npm run build
-          npm run start &      # запускаем dev-сервер в фоне
+          npm run preview &
           npx wait-on http://localhost:3000
 
       - name: Install Playwright browsers
