@@ -1,13 +1,20 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
   ],
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
     "jsx": "react-jsx",
     "strict": true,
     "moduleResolution": "node",
@@ -19,7 +26,9 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
     "types": [
       "vitest/globals",
@@ -34,5 +43,10 @@
     "vitest.workspace.ts",
     "node_modules/@testing-library/*",
     "node_modules/@playwright/test"
+  ],
+  "exclude": [
+    "dist",
+    "dist-ssr",
+    "node_modules"
   ]
 }
