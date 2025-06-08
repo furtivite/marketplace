@@ -23,6 +23,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run unit tests + coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 

@@ -15,7 +15,8 @@
     "prepare": "husky install .husky",
     "lint:fix": "eslint . --fix",
     "test": "vitest --config=vitest.config.cjs --run",
-    "test:watch": "vitest --config=vitest.config.cjs vitest.config.cjs"
+    "test:watch": "vitest --config=vitest.config.cjs vitest.config.cjs",
+    "test:coverage": "vitest run --config vitest.config.cjs --coverage"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [
@@ -53,7 +54,7 @@
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react": "^4.4.1",
     "@vitest/browser": "^3.1.4",
-    "@vitest/coverage-v8": "^3.1.4",
+    "@vitest/coverage-v8": "^3.2.2",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
@@ -81,7 +82,7 @@
     "typescript-eslint": "^8.33.1",
     "vite": "^6.3.5",
     "vite-plugin-svgr": "^4.3.0",
-    "vitest": "^3.1.4"
+    "vitest": "^3.2.2"
   },
   "eslintConfig": {
     "extends": [

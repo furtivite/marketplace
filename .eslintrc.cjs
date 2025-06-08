@@ -9,6 +9,7 @@ module.exports = {
   extends: [
     'airbnb',
     'airbnb/hooks',
+    'plugin:jsx-a11y/recommended',
     'plugin:storybook/recommended',
   ],
   plugins: [
