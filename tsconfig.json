@@ -28,8 +28,8 @@
     ]
   },
   "include": [
-    "src",
-    "e2e",
+    "src/**/*",
+    "e2e/**/*",
     "playwright.config.ts",
     "vitest.workspace.ts"
   ],
