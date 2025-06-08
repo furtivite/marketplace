@@ -1,4 +1,3 @@
-# .github/workflows/ci.yml
 name: CI
 
 on:
@@ -11,30 +10,15 @@ jobs:
   build-and-lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Run unit tests + coverage
-        run: npm run test:coverage
-
-      - name: Upload coverage artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
 
       - name: Lint
         run: npm run lint
@@ -42,51 +26,14 @@ jobs:
       - name: Type check
         run: npm run tsc -- --noEmit
 
-  test:
+      - name: Run unit tests
+        run: npm test
+
+  e2e:
     needs: build-and-lint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js 18
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run unit & integration tests
-        run: npx vitest run --coverage
-
-      - name: Upload coverage report
-        if: success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: coverage
-
-  e2e:
-    needs: test
-    runs-on: ubuntu-latest
-    services:
-      web:
-        image: node:18
-        ports:
-          - 3000:3000
-        options: >-
-          --health-cmd "curl --fail http://localhost:3000 || exit 1"
-          --health-interval 5s
-          --health-timeout 2s
-          --health-retries 10
-        # Start your app in the container
-        # Assumes you have a start script that boots dev server on 3000
-        command: sh -c "npm ci && npm run start"
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Use Node.js 18
         uses: actions/setup-node@v4
@@ -95,6 +42,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Build and start app in background
+        run: |
+          npm run build
+          npm run start &      # запускаем dev-сервер в фоне
+          npx wait-on http://localhost:3000
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
