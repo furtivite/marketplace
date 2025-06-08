@@ -12,6 +12,12 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
   "dependencies": {
     "@fontsource/inter": "^5.2.5",
     "@fontsource/manrope": "^5.2.5",
