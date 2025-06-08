@@ -9,12 +9,14 @@ module.exports = {
   extends: [
     'airbnb',
     'airbnb/hooks',
+    'plugin:jsx-a11y/recommended',
     'plugin:storybook/recommended',
   ],
   plugins: [
     'react',
     'react-hooks',
     'react-refresh',
+    'fsd-projects',
   ],
   settings: {
     react: { version: 'detect' },
@@ -46,6 +48,19 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    'fsd-projects/path-checker': ['error', { alias: '@', testFilesPatterns: ['**/*.test.*', '**/*.spec.*'] }],
+    'fsd-projects/layer-imports': ['error', {
+      alias: '@',
+      ignoreImportPatterns: ['**/StoreProvider', '**/testing'],
+      rules: [
+        { from: 'app', allow: ['pages', 'widgets', 'features', 'entities', 'shared'] },
+        { from: 'pages', allow: ['widgets', 'features', 'entities', 'shared'] },
+        { from: 'widgets', allow: ['features', 'entities', 'shared'] },
+        { from: 'features', allow: ['entities', 'shared'] },
+        { from: 'entities', allow: ['shared'] },
+        { from: 'shared', allow: [] },
+      ],
+    }],
   },
   overrides: [
     {
@@ -73,17 +88,9 @@ module.exports = {
         'react/jsx-props-no-spreading': 'off',
         'react/destructuring-assignment': 'off',
         'react/button-has-type': 'off',
-        'import/extensions': ['error', 'ignorePackages', {
-          js: 'never',
-          jsx: 'never',
-          ts: 'never',
-          tsx: 'never',
-        }],
+        'import/extensions': ['error', 'ignorePackages', { js: 'never', jsx: 'never', ts: 'never', tsx: 'never' }],
         'import/prefer-default-export': 'off',
-        'react/function-component-definition': ['error', {
-          namedComponents: 'arrow-function',
-          unnamedComponents: 'arrow-function',
-        }],
+        'react/function-component-definition': ['error', { namedComponents: 'arrow-function', unnamedComponents: 'arrow-function' }],
         'no-plusplus': 'off',
         'react/no-array-index-key': 'off',
       },
@@ -113,15 +120,37 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-implied-eval': 'off',
         '@typescript-eslint/dot-notation': 'off',
-        'import/no-extraneous-dependencies': ['error', {
-          devDependencies: true,
-          optionalDependencies: false,
-          peerDependencies: false,
-        }],
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true, optionalDependencies: false, peerDependencies: false }],
       },
     },
     {
       files: ['vitest.workspace.ts'],
+      parserOptions: { project: undefined },
+      rules: {
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true, optionalDependencies: false, peerDependencies: false }],
+      },
+    },
+    {
+      files: ['vitest.config.ts'],
+      parserOptions: { project: undefined },
+      rules: {
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true, optionalDependencies: false, peerDependencies: false }],
+      },
+    },
+    {
+      files: ['**/*.test.*', '**/*.spec.*'],
+      rules: {
+        'fsd-projects/layer-imports': 'off',
+      },
+    },
+    {
+      files: ['.eslintrc.cjs'],
+      rules: {
+        'object-curly-spacing': 'off',
+      },
+    },
+    {
+      files: ['vitest.config.cjs'],
       parserOptions: { project: undefined },
       rules: {
         'import/no-extraneous-dependencies': ['error', {
@@ -129,12 +158,6 @@ module.exports = {
           optionalDependencies: false,
           peerDependencies: false,
         }],
-      },
-    },
-    {
-      files: ['.eslintrc.cjs'],
-      rules: {
-        'object-curly-spacing': 'off',
       },
     },
   ],
