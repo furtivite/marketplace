@@ -148,5 +148,16 @@ module.exports = {
         'object-curly-spacing': 'off',
       },
     },
+    {
+      files: ['vitest.config.cjs'],
+      parserOptions: { project: undefined },
+      rules: {
+        'import/no-extraneous-dependencies': ['error', {
+          devDependencies: true,
+          optionalDependencies: false,
+          peerDependencies: false,
+        }],
+      },
+    },
   ],
 };
