@@ -28,9 +28,7 @@ describe('Tooltip component', () => {
     originalInnerWidth = window.innerWidth;
     originalInnerHeight = window.innerHeight;
     // Подмена
-    Element.prototype.getBoundingClientRect = function () {
-      return mockGetBoundingClientRect();
-    };
+    Element.prototype.getBoundingClientRect = () => mockGetBoundingClientRect();
     Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
     Object.defineProperty(window, 'innerHeight', { value: 500, configurable: true });
     global.requestAnimationFrame = (cb: FrameRequestCallback): number => {

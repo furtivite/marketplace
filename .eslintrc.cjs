@@ -186,5 +186,12 @@ module.exports = {
         'object-curly-spacing': 'off',
       },
     },
+    {
+      files: ['playwright.config.ts'],
+      parserOptions: { project: undefined },
+      rules: {
+        'no-multi-spaces': 'off',
+      },
+    },
   ],
 };
