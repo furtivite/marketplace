@@ -16,7 +16,9 @@ type MenuItemProps = {
   href?: string;
 };
 
-export const HeaderMenuItem: React.FC<MenuItemProps> = ({ id, label, subMenu, href }) => {
+export const HeaderMenuItem: React.FC<MenuItemProps> = ({
+  id, label, subMenu, href,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLLIElement>(null);
 
@@ -29,9 +31,9 @@ export const HeaderMenuItem: React.FC<MenuItemProps> = ({ id, label, subMenu, hr
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        isOpen &&
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
+        isOpen
+        && containerRef.current
+        && !containerRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
       }

@@ -34,6 +34,6 @@ type Story = StoryObj<typeof Typography>;
 
 export const Playground: Story = {
   args: {
-    className: ""
-  }
+    className: '',
+  },
 };

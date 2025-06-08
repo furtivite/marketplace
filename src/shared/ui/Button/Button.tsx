@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
+import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
 
 type ButtonVariant = 'default' | 'outline' | 'white' | 'outline-black';
 
@@ -28,10 +28,9 @@ export const Button: React.FC<ButtonAsLinkProps | ButtonAsButtonProps> = (props)
     ...rest
   } = props;
 
-  const base =
-    'inline-flex items-center justify-center font-semibold rounded-[4px] transition-colors ' +
-    'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 ' +
-    'disabled:opacity-50 disabled:pointer-events-none';
+  const base = 'inline-flex items-center justify-center font-semibold rounded-[4px] transition-colors '
+    + 'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 '
+    + 'disabled:opacity-50 disabled:pointer-events-none';
 
   const variants: Record<ButtonVariant, string> = {
     default: 'bg-neutral-900 text-white-0 hover:bg-neutral-800',
@@ -67,7 +66,7 @@ export const Button: React.FC<ButtonAsLinkProps | ButtonAsButtonProps> = (props)
       type={props.type ?? 'button'}
       className={finalClassName}
     >
-      <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} as='span'>{children}</Typography>
+      <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} as="span">{children}</Typography>
     </button>
   );
 };

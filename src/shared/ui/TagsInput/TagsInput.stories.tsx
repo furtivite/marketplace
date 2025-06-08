@@ -14,6 +14,7 @@ export const Default: Story = {
   args: {
     label: 'Tags',
     tags: ['React', 'TypeScript'],
+    // eslint-disable-next-line no-console
     onRemove: (tag) => console.log('Removed:', tag),
   },
 };
@@ -23,6 +24,7 @@ export const ErrorState: Story = {
     label: 'Tags',
     tags: ['React'],
     error: true,
+    // eslint-disable-next-line no-console
     onRemove: (tag) => console.log('Removed:', tag),
   },
 };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Tooltip } from '../Tooltip';
-import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
+import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
 
 interface ProgressBarProps {
   label: string;

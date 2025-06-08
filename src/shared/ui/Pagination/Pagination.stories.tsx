@@ -7,7 +7,8 @@ const meta: Meta<typeof Pagination> = {
   tags: ['autodocs'],
   args: {
     total: 24,
-    onChange: () => {},
+    onChange: () => {
+    },
   },
 };
 

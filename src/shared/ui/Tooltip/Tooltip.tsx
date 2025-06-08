@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
+import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
 
 type Position = 'top' | 'bottom' | 'left' | 'right';
 
@@ -15,12 +15,12 @@ interface TooltipProps {
 let tooltipIdCounter = 0;
 
 export const Tooltip: React.FC<TooltipProps> = ({
-                                                  children,
-                                                  text,
-                                                  position = 'top',
-                                                  adaptive = true,
-                                                  insetArrow = false,
-                                                }) => {
+  children,
+  text,
+  position = 'top',
+  adaptive = true,
+  insetArrow = false,
+}) => {
   const [visible, setVisible] = React.useState(false);
   const [actualPosition, setActualPosition] = React.useState<Position>(position);
   const [measured, setMeasured] = React.useState(false);
@@ -30,64 +30,65 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const tooltipId = React.useRef(`tooltip-${++tooltipIdCounter}`);
 
   React.useEffect(() => {
-    if (!visible) return;
+    let id: number;
+    if (visible) {
+      id = requestAnimationFrame(() => {
+        if (!tooltipRef.current || !containerRef.current) return;
 
-    const id = requestAnimationFrame(() => {
-      if (!tooltipRef.current || !containerRef.current) return;
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const tooltipRect = tooltipRef.current.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
 
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const tooltipRect = tooltipRef.current.getBoundingClientRect();
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
+        const space = {
+          top: containerRect.top,
+          bottom: vh - containerRect.bottom,
+          left: containerRect.left,
+          right: vw - containerRect.right,
+        };
 
-      const space = {
-        top: containerRect.top,
-        bottom: vh - containerRect.bottom,
-        left: containerRect.left,
-        right: vw - containerRect.right,
-      };
+        const fits: Record<Position, boolean> = {
+          top: space.top >= tooltipRect.height + 8,
+          bottom: space.bottom >= tooltipRect.height + 8,
+          left: space.left >= tooltipRect.width + 8,
+          right: space.right >= tooltipRect.width + 8,
+        };
 
-      const fits: Record<Position, boolean> = {
-        top: space.top >= tooltipRect.height + 8,
-        bottom: space.bottom >= tooltipRect.height + 8,
-        left: space.left >= tooltipRect.width + 8,
-        right: space.right >= tooltipRect.width + 8,
-      };
+        const fallbackMap: Record<Position, Position[]> = {
+          top: ['bottom', 'left', 'right'],
+          bottom: ['top', 'left', 'right'],
+          left: ['right', 'top', 'bottom'],
+          right: ['left', 'top', 'bottom'],
+        };
 
-      const fallbackMap: Record<Position, Position[]> = {
-        top: ['bottom', 'left', 'right'],
-        bottom: ['top', 'left', 'right'],
-        left: ['right', 'top', 'bottom'],
-        right: ['left', 'top', 'bottom'],
-      };
+        const resolved = adaptive && !fits[position]
+          ? fallbackMap[position].find((p) => fits[p]) ?? position
+          : position;
 
-      const resolved = adaptive && !fits[position]
-        ? fallbackMap[position].find(p => fits[p]) ?? position
-        : position;
-
-      setActualPosition(resolved);
-      setMeasured(true);
-    });
-
-    return () => cancelAnimationFrame(id);
+        setActualPosition(resolved);
+        setMeasured(true);
+      });
+    }
+    return () => {
+      if (visible) {
+        cancelAnimationFrame(id);
+      }
+    };
   }, [visible, position, adaptive]);
 
   const baseArrow = 'absolute w-0 h-0 border-8 border-transparent';
-
   const arrow = {
     top: 'top-full left-1/2 -translate-x-1/2 border-t-gray-900',
     bottom: 'bottom-full left-1/2 -translate-x-1/2 border-b-gray-900',
     left: 'left-full top-1/2 -translate-y-1/2 border-l-gray-900 -ml-[1px]',
     right: 'right-full top-1/2 -translate-y-1/2 border-r-gray-900 -mr-[1px]',
   };
-
   const arrowInset = {
     top: '-bottom-4 left-1/2 -translate-x-1/2 border-t-gray-900',
     bottom: 'top-0 left-1/2 -translate-x-1/2 border-b-gray-900',
     left: 'right-0 top-1/2 -translate-y-1/2 border-l-gray-900',
     right: 'left-0 top-1/2 -translate-y-1/2 border-r-gray-900',
   };
-
   const tooltipPos: Record<Position, string> = {
     top: insetArrow
       ? '-top-2 left-1/2 -translate-x-1/2 -translate-y-full'
@@ -99,20 +100,16 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
   return (
     <div
-      className={clsx('relative', insetArrow ? 'w-full' : 'inline-block')}
       ref={containerRef}
-      onMouseEnter={() => {
-        setMeasured(false);
-        setVisible(true);
-      }}
+      onMouseEnter={() => { setMeasured(false); setVisible(true); }}
       onMouseLeave={() => setVisible(false)}
-      onFocus={() => {
-        setMeasured(false);
-        setVisible(true);
-      }}
+      onFocus={() => { setMeasured(false); setVisible(true); }}
       onBlur={() => setVisible(false)}
-      aria-describedby={tooltipId.current}
+      role="button"
       tabIndex={0}
+      aria-haspopup
+      aria-describedby={tooltipId.current}
+      className={clsx(insetArrow ? 'w-full relative' : 'inline-block relative')}
     >
       <Typography as="div" type={TYPOGRAPHY_TYPES.LABEL}>
         {children}
@@ -124,14 +121,14 @@ export const Tooltip: React.FC<TooltipProps> = ({
           ref={tooltipRef}
           className={clsx(
             'absolute z-10 px-3 py-1 text-sm text-white-0 bg-gray-900 rounded shadow max-w-[420px] w-max',
-            measured ? tooltipPos[actualPosition] : 'invisible'
+            measured ? tooltipPos[actualPosition] : 'invisible',
           )}
         >
           {text}
           <span
             className={clsx(
               baseArrow,
-              insetArrow ? arrowInset[actualPosition] : arrow[actualPosition]
+              insetArrow ? arrowInset[actualPosition] : arrow[actualPosition],
             )}
           />
         </div>

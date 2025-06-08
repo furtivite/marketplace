@@ -34,19 +34,16 @@ const typeClassMap: Record<TypographyType, string> = {
 };
 
 export const Typography: React.FC<TypographyProps> = ({
-                                                        children,
-                                                        as = 'div',
-                                                        type,
-                                                        className,
-                                                        ...rest
-                                                      }) => {
-  // rest: для label — содержит htmlFor, для других — нет htmlFor
-  return React.createElement(
-    as,
-    {
-      className: clsx('sans', className, typeClassMap[type]),
-      ...rest,
-    },
-    children,
-  );
-};
+  children,
+  as = 'div',
+  type,
+  className,
+  ...rest
+}) => React.createElement(
+  as,
+  {
+    className: clsx('sans', className, typeClassMap[type]),
+    ...rest,
+  },
+  children,
+);

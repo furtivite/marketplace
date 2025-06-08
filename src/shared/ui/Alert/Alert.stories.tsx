@@ -7,7 +7,8 @@ const meta: Meta<typeof Alert> = {
   tags: ['autodocs'],
   args: {
     message: 'Пример алерта',
-    onClose: () => {},
+    onClose: () => {
+    },
   },
 };
 

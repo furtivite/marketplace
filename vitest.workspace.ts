@@ -5,8 +5,7 @@ import { defineWorkspace } from 'vitest/config';
 
 import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
 
-const dirname =
-  typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
 // More info at: https://storybook.js.org/docs/writing-tests/test-addon
 export default defineWorkspace([
@@ -24,7 +23,7 @@ export default defineWorkspace([
         enabled: true,
         headless: true,
         provider: 'playwright',
-        instances: [{ browser: 'chromium' }]
+        instances: [{ browser: 'chromium' }],
       },
       setupFiles: ['.storybook/vitest.setup.ts'],
     },

@@ -14,10 +14,10 @@ interface LogoProps {
 }
 
 export const Logo: React.FC<LogoProps> = ({
-                                            variant = 'dark',
-                                            className,
-                                            textClassName,
-                                          }) => {
+  variant = 'dark',
+  className,
+  textClassName,
+}) => {
   let LogoComponent;
 
   switch (variant) {

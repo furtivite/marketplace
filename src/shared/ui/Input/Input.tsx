@@ -37,8 +37,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
   const isErrorString = isString(error);
   const describedBy = isErrorString ? errorId : undefined;
 
-  // Логика выбора иконки: если есть startIcon — используем его, иначе endIcon, иначе нет
-  const iconToRender = startIcon ? { node: startIcon, position: 'start' } : endIcon ? { node: endIcon, position: 'end' } : null;
+  // Избегаем вложенного тернарного, используем if/else
+  type IconPayload = { node: React.ReactNode; position: 'start' | 'end' };
+  let iconToRender: IconPayload | null = null;
+  if (startIcon) {
+    iconToRender = { node: startIcon, position: 'start' };
+  } else if (endIcon) {
+    iconToRender = { node: endIcon, position: 'end' };
+  }
 
   return (
     <div className={clsx('flex flex-col gap-1', className)}>
@@ -49,19 +55,23 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
           htmlFor={inputId}
           className="text-neutral-500"
         >
-          {label} {required && '*'}
+          {label}
+          {' '}
+          {required && '*'}
         </Typography>
       )}
       <div
         className={clsx(
           'flex items-center rounded-md ring-1',
-          hasError ? 'ring-red-500 focus-within:ring-red-500' : 'ring-neutral-200 focus-within:ring-neutral-400',
+          hasError
+            ? 'ring-red-500 focus-within:ring-red-500'
+            : 'ring-neutral-200 focus-within:ring-neutral-400',
           isSmall ? 'h-10' : 'h-[45px]',
           'px-4',
           'bg-white',
         )}
       >
-        {iconToRender?.position === 'start' && (
+        {iconToRender && iconToRender.position === 'start' && (
           <span className="mr-2 flex items-center">{iconToRender.node}</span>
         )}
         <input
@@ -76,7 +86,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
           )}
           {...inputProps}
         />
-        {iconToRender?.position === 'end' && (
+        {iconToRender && iconToRender.position === 'end' && (
           <span className="ml-2 flex items-center">{iconToRender.node}</span>
         )}
       </div>
