@@ -2,8 +2,6 @@ module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
     parserOptions: {
-        project: ['./tsconfig.json'],
-        tsconfigRootDir: __dirname,
         ecmaVersion: 2020,
         sourceType: 'module',
         ecmaFeatures: { jsx: true },
@@ -21,6 +19,23 @@ module.exports = {
             node: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
         },
     },
+    overrides: [
+        // для TS/TSX файлов — включаем проект
+        {
+            files: ['**/*.ts', '**/*.tsx'],
+            parserOptions: {
+                project: ['./tsconfig.json'],
+                tsconfigRootDir: __dirname,
+            },
+        },
+        // для JS/JSX — без project, чистый JS
+        {
+            files: ['**/*.js', '**/*.jsx'],
+            parserOptions: {
+                project: undefined,
+            },
+        },
+    ],
     rules: {
         'indent': ['error', 2, { SwitchCase: 1 }],
         'semi': ['error', 'always'],
