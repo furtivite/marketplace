@@ -1,115 +1,121 @@
-# Marketplace
 
-A **modular e-commerce front‑end** built with React + TypeScript and the Feature‑Sliced Design (FSD) methodology.
-The repository is meant as a playground for clean architecture, automated quality gates and accessible UI.
+# Marketplace Frontend &nbsp;![CI](https://img.shields.io/github/actions/workflow/status/your-org/marketplace/ci.yml?branch=main)
 
----
-
-## ✨ Highlights
-
-| Area | What you get |
-|------|--------------|
-| **Modern stack** | Vite • React 18 • TypeScript • TailwindCSS |
-| **Architecture** | Feature‑Sliced Design (layers: *app / pages / widgets / features / entities / shared*) with absolute imports `@/*` |
-| **Code quality** | ESLint (AirBnB, `plugin:jsx-a11y/recommended`, `eslint-plugin-fsd-projects`) • Prettier • Husky + lint‑staged |
-| **Tests & coverage** | Vitest (unit & component) with **V8** coverage thresholds (`≥ 80 %`) • Playwright ready for E2E |
-| **Docs & DX** | Storybook with A11y addon • typed commit hooks • CI via GitHub Actions |
+Modern e‑commerce UI built with **React 18**, **TypeScript**, **Vite**, **Tailwind CSS** and the **Feature‑Sliced Design (FSD)** architecture.  
+The repository ships with a bespoke component library, Storybook docs, strict ESLint rules and a full Vitest + Playwright testing matrix.
 
 ---
 
-## Folder Structure (FSD)
+## ✨ Features
 
+| Area            | Stack / Tooling                                                                   |
+|-----------------|-----------------------------------------------------------------------------------|
+| Build           | Vite + ESBuild (TS 4.9 target)                                                    |
+| Styling         | Tailwind CSS v3                                                                   |
+| UI‑kit          | Reusable primitives in `shared/ui` + Storybook                                    |
+| Routing         | React Router 6                                                                    |
+| Data / State    | React Query, Zustand *(plug‑in your flavour)*                                     |
+| Tests           | Unit & integration with **Vitest** + **Testing‑Library**                          |
+| Browser tests   | Headless **Playwright** through `@storybook/experimental-addon-test`              |
+| Quality         | ESLint (Airbnb + TS) • Prettier • Commitlint                                      |
+| CI              | GitHub Actions → install ➜ lint ➜ type‑check ➜ tests                              |
+| Architecture    | **FSD** layers: `shared → entities → features → widgets → pages → app`            |
+
+---
+
+## 📂 Project layout
+
+```text
+.
+├── .storybook/               # Storybook config
+├── public/
+├── src/
+│   ├── app/                  # App entry & providers
+│   ├── pages/                # Route‑level pages
+│   ├── widgets/              # Page sections (Header, Footer…)
+│   ├── features/             # User features (Cart, Auth…)
+│   ├── entities/             # Domain entities (Product, User…)
+│   ├── shared/
+│   │   ├── ui/               # Design‑system primitives
+│   │   ├── lib/              # Utilities
+│   │   └── assets/           # Static assets & SVG icons
+│   └── index.tsx
+├── vitest.config.cjs         # Vitest workspace (unit + storybook)
+└── tsconfig.[app|test].json
 ```
-src/
-├─ app/          # App bootstrap, routing, providers
-│  └─ index.tsx
-├─ pages/        # Route‑level screens (lazy‑loaded)
-├─ widgets/      # Reusable UI compositions (search bar, cart preview…)
-├─ features/     # User‑facing actions (add‑to‑cart, auth, filters…)
-├─ entities/     # Business entities (product, user, order…)
-├─ shared/
-│  ├─ ui/        # Design‑system atoms/molecules
-│  ├─ lib/       # Helpers, API clients
-│  └─ model/     # Global types, constants
-└─ index.html
-```
-
-> Import rules are enforced by `eslint-plugin-fsd-projects`: lower layers may **not** import from higher ones.
 
 ---
 
-## Getting Started
+## 🚀 Quick start
 
 ```bash
-# 1. Install dependencies
-npm ci
+# 1. Install deps
+pnpm install        # or npm ci / yarn
 
-# 2. Start development server
-npm run dev
+# 2. Dev server
+pnpm dev            # http://localhost:5173
 
-# 3. Storybook (playground & a11y checks)
-npm run storybook
+# 3. Storybook
+pnpm storybook      # http://localhost:6006
+
+# 4. Tests
+pnpm test           # unit
+pnpm test:ui        # storybook + playwright
+
+# 5. Lint & types
+pnpm lint
+pnpm typecheck
+
+# 6. Production build
+pnpm build          # outputs to dist/
 ```
 
-### Environment variables
-
-| Key | Purpose | Default |
-|-----|---------|---------|
-| `VITE_API_URL` | REST/GraphQL endpoint | `https://api.example.com` |
-
-Create a local `.env` (see `.env.example`).
+> **Node ≥ 18** required (`"type": "module"` package).
 
 ---
 
-## Quality Gates
+## 🧪 Testing
 
-| Command | Purpose |
-|---------|---------|
-| `npm run lint` | ESLint + Prettier |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run test` | Vitest in watch mode |
-| `npm run test:coverage` | Vitest in CI mode with V8 coverage; **fails if lines / branches / functions < 80 %** |
-| `npm run e2e` | Placeholder for Playwright suite |
+* **Unit tests** live next to code (`*.test.tsx`) and use React Testing Library.
+* **Story tests** convert each Storybook story into a Playwright interaction spec.
+* Run specific projects:
 
-### Continuous Integration
+```bash
+pnpm vitest run --project unit
+pnpm vitest run --project storybook
+```
 
-`.github/workflows/ci.yml`:
-
-1. Checkout → `npm ci`
-2. `npm run lint && npm run typecheck && npm run test:coverage`
-3. Upload HTML coverage report as an artifact
-4. (Optional) Publish to Codecov
-
-Pull‑requests fail automatically when linting errors or insufficient coverage are detected.
+Coverage reports land in `coverage/`.
 
 ---
 
-## Accessibility
+## 🏗️ Scripts
 
-* `eslint-plugin-jsx-a11y` with all recommended rules in **error** mode
-* Storybook A11y addon for interactive audits
-* Unit tests can assert `expect(await axe(container)).toHaveNoViolations()` (Jest‑Axe)
-
----
-
-## Contributing
-
-1. Fork & clone
-2. Create a branch `feat/my-feature`
-3. **Commits follow [Conventional Commits](https://www.conventionalcommits.org/)** (enforced by Husky)
-4. Open a pull‑request – GitHub Actions will run the full quality pipeline.
-
----
-
-## Roadmap
-
-- [ ] Real product API integration
-- [ ] Complete E2E coverage with Playwright
-- [ ] PWA install & offline catalogue
-- [ ] Internationalisation (i18n)
+| Command            | Purpose                                    |
+|--------------------|--------------------------------------------|
+| `dev`              | Vite dev server                            |
+| `build`            | Production build                           |
+| `preview`          | Preview prod build                         |
+| `storybook`        | Storybook dev                              |
+| `build:sb`         | Static Storybook build                     |
+| `test`             | Vitest unit tests                          |
+| `test:ui`          | Vitest browser tests                       |
+| `lint`             | ESLint + Prettier                          |
+| `typecheck`        | `tsc --noEmit`                             |
+| `format`           | Prettier write                             |
+| `clean`            | Remove `dist/`, `coverage/`, caches        |
 
 ---
 
-## License
+## 🗂️ FSD Layer Rules
 
-**TBD – no license chosen yet.**
+```
+app       – app shell & providers
+pages     – one file per route
+widgets   – large page sections
+features  – user‑focused functionality
+entities  – business entities
+shared    – atomic UI & helpers
+```
+
+Cross‑layer imports are safeguarded by the `fsd-projects` ESLint plugin.
