@@ -11,7 +11,8 @@
     "prestorybook": "node tools/build-tailwind-storybook-config.mjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepare": "husky install .husky"
+    "prepare": "husky install .husky",
+    "lint:fix": "eslint . --fix"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [
