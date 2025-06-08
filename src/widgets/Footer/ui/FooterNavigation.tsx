@@ -38,38 +38,30 @@ const footerMenu: FooterMenuSection[] = [
   },
 ];
 
-export const FooterNavigation: React.FC = () => {
-  return (
-    <nav
-      aria-label="Footer navigation"
-      className="flex flex-wrap gap-12 flex-1 justify-between"
-    >
-      {footerMenu.map(({ title, links }) => (
-        <div key={title}>
-          <Typography
-            type={TYPOGRAPHY_TYPES.BODY_MEDIUM}
-            as="h3"
-            className="mb-16 text-neutral-300"
-          >
-            {title}
-          </Typography>
-          <ul className="space-y-2" role="list">
-            {links.map(({ label, href }) => (
-              <Typography
-                key={label}
-                as="li"
-                type={TYPOGRAPHY_TYPES.BODY_MEDIUM}
-                className="text-neutral-500"
-                role="listitem"
-              >
-                <a href={href} className="hover:underline">
-                  {label}
-                </a>
-              </Typography>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </nav>
-  );
-};
+export const FooterNavigation: React.FC = () => (
+  <nav
+    aria-label="Footer navigation"
+    className="flex flex-wrap gap-12 flex-1 justify-between"
+  >
+    {footerMenu.map(({ title, links }) => (
+      <div key={title}>
+        <Typography
+          as="h3"
+          type={TYPOGRAPHY_TYPES.BODY_MEDIUM}
+          className="mb-4 text-neutral-300"
+        >
+          {title}
+        </Typography>
+        <ul className="space-y-2 list-none p-0 m-0">
+          {links.map(({ label, href }) => (
+            <li key={label}>
+              <a href={href} className="text-neutral-500 hover:underline">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </nav>
+);

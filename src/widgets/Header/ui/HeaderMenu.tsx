@@ -20,7 +20,7 @@ const MENU_ITEMS: MenuItem[] = [
     label: 'Categories',
     subMenu: [
       { id: 'demo', name: 'Demo Category' },
-      { id: 'demo2', name: 'Demo Category 2' }
+      { id: 'demo2', name: 'Demo Category 2' },
     ],
   },
   { id: 'about', label: 'About', href: '/about' },

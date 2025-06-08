@@ -1,1 +1,1 @@
-export { Alert } from './Alert.tsx';
+export { Alert } from './Alert';

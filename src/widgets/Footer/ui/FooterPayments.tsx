@@ -19,30 +19,28 @@ const paymentMethods: PaymentMethod[] = [
 
 const iconClassName = 'grayscale transition duration-300 ease-in-out hover:grayscale-0';
 
-export const FooterPayments: React.FC = () => {
-  return (
-    <div className="flex flex-col gap-16 min-w-[140px]">
-      <Typography
-        type={TYPOGRAPHY_TYPES.BODY_MEDIUM}
-        as="h3"
-        className="text-neutral-300"
-      >
-        Accepted Payments
-      </Typography>
-      <div
-        className="flex gap-3"
-        aria-label="Accepted payment methods"
-        role="list"
-      >
-        {paymentMethods.map(({ name, Icon }) => (
-          <Icon
-            key={name}
-            className={clsx(iconClassName, 'h-6 w-auto')}
-            role="listitem"
-            aria-label={name}
-          />
-        ))}
-      </div>
+export const FooterPayments: React.FC = () => (
+  <div className="flex flex-col gap-16 min-w-[140px]">
+    <Typography
+      type={TYPOGRAPHY_TYPES.BODY_MEDIUM}
+      as="h3"
+      className="text-neutral-300"
+    >
+      Accepted Payments
+    </Typography>
+    <div
+      className="flex gap-3"
+      aria-label="Accepted payment methods"
+      role="list"
+    >
+      {paymentMethods.map(({ name, Icon }) => (
+        <Icon
+          key={name}
+          className={clsx(iconClassName, 'h-6 w-auto')}
+          role="listitem"
+          aria-label={name}
+        />
+      ))}
     </div>
-  );
-};
+  </div>
+);

@@ -14,28 +14,26 @@ type LayoutProps = {
 } & Partial<SpecialOfferProps>;
 
 export const Layout: React.FC<LayoutProps> = ({
-                                                children,
-                                                withoutHeader = false,
-                                                hasNotificationBar = false,
-                                                hasFooter = false,
-                                                hasNewsletter = false,
-                                                text,
-                                                link,
-                                              }) => {
-  return (
-    <div className="min-h-screen flex flex-col">
-      {hasNotificationBar && text && <NotificationBar text={text} link={link} />}
-      {!withoutHeader && (
-        <Header className="shadow-[0_1px_4px_0_rgba(255,255,255,0.4)] bg-white-0" />
-      )}
+  children,
+  withoutHeader = false,
+  hasNotificationBar = false,
+  hasFooter = false,
+  hasNewsletter = false,
+  text,
+  link,
+}) => (
+  <div className="min-h-screen flex flex-col">
+    {hasNotificationBar && text && <NotificationBar text={text} link={link} />}
+    {!withoutHeader && (
+      <Header className="shadow-[0_1px_4px_0_rgba(255,255,255,0.4)] bg-white-0" />
+    )}
 
-      <main className="flex-grow">
-        <Container className="py-8">{children}</Container>
-      </main>
+    <main className="flex-grow">
+      <Container className="py-8">{children}</Container>
+    </main>
 
-      {hasFooter && (
-        <Footer hasNewsletter={hasNewsletter} />
-      )}
-    </div>
-  );
-};
+    {hasFooter && (
+      <Footer hasNewsletter={hasNewsletter} />
+    )}
+  </div>
+);

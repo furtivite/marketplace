@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { NotificationBar } from './NotificationBar.tsx';
+import { NotificationBar } from './NotificationBar';
 
 const meta: Meta<typeof NotificationBar> = {
   title: 'Widgets/Layout/NotificationBar',

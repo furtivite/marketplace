@@ -22,7 +22,6 @@ export const Newsletter: React.FC = () => {
       setError(true);
       return;
     }
-    alert(`Subscribed with ${email}`);
     setEmail('');
   };
 

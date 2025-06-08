@@ -25,41 +25,45 @@ function findLastItem(items: BreadcrumbItem[]): BreadcrumbItem {
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
   const activeItem = findLastItem(items);
 
-  const flattenItems = (items: BreadcrumbItem[]): BreadcrumbItem[] => {
-    let result: BreadcrumbItem[] = [];
-    items.forEach((item) => {
-      result.push({ label: item.label, href: item.href });
-      if (item.subItems && item.subItems.length > 0) {
-        result = result.concat(flattenItems(item.subItems));
-      }
-    });
-    return result;
-  };
+  const flattenItems = (
+    list: BreadcrumbItem[],
+  ): BreadcrumbItem[] => list.reduce<BreadcrumbItem[]>((acc, item) => {
+    acc.push({ label: item.label, href: item.href });
+    if (item.subItems) {
+      acc.push(...flattenItems(item.subItems));
+    }
+    return acc;
+  }, []);
 
   const flatItems = flattenItems(items);
 
   return (
     <Container className="py-4">
-      <Typography type={TYPOGRAPHY_TYPES.H3} as='h1' className="mb-2">
+      <Typography
+        as="h1"
+        type={TYPOGRAPHY_TYPES.H3}
+        className="mb-2 text-neutral-900 font-semibold"
+      >
         {activeItem.label}
       </Typography>
       <nav aria-label="Breadcrumb">
-        <ol className="flex items-center gap-1 text-neutral-600">
+        <ol className="flex items-center gap-1 list-none p-0 m-0 text-neutral-600">
           {flatItems.map((item, index) => {
             const isLast = index === flatItems.length - 1;
             return (
               <li key={index} className="flex items-center">
-                {!isLast && item.href ? (
+                {item.href && !isLast ? (
                   <a
                     href={item.href}
                     className="text-neutral-500 hover:underline"
                   >
-                    <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM}>
+                    <Typography as="span" type={TYPOGRAPHY_TYPES.BODY_MEDIUM}>
                       {item.label}
                     </Typography>
                   </a>
                 ) : (
                   <Typography
+                    as="span"
                     type={TYPOGRAPHY_TYPES.BODY_MEDIUM}
                     className="text-neutral-900 font-semibold"
                   >

@@ -1,24 +1,25 @@
 {
   "files": [],
   "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "baseUrl": "src",
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@app/*": ["app/*"],
-      "@pages/*": ["pages/*"],
-      "@widgets/*": ["widgets/*"],
-      "@features/*": ["features/*"],
-      "@entities/*": ["entities/*"],
-      "@shared/*": ["shared/*"],
-      "@tools/*": ["../tools/*"]
+      "@/*": ["src/*"]
     }
   }
 }

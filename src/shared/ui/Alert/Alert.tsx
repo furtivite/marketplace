@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { Typography, TYPOGRAPHY_TYPES } from "../Typography";
+import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
 
 import CheckIcon from '@/shared/assets/icons/check.svg?react';
 import InfoIcon from '@/shared/assets/icons/info.svg?react';
@@ -23,20 +23,26 @@ const ICONS: Record<AlertType, React.FC<React.SVGProps<SVGSVGElement>>> = {
 };
 
 export const Alert: React.FC<AlertProps> = ({
-                                              type,
-                                              message,
-                                              onClose,
-                                              autoHideDuration,
-                                            }) => {
+  type,
+  message,
+  onClose,
+  autoHideDuration,
+}) => {
   const [visible, setVisible] = React.useState(true);
 
   React.useEffect(() => {
-    if (!autoHideDuration) return;
-    const timer = setTimeout(() => {
-      setVisible(false);
-      setTimeout(onClose, 300);
-    }, autoHideDuration);
-    return () => clearTimeout(timer);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    if (autoHideDuration) {
+      timer = setTimeout(() => {
+        setVisible(false);
+        setTimeout(onClose, 300);
+      }, autoHideDuration);
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
   }, [autoHideDuration, onClose]);
 
   React.useEffect(() => {
@@ -82,7 +88,11 @@ export const Alert: React.FC<AlertProps> = ({
           })}
         />
       </span>
-      <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} as='span' className={'flex-1'}>
+      <Typography
+        type={TYPOGRAPHY_TYPES.BODY_MEDIUM}
+        as="span"
+        className="flex-1"
+      >
         {message}
       </Typography>
       <button
@@ -101,7 +111,7 @@ export const Alert: React.FC<AlertProps> = ({
             'w-4 h-4 transition-opacity',
             type === 'info'
               ? 'text-white-0 hover:opacity-80'
-              : 'text-inherit hover:opacity-70'
+              : 'text-inherit hover:opacity-70',
           )}
         />
       </button>

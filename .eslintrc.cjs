@@ -1,4 +1,3 @@
-// .eslintrc.cjs
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
@@ -24,10 +23,23 @@ module.exports = {
     },
   },
   rules: {
-    // фикс object-curly-spacing для JS/JSX
-    'object-curly-spacing': ['error', 'always'],           // здесь
-    'indent': ['error', 2, { SwitchCase: 1 }],
-    'semi': ['error', 'always'],
+    'react/prop-types': 'off',
+    'react/require-default-props': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'import/extensions': ['error', 'ignorePackages', {
+      js: 'never',
+      jsx: 'never',
+      ts: 'never',
+      tsx: 'never',
+    }],
+    'import/prefer-default-export': 'off',
+    'react/function-component-definition': ['error', {
+      namedComponents: 'arrow-function',
+      unnamedComponents: 'arrow-function',
+    }],
+    'object-curly-spacing': 'off',
+    indent: ['error', 2, { SwitchCase: 1 }],
+    semi: ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': ['warn', { extensions: ['.tsx'] }],
@@ -38,8 +50,9 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx'],
+      excludedFiles: ['vite.config.ts'],
       parserOptions: {
-        project: ['./tsconfig.json'],
+        project: ['./tsconfig.app.json'],
         tsconfigRootDir: __dirname,
         ecmaVersion: 2020,
         sourceType: 'module',
@@ -48,25 +61,80 @@ module.exports = {
       extends: ['airbnb-typescript'],
       plugins: ['@typescript-eslint'],
       rules: {
-        // и аналогичная настройка для @typescript-eslint
-        '@typescript-eslint/object-curly-spacing': ['error', 'always'],  // здесь
+        'object-curly-spacing': 'off',
+        '@typescript-eslint/object-curly-spacing': ['error', 'always'],
         '@typescript-eslint/indent': ['error', 2, { SwitchCase: 1 }],
         '@typescript-eslint/semi': ['error', 'always'],
         '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+        'react/prop-types': 'off',
+        'react/require-default-props': 'off',
+        'react/jsx-props-no-spreading': 'off',
+        'react/destructuring-assignment': 'off',
+        'react/button-has-type': 'off',
+        'import/extensions': ['error', 'ignorePackages', {
+          js: 'never',
+          jsx: 'never',
+          ts: 'never',
+          tsx: 'never',
+        }],
+        'import/prefer-default-export': 'off',
+        'react/function-component-definition': ['error', {
+          namedComponents: 'arrow-function',
+          unnamedComponents: 'arrow-function',
+        }],
+        'no-plusplus': 'off',
+        'react/no-array-index-key': 'off',
       },
     },
     {
       files: ['**/*.js', '**/*.jsx'],
-      parserOptions: {
-        project: undefined,
-      },
+      parserOptions: { project: undefined },
       rules: {
-        // отключаем TS-правила
         '@typescript-eslint/no-implied-eval': 'off',
         '@typescript-eslint/dot-notation': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
+        'object-curly-spacing': 'off',
+      },
+    },
+    {
+      files: ['tools/**/*.{js,mjs}'],
+      parserOptions: { project: undefined },
+      rules: {
+        'import/extensions': 'off',
+        'no-underscore-dangle': 'off',
+        'no-console': 'off',
+      },
+    },
+    {
+      files: ['vite.config.ts'],
+      parserOptions: { project: undefined },
+      rules: {
+        '@typescript-eslint/no-implied-eval': 'off',
+        '@typescript-eslint/dot-notation': 'off',
+        'import/no-extraneous-dependencies': ['error', {
+          devDependencies: true,
+          optionalDependencies: false,
+          peerDependencies: false,
+        }],
+      },
+    },
+    {
+      files: ['vitest.workspace.ts'],
+      parserOptions: { project: undefined },
+      rules: {
+        'import/no-extraneous-dependencies': ['error', {
+          devDependencies: true,
+          optionalDependencies: false,
+          peerDependencies: false,
+        }],
+      },
+    },
+    {
+      files: ['.eslintrc.cjs'],
+      rules: {
+        'object-curly-spacing': 'off',
       },
     },
   ],

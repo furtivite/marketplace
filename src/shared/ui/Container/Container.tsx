@@ -7,10 +7,8 @@ interface ContainerProps {
   style?: React.CSSProperties;
 }
 
-export const Container: React.FC<ContainerProps> = ({ className, children, style }) => {
-  return (
-    <div className={clsx('mx-auto w-full max-w-[1116px]', className)} style={style}>
-      {children}
-    </div>
-  );
-};
+export const Container: React.FC<ContainerProps> = ({ className, children, style }) => (
+  <div className={clsx('mx-auto w-full max-w-[1116px]', className)} style={style}>
+    {children}
+  </div>
+);

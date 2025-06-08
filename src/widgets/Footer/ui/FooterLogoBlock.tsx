@@ -32,32 +32,33 @@ const socialLinks: SocialLink[] = [
   },
 ];
 
-export const FooterLogoBlock: React.FC = () => {
-  return (
-    <div className="flex flex-col gap-3 max-w-xs">
-      <Logo variant="dark" />
-      <Typography
-        type={TYPOGRAPHY_TYPES.BODY_REGULAR}
-        as="p"
-        className="text-neutral-600"
-      >
-        DevCut is a YouTube channel for practical project-based learning.
-      </Typography>
-      <div className="flex gap-4 mt-3" aria-label="Social media links" role="list">
+export const FooterLogoBlock: React.FC = () => (
+  <div className="flex flex-col gap-3 max-w-xs">
+    <Logo variant="dark" />
+    <Typography
+      type={TYPOGRAPHY_TYPES.BODY_REGULAR}
+      as="p"
+      className="text-neutral-600"
+    >
+      DevCut is a YouTube channel for practical project-based learning.
+    </Typography>
+
+    <nav aria-label="Social media links" className="mt-3">
+      <ul className="flex gap-4 list-none p-0 m-0">
         {socialLinks.map(({ href, label, Icon }) => (
-          <a
-            key={label}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={label}
-            className="hover:text-neutral-900"
-            role="listitem"
-          >
-            <Icon className={iconClassName} />
-          </a>
+          <li key={label}>
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="hover:text-neutral-900"
+            >
+              <Icon className={iconClassName} />
+            </a>
+          </li>
         ))}
-      </div>
-    </div>
-  );
-};
+      </ul>
+    </nav>
+  </div>
+);

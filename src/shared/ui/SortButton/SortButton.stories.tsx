@@ -18,14 +18,16 @@ type Story = StoryObj<typeof SortButton>;
 export const Ascending: Story = {
   args: {
     order: 'asc',
-    onChange: () => {},
+    onChange: () => {
+    },
   },
 };
 
 export const Descending: Story = {
   args: {
     order: 'desc',
-    onChange: () => {},
+    onChange: () => {
+    },
   },
 };
 
@@ -33,7 +35,8 @@ export const Disabled: Story = {
   args: {
     order: 'asc',
     disabled: true,
-    onChange: () => {},
+    onChange: () => {
+    },
   },
 };
 
