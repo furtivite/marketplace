@@ -14,7 +14,8 @@
     "tools/**/*",
     "vite.config.ts",
     "tailwind.config.ts",
-    "vitest.shims.d.ts",
+    "playwright.config.ts",
+    "vitest.setup.ts",
     "vitest.workspace.ts"
   ]
 }

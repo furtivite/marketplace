@@ -5,6 +5,7 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
     ecmaFeatures: { jsx: true },
+    // don't point at a TS config by default; overrides will set it
   },
   extends: [
     'airbnb',
@@ -17,6 +18,7 @@ module.exports = {
     'react-hooks',
     'react-refresh',
     'fsd-projects',
+    '@typescript-eslint',
   ],
   settings: {
     react: { version: 'detect' },
@@ -48,7 +50,10 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-    'fsd-projects/path-checker': ['error', { alias: '@', testFilesPatterns: ['**/*.test.*', '**/*.spec.*'] }],
+    'fsd-projects/path-checker': ['error', {
+      alias: '@',
+      testFilesPatterns: ['**/*.test.*', '**/*.spec.*'],
+    }],
     'fsd-projects/layer-imports': ['error', {
       alias: '@',
       ignoreImportPatterns: ['**/StoreProvider', '**/testing'],
@@ -63,9 +68,10 @@ module.exports = {
     }],
   },
   overrides: [
+    // TypeScript files in src: use tsconfig.app.json
     {
       files: ['**/*.ts', '**/*.tsx'],
-      excludedFiles: ['vite.config.ts'],
+      excludedFiles: ['vite.config.ts', 'playwright.config.ts', 'vitest.setup.ts'],
       parserOptions: {
         project: ['./tsconfig.app.json'],
         tsconfigRootDir: __dirname,
@@ -74,9 +80,7 @@ module.exports = {
         ecmaFeatures: { jsx: true },
       },
       extends: ['airbnb-typescript'],
-      plugins: ['@typescript-eslint'],
       rules: {
-        'object-curly-spacing': 'off',
         '@typescript-eslint/object-curly-spacing': ['error', 'always'],
         '@typescript-eslint/indent': ['error', 2, { SwitchCase: 1 }],
         '@typescript-eslint/semi': ['error', 'always'],
@@ -88,13 +92,16 @@ module.exports = {
         'react/jsx-props-no-spreading': 'off',
         'react/destructuring-assignment': 'off',
         'react/button-has-type': 'off',
-        'import/extensions': ['error', 'ignorePackages', { js: 'never', jsx: 'never', ts: 'never', tsx: 'never' }],
         'import/prefer-default-export': 'off',
-        'react/function-component-definition': ['error', { namedComponents: 'arrow-function', unnamedComponents: 'arrow-function' }],
+        'react/function-component-definition': ['error', {
+          namedComponents: 'arrow-function',
+          unnamedComponents: 'arrow-function',
+        }],
         'no-plusplus': 'off',
         'react/no-array-index-key': 'off',
       },
     },
+    // JS/JSX files: no TS project
     {
       files: ['**/*.js', '**/*.jsx'],
       parserOptions: { project: undefined },
@@ -105,6 +112,7 @@ module.exports = {
         'object-curly-spacing': 'off',
       },
     },
+    // Tools folder: no TS project
     {
       files: ['tools/**/*.{js,mjs}'],
       parserOptions: { project: undefined },
@@ -114,43 +122,23 @@ module.exports = {
         'no-console': 'off',
       },
     },
+    // Vite config: no TS project
     {
       files: ['vite.config.ts'],
       parserOptions: { project: undefined },
       rules: {
         '@typescript-eslint/no-implied-eval': 'off',
         '@typescript-eslint/dot-notation': 'off',
-        'import/no-extraneous-dependencies': ['error', { devDependencies: true, optionalDependencies: false, peerDependencies: false }],
+        'import/no-extraneous-dependencies': ['error', {
+          devDependencies: true,
+          optionalDependencies: false,
+          peerDependencies: false,
+        }],
       },
     },
+    // Playwright config: no TS project
     {
-      files: ['vitest.workspace.ts'],
-      parserOptions: { project: undefined },
-      rules: {
-        'import/no-extraneous-dependencies': ['error', { devDependencies: true, optionalDependencies: false, peerDependencies: false }],
-      },
-    },
-    {
-      files: ['vitest.config.ts'],
-      parserOptions: { project: undefined },
-      rules: {
-        'import/no-extraneous-dependencies': ['error', { devDependencies: true, optionalDependencies: false, peerDependencies: false }],
-      },
-    },
-    {
-      files: ['**/*.test.*', '**/*.spec.*'],
-      rules: {
-        'fsd-projects/layer-imports': 'off',
-      },
-    },
-    {
-      files: ['.eslintrc.cjs'],
-      rules: {
-        'object-curly-spacing': 'off',
-      },
-    },
-    {
-      files: ['vitest.config.cjs'],
+      files: ['playwright.config.ts'],
       parserOptions: { project: undefined },
       rules: {
         'import/no-extraneous-dependencies': ['error', {
@@ -158,6 +146,44 @@ module.exports = {
           optionalDependencies: false,
           peerDependencies: false,
         }],
+      },
+    },
+    // Vitest setup: no TS project
+    {
+      files: ['vitest.setup.ts'],
+      parserOptions: { project: undefined },
+      rules: {
+        'import/no-extraneous-dependencies': ['error', {
+          devDependencies: true,
+          optionalDependencies: false,
+          peerDependencies: false,
+        }],
+      },
+    },
+    // Vitest config files: no TS project
+    {
+      files: ['vitest.config.ts', 'vitest.config.cjs', 'vitest.workspace.ts'],
+      parserOptions: { project: undefined },
+      rules: {
+        'import/no-extraneous-dependencies': ['error', {
+          devDependencies: true,
+          optionalDependencies: false,
+          peerDependencies: false,
+        }],
+      },
+    },
+    // Test files: disable layer-imports
+    {
+      files: ['**/*.test.*', '**/*.spec.*'],
+      rules: {
+        'fsd-projects/layer-imports': 'off',
+      },
+    },
+    // ESLint config itself: ease spacing
+    {
+      files: ['.eslintrc.cjs'],
+      rules: {
+        'object-curly-spacing': 'off',
       },
     },
   ],
