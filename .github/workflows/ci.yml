@@ -37,39 +37,39 @@ jobs:
       - name: Run unit tests
         run: npm test
 
-  e2e:
-    needs: build-and-lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache npm
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Use Node.js 18
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build app
-        run: npm run build
-
-      - name: Start preview server
-        # запускаем фоновой процесс на порту 3000, ждём пока он поднимется
-        run: |
-          npm run preview -- --port 3000 &
-          npx wait-on http://localhost:3000
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      - name: Run E2E tests
-        run: npx playwright test --config=playwright.config.ts
+# Temporarily disable E2E until tests are added
+#  e2e:
+#    needs: build-and-lint
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Cache npm
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.npm
+#          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+#          restore-keys: |
+#            ${{ runner.os }}-node-
+#
+#      - name: Use Node.js 18
+#        uses: actions/setup-node@v4
+#        with:
+#          node-version: 18
+#
+#      - name: Install dependencies
+#        run: npm ci
+#
+#      - name: Build app
+#        run: npm run build
+#
+#      - name: Start preview server
+#        run: |
+#          npm run preview -- --port 3000 &
+#          npx wait-on http://localhost:3000
+#
+#      - name: Install Playwright browsers
+#        run: npx playwright install --with-deps
+#
+#      - name: Run E2E tests
+#        run: npx playwright test --config=playwright.config.ts
