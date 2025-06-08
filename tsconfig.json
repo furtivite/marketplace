@@ -20,6 +20,19 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
-  }
+    },
+    "types": [
+      "vitest/globals",
+      "@testing-library/jest-dom",
+      "playwright/test"
+    ]
+  },
+  "include": [
+    "src",
+    "e2e",
+    "playwright.config.ts",
+    "vitest.workspace.ts",
+    "node_modules/@testing-library/*",
+    "node_modules/@playwright/test"
+  ]
 }
