@@ -1,8 +1,10 @@
+// tsconfig.node.json
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "composite": true,
     "noEmit": false,
+    "emitDeclarationOnly": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2022",
     "lib": ["ES2023"],
