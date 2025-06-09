@@ -4,6 +4,8 @@ import { Layout } from '../../widgets/Layout/Layout';
 import { Container } from '../../shared/ui/Container';
 import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
 import { FeatureList } from './ui/FeatureList';
+import type { TFeatureProps } from './ui/Feature/types';
+
 // import { BestSellingSection } from './ui/BestSellingSection'
 // import { BrowseCategorySection } from './ui/BrowseCategorySection'
 // import { FeaturedTabsSection } from './ui/FeaturedTabsSection'
@@ -12,6 +14,9 @@ import ellipse from './assets/ellipse.svg';
 import burstPucker from './assets/burst-pucker.svg';
 import boy2x from './assets/banner-boy@2x.png';
 import boy1x from './assets/banner-boy.png';
+import delivery from '../../shared/assets/icons/delivery.svg';
+import satisfactionIcon from '../../shared/assets/icons/star-badge.svg';
+import securePaymentIcon from '../../shared/assets/icons/shield-check.svg';
 
 const BannerImage: React.FC = () => (
   <>
@@ -48,6 +53,24 @@ const bannerButton: THomeSectionButtonLink = {
 const bannerTitle = 'Fresh Arrivals Online';
 const bannerSubtitle = 'Discover Our Newest Collection Today.';
 
+const featureItems: TFeatureProps[] = [
+  {
+    icon: () => <img src={delivery} alt="" width={24} height={24} />,
+    title: 'Free Shipping',
+    subtitle: 'Upgrade your style today and get FREE shipping on all orders! Don’t miss out.',
+  },
+  {
+    icon: () => <img src={satisfactionIcon} alt="" width={24} height={24} />,
+    title: 'Satisfaction Guarantee',
+    subtitle: 'Shop confidently with our Satisfaction Guarantee: Love it or get a refund.',
+  },
+  {
+    icon: () => <img src={securePaymentIcon} alt="" width={24} height={24} />,
+    title: 'Secure Payment',
+    subtitle: 'Your security is our priority. Your payments are secure with us.',
+  },
+];
+
 export const HomePage: React.FC = () => (
   <Layout hasFooter hasNewsletter hasFullWidth>
     <HeroSection
@@ -57,7 +80,7 @@ export const HomePage: React.FC = () => (
       subtitle={bannerSubtitle}
     />
     <Container className="mt-[88px] mb-[128px]">
-      <FeatureList />
+      <FeatureList items={featureItems} />
     </Container>
     {/* <BestSellingSection /> */}
     {/* <BrowseCategorySection /> */}
