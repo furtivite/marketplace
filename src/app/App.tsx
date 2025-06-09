@@ -1,8 +1,14 @@
+// src/app/App.tsx
 import * as React from 'react';
-import { Typography, TYPOGRAPHY_TYPES } from '../shared/ui/Typography';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HomePage } from '../pages/HomePage/HomePage';
 
 export const App: React.FC = () => (
-  <Typography type={TYPOGRAPHY_TYPES.H1} as="h1" className="text-primary-400">
-    Tailwind работает
-  </Typography>
+  <Router>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+    </Routes>
+  </Router>
 );
+
+export default App;
