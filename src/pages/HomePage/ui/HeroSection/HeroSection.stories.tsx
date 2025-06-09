@@ -2,10 +2,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { HeroSection, HeroSectionProps } from './HeroSection';
-import ellipse from '../assets/ellipse.svg';
-import burstPucker from '../assets/burst-pucker.svg';
-import boy1x from '../assets/banner-boy.png';
-import boy2x from '../assets/banner-boy@2x.png';
+import ellipse from '../../assets/ellipse.svg';
+import burstPucker from '../../assets/burst-pucker.svg';
+import boy1x from '../../assets/banner-boy.png';
+import boy2x from '../../assets/banner-boy@2x.png';
 
 const BannerImage: React.FC = () => (
   <>
