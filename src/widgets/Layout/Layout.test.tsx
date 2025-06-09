@@ -30,6 +30,16 @@ vi.mock('./ui/NotificationBar', () => ({
   ),
 }));
 
+// Mock Container to detect wrapping and className
+vi.mock('../../shared/ui/Container', () => ({
+  __esModule: true,
+  Container: ({ children, className }: any) => (
+    <div data-testid="container" data-class={className}>
+      {children}
+    </div>
+  ),
+}));
+
 /* ==== tests ============================================================ */
 
 describe('Layout component', () => {
@@ -72,5 +82,20 @@ describe('Layout component', () => {
     );
     const footer = screen.getByTestId('footer');
     expect(footer).toHaveAttribute('data-hasnewsletter', 'true');
+  });
+
+  it('wraps children with Container by default', () => {
+    render(<Layout>Child</Layout>);
+    const container = screen.getByTestId('container');
+    expect(container).toBeInTheDocument();
+    expect(container).toHaveAttribute('data-class', expect.stringContaining('py-8'));
+  });
+
+  it('renders children full width when hasFullWidth is true', () => {
+    render(<Layout hasFullWidth>Child</Layout>);
+    // children should still render
+    expect(screen.getByText('Child')).toBeInTheDocument();
+    // but Container wrapper should not be present
+    expect(screen.queryByTestId('container')).toBeNull();
   });
 });
