@@ -1,6 +1,7 @@
 // src/pages/HomePage/HomePage.tsx
 import React from 'react';
 import { Layout } from '../../widgets/Layout/Layout';
+import type { SpecialOfferProps } from '../../widgets/Layout/ui/NotificationBar/types';
 import { Container } from '../../shared/ui/Container';
 import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
 import { FeatureList } from './ui/FeatureList';
@@ -17,6 +18,14 @@ import boy1x from './assets/banner-boy.png';
 import delivery from '../../shared/assets/icons/delivery.svg';
 import satisfactionIcon from '../../shared/assets/icons/star-badge.svg';
 import securePaymentIcon from '../../shared/assets/icons/shield-check.svg';
+
+const notification: SpecialOfferProps = {
+  text: 'Get 25% OFF on your first order.',
+  link: {
+    text: 'Order Now',
+    href: '#',
+  },
+};
 
 const BannerImage: React.FC = () => (
   <>
@@ -72,7 +81,14 @@ const featureItems: TFeatureProps[] = [
 ];
 
 export const HomePage: React.FC = () => (
-  <Layout hasFooter hasNewsletter hasFullWidth>
+  <Layout
+    hasFooter
+    hasNewsletter
+    hasFullWidth
+    hasNotificationBar
+    text={notification.text}
+    link={notification.link}
+  >
     <HeroSection
       bannerImage={BannerImage}
       buttonLink={bannerButton}

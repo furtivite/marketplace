@@ -5,7 +5,7 @@ import { Container } from '../../shared/ui/Container';
 import { Header } from '../Header';
 import { Footer } from '../Footer';
 import { NotificationBar } from './ui/NotificationBar';
-import type { SpecialOfferProps } from './ui/types';
+import type { SpecialOfferProps } from './ui/NotificationBar/types';
 
 export type LayoutProps = {
   children: React.ReactNode
@@ -38,17 +38,19 @@ export const Layout: React.FC<LayoutProps> = ({
     };
   }, []);
 
+  const hasNotificationOrHeader = hasNotificationBar || !withoutHeader;
+
   return (
     <div className="min-h-screen flex flex-col">
-      {hasNotificationBar && text && <NotificationBar text={text} link={link} />}
-
-      {!withoutHeader && (
-        <Header
-          className={clsx(
-            'sticky top-0 z-50 bg-white-0 transition-shadow',
-            { 'shadow-[0px_4px_8px_0px_rgba(182,183,188,0.2)]': scrolled },
-          )}
-        />
+      {hasNotificationOrHeader && (
+        <div className={clsx(
+          'sticky top-0 z-50 bg-white-0 transition-shadow',
+          { 'shadow-[0px_4px_8px_0px_rgba(182,183,188,0.2)]': scrolled },
+        )}
+        >
+          {hasNotificationBar && text && <NotificationBar text={text} link={link} />}
+          {!withoutHeader && <Header />}
+        </div>
       )}
 
       <main className="flex-grow">
@@ -59,7 +61,9 @@ export const Layout: React.FC<LayoutProps> = ({
         )}
       </main>
 
-      {hasFooter && <Footer hasNewsletter={hasNewsletter} />}
+      {
+        hasFooter && <Footer hasNewsletter={hasNewsletter} />
+      }
     </div>
   );
 };
