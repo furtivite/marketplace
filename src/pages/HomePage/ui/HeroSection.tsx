@@ -13,50 +13,48 @@ import burstPucker from '../assets/burst-pucker.svg';
 import arrow from '../../../shared/assets/icons/arrow_right_white.svg';
 
 export const HeroSection: React.FC = () => (
-  <section className="relative bg-neutral-50 py-20 overflow-hidden">
-    <Container>
-      <div className="relative z-10 text-left max-w-lg">
-        <Typography
-          type={TYPOGRAPHY_TYPES.H1}
-          as="h1"
-          className="text-neutral-900 mb-4"
-        >
-          Fresh Arrivals Online
-        </Typography>
-        <Typography
-          type={TYPOGRAPHY_TYPES.BODY_REGULAR}
-          as="p"
-          className="text-neutral-600 mb-6"
-        >
-          Discover Our Newest Collection Today.
-        </Typography>
-        <Button href="#" className="inline-flex items-center px-6 py-3">
-          View Collection
-          <img src={arrow} alt="" className="ml-2 w-4 h-4" />
-        </Button>
-      </div>
+  <section className="bg-neutral-50 overflow-hidden">
+    <Container className="relative h-full pt-[136px] pb-[136px]">
+      <Typography
+        type={TYPOGRAPHY_TYPES.H1}
+        as="h1"
+        className="text-neutral-900 mb-4"
+      >
+        Fresh Arrivals Online
+      </Typography>
+      <Typography
+        type={TYPOGRAPHY_TYPES.BODY_REGULAR}
+        as="p"
+        className="text-neutral-600 mb-6"
+      >
+        Discover Our Newest Collection Today.
+      </Typography>
+      <Button href="#" className="inline-flex items-center px-6 py-3">
+        View Collection
+        <img src={arrow} alt="" className="ml-2 w-4 h-4" />
+      </Button>
+
+      {/* Background circle */}
+      <img
+        src={ellipse}
+        alt=""
+        className="absolute right-3 -bottom-2 transform w-[340px] h-[340px]"
+      />
+
+      {/* Decorative star */}
+      <img
+        src={burstPucker}
+        alt=""
+        className="absolute right-[310px] bottom-[310px] w-6 h-6"
+      />
+
+      {/* Hero boy image */}
+      <img
+        srcSet={`${boy2x} 2x, ${boy1x} 1x`}
+        src={boy1x}
+        alt=""
+        className="absolute right-0 -bottom-2 max-h-[382px]"
+      />
     </Container>
-
-    {/* Background circle */}
-    <img
-      src={ellipse}
-      alt=""
-      className="absolute right-0 top-1/2 transform -translate-y-1/2 w-[600px] h-[600px]"
-    />
-
-    {/* Decorative star */}
-    <img
-      src={burstPucker}
-      alt=""
-      className="absolute right-40 top-12 w-6 h-6"
-    />
-
-    {/* Hero boy image */}
-    <img
-      srcSet={`${boy2x} 2x ${boy1x} 1x`}
-      src={boy1x}
-      alt=""
-      className="absolute right-0 bottom-0 max-h-[520px]"
-    />
   </section>
 );
