@@ -1,7 +1,7 @@
 // src/pages/HomePage/HomePage.tsx
 import React from 'react';
 import { Layout } from '../../widgets/Layout/Layout';
-// import { HeroSection } from './ui/HeroSection'
+import { HeroSection } from './ui/HeroSection';
 // import { BenefitsSection } from './ui/BenefitsSection'
 // import { BestSellingSection } from './ui/BestSellingSection'
 // import { BrowseCategorySection } from './ui/BrowseCategorySection'
@@ -9,7 +9,7 @@ import { Layout } from '../../widgets/Layout/Layout';
 
 export const HomePage: React.FC = () => (
   <Layout hasFooter hasNewsletter>
-    {/* <HeroSection /> */}
+    <HeroSection />
     {/* <BenefitsSection /> */}
     {/* <BestSellingSection /> */}
     {/* <BrowseCategorySection /> */}
