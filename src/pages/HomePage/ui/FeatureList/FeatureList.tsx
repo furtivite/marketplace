@@ -12,10 +12,8 @@ export const FeatureList: React.FC<TFeatureListProps> = ({ items }) => {
     return [...items].sort(() => Math.random() - 0.5).slice(0, 3);
   }, [items]);
 
-  const justifyClass = displayedItems.length <= 2 ? 'justify-between' : 'justify-start';
-
   return (
-    <ul className={`flex ${justifyClass} gap-[54px]`}>
+    <ul className="flex justify-start gap-[54px]">
       {displayedItems.map((item, index) => (
         <li key={index}>
           <Feature {...item} />
