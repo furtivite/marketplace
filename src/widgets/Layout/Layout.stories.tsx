@@ -1,3 +1,4 @@
+// src/widgets/Layout/Layout.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import { Layout } from './Layout';
 
@@ -5,6 +6,9 @@ const meta: Meta<typeof Layout> = {
   title: 'widgets/Layout',
   component: Layout,
   tags: ['autodocs'],
+  argTypes: {
+    hasFullWidth: { control: 'boolean' },
+  },
 };
 
 export default meta;
@@ -26,6 +30,7 @@ export const Default: Story = {
     hasNotificationBar: false,
     hasFooter: false,
     hasNewsletter: false,
+    hasFullWidth: false,
   },
 };
 
@@ -45,6 +50,7 @@ export const WithNotificationBarAndFooter: Story = {
     hasNotificationBar: true,
     hasFooter: true,
     hasNewsletter: true,
+    hasFullWidth: false,
     text: 'Special offer: 25% off!',
     link: { text: 'Order now', href: 'https://example.com' },
   },
@@ -63,6 +69,25 @@ export const WithoutHeaderWithFooter: Story = {
       </div>
     ),
     withoutHeader: true,
+    hasNotificationBar: false,
     hasFooter: true,
+    hasNewsletter: false,
+    hasFullWidth: false,
+  },
+};
+
+export const FullWidthContent: Story = {
+  render: (args) => (
+    <div style={{ height: '100vh', overflowY: 'auto' }}>
+      <Layout {...args} />
+    </div>
+  ),
+  args: {
+    hasFullWidth: true,
+    children: (
+      <div style={{ height: 1200, backgroundColor: '#e0e0e0' }}>
+        <p>Full-width content without Container wrapper</p>
+      </div>
+    ),
   },
 };
