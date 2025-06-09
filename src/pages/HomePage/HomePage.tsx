@@ -8,7 +8,7 @@ import { HeroSection } from './ui/HeroSection';
 // import { FeaturedTabsSection } from './ui/FeaturedTabsSection'
 
 export const HomePage: React.FC = () => (
-  <Layout hasFooter hasNewsletter>
+  <Layout hasFooter hasNewsletter hasFullWidth>
     <HeroSection />
     {/* <BenefitsSection /> */}
     {/* <BestSellingSection /> */}
