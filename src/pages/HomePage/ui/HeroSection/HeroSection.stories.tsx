@@ -1,7 +1,8 @@
 // src/pages/HomePage/ui/HeroSection.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-import { HeroSection, HeroSectionProps } from './HeroSection';
+import { HeroSection } from './HeroSection';
+import type { HeroSectionProps } from './types';
 import ellipse from '../../assets/ellipse.svg';
 import burstPucker from '../../assets/burst-pucker.svg';
 import boy1x from '../../assets/banner-boy.png';

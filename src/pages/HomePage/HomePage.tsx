@@ -56,7 +56,7 @@ export const HomePage: React.FC = () => (
       title={bannerTitle}
       subtitle={bannerSubtitle}
     />
-    <Container>
+    <Container className="mt-[88px] mb-[128px]">
       <FeatureList />
     </Container>
     {/* <BestSellingSection /> */}

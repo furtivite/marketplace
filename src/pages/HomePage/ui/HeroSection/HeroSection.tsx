@@ -3,22 +3,10 @@ import React from 'react';
 import { Container } from '../../../../shared/ui/Container';
 import { Typography, TYPOGRAPHY_TYPES } from '../../../../shared/ui/Typography';
 import { Button } from '../../../../shared/ui/Button';
+import type { HeroSectionProps } from './types';
 
 // Shared arrow icon
 import arrow from '../../../../shared/assets/icons/arrow_right_white.svg';
-
-export type THomeSectionButtonLink = {
-  text: string
-  href: string
-  hasArrow?: boolean
-};
-
-export type HeroSectionProps = {
-  bannerImage?: React.FC;
-  title: string;
-  subtitle?: string;
-  buttonLink?: THomeSectionButtonLink;
-};
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   bannerImage: BannerImage,
