@@ -11,6 +11,7 @@ type LayoutProps = {
   hasNotificationBar?: boolean;
   hasFooter?: boolean;
   hasNewsletter?: boolean;
+  hasFullWidth?: boolean;
 } & Partial<SpecialOfferProps>;
 
 export const Layout: React.FC<LayoutProps> = ({
@@ -19,6 +20,7 @@ export const Layout: React.FC<LayoutProps> = ({
   hasNotificationBar = false,
   hasFooter = false,
   hasNewsletter = false,
+  hasFullWidth = false,
   text,
   link,
 }) => (
@@ -29,7 +31,7 @@ export const Layout: React.FC<LayoutProps> = ({
     )}
 
     <main className="flex-grow">
-      <Container className="py-8">{children}</Container>
+      {hasFullWidth ? children : <Container className="py-8">{children}</Container>}
     </main>
 
     {hasFooter && (
