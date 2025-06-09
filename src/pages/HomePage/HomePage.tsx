@@ -1,9 +1,9 @@
 // src/pages/HomePage/HomePage.tsx
 import React from 'react';
 import { Layout } from '../../widgets/Layout/Layout';
-import { HeroSection } from './ui/HeroSection';
-import type { THomeSectionButtonLink } from './ui/interfaces';
-// import { BenefitsSection } from './ui/BenefitsSection'
+import { Container } from '../../shared/ui/Container';
+import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
+import { FeatureList } from './ui/FeatureList';
 // import { BestSellingSection } from './ui/BestSellingSection'
 // import { BrowseCategorySection } from './ui/BrowseCategorySection'
 // import { FeaturedTabsSection } from './ui/FeaturedTabsSection'
@@ -56,10 +56,11 @@ export const HomePage: React.FC = () => (
       title={bannerTitle}
       subtitle={bannerSubtitle}
     />
-    {/* <BenefitsSection /> */}
+    <Container>
+      <FeatureList />
+    </Container>
     {/* <BestSellingSection /> */}
     {/* <BrowseCategorySection /> */}
     {/* <FeaturedTabsSection /> */}
-    Это главная страница
   </Layout>
 );
