@@ -5,26 +5,24 @@ import { Container } from '../../shared/ui/Container';
 import { Header } from '../Header';
 import { Footer } from '../Footer';
 import { NotificationBar } from './ui/NotificationBar';
-import type { SpecialOfferProps } from './ui/NotificationBar/types';
+import type { NotificationBarProps } from './ui/NotificationBar/types';
 
 export type LayoutProps = {
-  children: React.ReactNode
+  children: React.ReactNode,
+  notificationBar?: NotificationBarProps
   withoutHeader?: boolean
-  hasNotificationBar?: boolean
   hasFooter?: boolean
   hasNewsletter?: boolean
   hasFullWidth?: boolean
-} & Partial<SpecialOfferProps>;
+};
 
 export const Layout: React.FC<LayoutProps> = ({
   children,
   withoutHeader = false,
-  hasNotificationBar = false,
+  notificationBar,
   hasFooter = false,
   hasNewsletter = false,
   hasFullWidth = false,
-  text,
-  link,
 }) => {
   const [scrolled, setScrolled] = useState(false);
 
@@ -38,7 +36,7 @@ export const Layout: React.FC<LayoutProps> = ({
     };
   }, []);
 
-  const hasNotificationOrHeader = hasNotificationBar || !withoutHeader;
+  const hasNotificationOrHeader = !!notificationBar || !withoutHeader;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -48,7 +46,9 @@ export const Layout: React.FC<LayoutProps> = ({
           { 'shadow-[0px_4px_8px_0px_rgba(182,183,188,0.2)]': scrolled },
         )}
         >
-          {hasNotificationBar && text && <NotificationBar text={text} link={link} />}
+          {notificationBar && (
+            <NotificationBar text={notificationBar.text} link={notificationBar.link} />
+          )}
           {!withoutHeader && <Header />}
         </div>
       )}

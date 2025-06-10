@@ -1,7 +1,7 @@
 // src/pages/HomePage/HomePage.tsx
 import React from 'react';
 import { Layout } from '../../widgets/Layout/Layout';
-import type { SpecialOfferProps } from '../../widgets/Layout/ui/NotificationBar/types';
+import type { NotificationBarProps } from '../../widgets/Layout/ui/NotificationBar/types';
 import { Container } from '../../shared/ui/Container';
 import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
 import { FeatureList } from './ui/FeatureList';
@@ -19,7 +19,7 @@ import delivery from '../../shared/assets/icons/delivery.svg';
 import satisfactionIcon from '../../shared/assets/icons/star-badge.svg';
 import securePaymentIcon from '../../shared/assets/icons/shield-check.svg';
 
-const notification: SpecialOfferProps = {
+const notification: NotificationBarProps = {
   text: 'Get 25% OFF on your first order.',
   link: {
     text: 'Order Now',
@@ -85,9 +85,7 @@ export const HomePage: React.FC = () => (
     hasFooter
     hasNewsletter
     hasFullWidth
-    hasNotificationBar
-    text={notification.text}
-    link={notification.link}
+    notificationBar={notification}
   >
     <HeroSection
       bannerImage={BannerImage}

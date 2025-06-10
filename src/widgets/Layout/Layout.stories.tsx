@@ -1,12 +1,18 @@
 // src/widgets/Layout/Layout.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
 import { Layout } from './Layout';
+import type { NotificationBarProps } from './ui/NotificationBar/types';
 
 const meta: Meta<typeof Layout> = {
   title: 'widgets/Layout',
   component: Layout,
   tags: ['autodocs'],
   argTypes: {
+    withoutHeader: { control: 'boolean' },
+    notificationBar: { control: 'object' },
+    hasFooter: { control: 'boolean' },
+    hasNewsletter: { control: 'boolean' },
     hasFullWidth: { control: 'boolean' },
   },
 };
@@ -27,7 +33,7 @@ export const Default: Story = {
       </div>
     ),
     withoutHeader: false,
-    hasNotificationBar: false,
+    notificationBar: undefined,
     hasFooter: false,
     hasNewsletter: false,
     hasFullWidth: false,
@@ -47,12 +53,13 @@ export const WithNotificationBarAndFooter: Story = {
       </div>
     ),
     withoutHeader: false,
-    hasNotificationBar: true,
+    notificationBar: {
+      text: 'Special offer: 25% off!',
+      link: { text: 'Order now', href: 'https://example.com' },
+    } as NotificationBarProps,
     hasFooter: true,
     hasNewsletter: true,
     hasFullWidth: false,
-    text: 'Special offer: 25% off!',
-    link: { text: 'Order now', href: 'https://example.com' },
   },
 };
 
@@ -69,7 +76,7 @@ export const WithoutHeaderWithFooter: Story = {
       </div>
     ),
     withoutHeader: true,
-    hasNotificationBar: false,
+    notificationBar: undefined,
     hasFooter: true,
     hasNewsletter: false,
     hasFullWidth: false,
@@ -83,11 +90,15 @@ export const FullWidthContent: Story = {
     </div>
   ),
   args: {
-    hasFullWidth: true,
     children: (
       <div style={{ height: 1200, backgroundColor: '#e0e0e0' }}>
         <p>Full-width content without Container wrapper</p>
       </div>
     ),
+    withoutHeader: false,
+    notificationBar: undefined,
+    hasFooter: false,
+    hasNewsletter: false,
+    hasFullWidth: true,
   },
 };

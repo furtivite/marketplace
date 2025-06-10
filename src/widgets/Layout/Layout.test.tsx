@@ -56,9 +56,9 @@ describe('Layout component', () => {
     expect(screen.queryByTestId('header')).toBeNull();
   });
 
-  it('renders notification bar when requested', () => {
+  it('renders notification bar when notificationBar prop is provided', () => {
     render(
-      <Layout hasNotificationBar text="Big sale!" link={{ href: '#', text: 'Shop' }}>
+      <Layout notificationBar={{ text: 'Big sale!', link: { href: '#', text: 'Shop' } }}>
         Child
       </Layout>,
     );
@@ -93,9 +93,7 @@ describe('Layout component', () => {
 
   it('renders children full width when hasFullWidth is true', () => {
     render(<Layout hasFullWidth>Child</Layout>);
-    // children should still render
     expect(screen.getByText('Child')).toBeInTheDocument();
-    // but Container wrapper should not be present
     expect(screen.queryByTestId('container')).toBeNull();
   });
 });
