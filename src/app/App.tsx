@@ -7,6 +7,7 @@ export const App: React.FC = () => (
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="*" element={<>404</>} />
     </Routes>
   </BrowserRouter>
 );
