@@ -1,8 +1,13 @@
+// src/app/App.tsx
 import * as React from 'react';
-import { Typography, TYPOGRAPHY_TYPES } from '../shared/ui/Typography';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HomePage } from '../pages/HomePage/HomePage';
 
 export const App: React.FC = () => (
-  <Typography type={TYPOGRAPHY_TYPES.H1} as="h1" className="text-primary-400">
-    Tailwind работает
-  </Typography>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="*" element={<>404</>} />
+    </Routes>
+  </BrowserRouter>
 );

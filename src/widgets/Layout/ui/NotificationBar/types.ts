@@ -1,4 +1,4 @@
-export type SpecialOfferProps = {
+export type NotificationBarProps = {
   text: string;
   link?: {
     text: string;

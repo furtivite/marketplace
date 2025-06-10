@@ -30,6 +30,16 @@ vi.mock('./ui/NotificationBar', () => ({
   ),
 }));
 
+// Mock Container to detect wrapping and className
+vi.mock('../../shared/ui/Container', () => ({
+  __esModule: true,
+  Container: ({ children, className }: any) => (
+    <div data-testid="container" data-class={className}>
+      {children}
+    </div>
+  ),
+}));
+
 /* ==== tests ============================================================ */
 
 describe('Layout component', () => {
@@ -46,9 +56,9 @@ describe('Layout component', () => {
     expect(screen.queryByTestId('header')).toBeNull();
   });
 
-  it('renders notification bar when requested', () => {
+  it('renders notification bar when notificationBar prop is provided', () => {
     render(
-      <Layout hasNotificationBar text="Big sale!" link={{ href: '#', text: 'Shop' }}>
+      <Layout notificationBar={{ text: 'Big sale!', link: { href: '#', text: 'Shop' } }}>
         Child
       </Layout>,
     );
@@ -72,5 +82,18 @@ describe('Layout component', () => {
     );
     const footer = screen.getByTestId('footer');
     expect(footer).toHaveAttribute('data-hasnewsletter', 'true');
+  });
+
+  it('wraps children with Container by default', () => {
+    render(<Layout>Child</Layout>);
+    const container = screen.getByTestId('container');
+    expect(container).toBeInTheDocument();
+    expect(container).toHaveAttribute('data-class', expect.stringContaining('py-8'));
+  });
+
+  it('renders children full width when hasFullWidth is true', () => {
+    render(<Layout hasFullWidth>Child</Layout>);
+    expect(screen.getByText('Child')).toBeInTheDocument();
+    expect(screen.queryByTestId('container')).toBeNull();
   });
 });
