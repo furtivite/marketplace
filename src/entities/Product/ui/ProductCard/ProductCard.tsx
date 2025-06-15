@@ -4,9 +4,9 @@ import * as React from 'react';
 import { Typography, TYPOGRAPHY_TYPES } from '../../../../shared/ui/Typography';
 import { IProduct } from '../../model/types';
 
-import HeartIcon from '@/shared/assets/icons/social/heart_unfilled_gray.svg?react';
-import HeartFilledIcon from '@/shared/assets/icons/social/heart_filled_gray.svg?react';
-import ShoppingCartIcon from '@/shared/assets/icons/social/add-to-cart_white.svg?react';
+import HeartIcon from '../../../../shared/assets/icons/heart_unfilled_gray.svg?react';
+import HeartFilledIcon from '../../../../shared/assets/icons/heart_filled_gray.svg?react';
+import ShoppingCartIcon from '../../../../shared/assets/icons/add-to-cart_white.svg?react';
 
 type ProductCardProps = {
   product: IProduct;
@@ -30,7 +30,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <article
       className="
-        group relative rounded-lg bg-white
+        max-w-[264px] max-h-[434px]
+        group relative rounded-lg bg-white-0
         hover:shadow-lg transition-shadow
         focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary
       "
@@ -82,8 +83,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         "
       >
         {isLiked
-          ? <HeartFilledIcon className="h-6 w-6" aria-hidden="true" />
-          : <HeartIcon className="h-6 w-6" aria-hidden="true" />}
+          ? <HeartFilledIcon />
+          : <HeartIcon />}
       </button>
     </article>
   );
