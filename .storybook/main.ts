@@ -24,7 +24,6 @@ const config: StorybookConfig = {
       '@tools': resolve(__dirname, '../tools'),
     };
 
-    // @ts-expect-error tailwindcss is CommonJS with default export
     const tailwindcss = (await import('tailwindcss')).default;
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const tailwindConfig = require('../tailwind.storybook.config.cjs');

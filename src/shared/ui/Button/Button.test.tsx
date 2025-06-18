@@ -1,17 +1,29 @@
 // src/shared/ui/Button/Button.test.tsx
+
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { Button } from './Button';
 
+// DummyIcon – замена реального SVG, чтобы в тестах не пытаться рендерить data URI
+const DummyIcon: React.FC<React.SVGProps<SVGSVGElement> & { 'data-testid'?: string }> = (props) => (
+  <svg {...props} />
+);
+
 describe('Button component', () => {
-  it('renders as a <button> by default with correct type and classes', () => {
+  it('renders as a <button> by default with correct type, classes and rounded corners', () => {
     render(<Button>Click me</Button>);
     const btn = screen.getByRole('button', { name: 'Click me' });
     expect(btn.tagName).toBe('BUTTON');
     expect(btn).toHaveAttribute('type', 'button');
-    // default variant + default size
-    expect(btn).toHaveClass('bg-neutral-900', 'text-white-0', 'h-[48px]', 'px-6', 'text-sm');
+    expect(btn).toHaveClass(
+      'bg-neutral-900',
+      'text-white-0',
+      'h-[48px]',
+      'px-6',
+      'text-sm',
+      'rounded-[4px]',
+    );
   });
 
   it('applies custom className and forwards props', () => {
@@ -39,9 +51,13 @@ describe('Button component', () => {
   ] as const)('applies variant "%s" classes', (variant, expectedClasses) => {
     render(<Button variant={variant}>{variant}</Button>);
     const btn = screen.getByRole('button', { name: variant });
-    expectedClasses.forEach((cls) => {
-      expect(btn).toHaveClass(cls);
-    });
+    expectedClasses.forEach((cls) => expect(btn).toHaveClass(cls));
+  });
+
+  it('removes rounded corners when squareCorners is true', () => {
+    render(<Button squareCorners>Square</Button>);
+    const btn = screen.getByRole('button', { name: 'Square' });
+    expect(btn).not.toHaveClass('rounded-[4px]');
   });
 
   it('renders as <a> for internal link without target/rel', () => {
@@ -60,5 +76,28 @@ describe('Button component', () => {
     expect(link).toHaveAttribute('href', 'https://example.com');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('renders start icon when renderStartIcon is provided and ignores renderEndIcon', () => {
+    render(
+      <Button
+        renderStartIcon={<DummyIcon data-testid="start-icon" />}
+        renderEndIcon={<DummyIcon data-testid="end-icon" />}
+      >
+        IconTest
+      </Button>,
+    );
+    expect(screen.getByTestId('start-icon')).toBeInTheDocument();
+    expect(screen.queryByTestId('end-icon')).toBeNull();
+  });
+
+  it('renders end icon when renderEndIcon is provided and no renderStartIcon', () => {
+    render(
+      <Button renderEndIcon={<DummyIcon data-testid="end-icon" />}>
+        IconTest
+      </Button>,
+    );
+    expect(screen.getByTestId('end-icon')).toBeInTheDocument();
+    expect(screen.queryByTestId('start-icon')).toBeNull();
   });
 });

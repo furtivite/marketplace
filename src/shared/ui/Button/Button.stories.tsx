@@ -1,5 +1,8 @@
+// src/shared/ui/Button.stories.tsx
+
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
+import ShoppingCartIcon from '../../assets/icons/add-to-cart_white.svg?react';
 
 const meta: Meta<typeof Button> = {
   title: 'shared/Button',
@@ -18,6 +21,18 @@ const meta: Meta<typeof Button> = {
     href: {
       control: 'text',
       description: 'Если указан, кнопка рендерится как <a>',
+    },
+    squareCorners: {
+      control: 'boolean',
+      description: 'Убирает скругление углов',
+    },
+    renderStartIcon: {
+      control: false,
+      description: 'Иконка слева от текста. Если указана, renderEndIcon игнорируется.',
+    },
+    renderEndIcon: {
+      control: false,
+      description: 'Иконка справа от текста (если нет renderStartIcon).',
     },
     onClick: { action: 'clicked' },
     disabled: {
@@ -66,26 +81,32 @@ export const SmallDefault: Story = {
   },
 };
 
-export const SmallOutline: Story = {
-  args: {
-    children: 'Добавить',
-    variant: 'outline',
-    isSmall: true,
-  },
-};
-
-export const SmallOutlineBlack: Story = {
-  args: {
-    children: 'Назад',
-    variant: 'outline-black',
-    isSmall: true,
-  },
-};
-
 export const AsLink: Story = {
   args: {
     children: 'Перейти',
     href: 'https://example.com',
     variant: 'white',
+  },
+};
+
+export const SquareCorners: Story = {
+  args: {
+    children: 'Купить',
+    variant: 'default',
+    squareCorners: true,
+  },
+};
+
+export const WithStartIcon: Story = {
+  args: {
+    children: 'Купить',
+    renderStartIcon: <ShoppingCartIcon className="h-5 w-5" />,
+  },
+};
+
+export const WithEndIcon: Story = {
+  args: {
+    children: 'Купить',
+    renderEndIcon: <ShoppingCartIcon className="h-5 w-5" />,
   },
 };

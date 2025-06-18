@@ -1,3 +1,5 @@
+// src/shared/ui/Button.tsx
+
 import * as React from 'react';
 import clsx from 'clsx';
 import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
@@ -9,13 +11,18 @@ interface CommonProps {
   variant?: ButtonVariant;
   isSmall?: boolean;
   className?: string;
+  squareCorners?: boolean;
+  renderStartIcon?: React.ReactNode;
+  renderEndIcon?: React.ReactNode;
 }
 
-type ButtonAsLinkProps = CommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+type ButtonAsLinkProps = CommonProps &
+React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
 };
 
-type ButtonAsButtonProps = CommonProps & React.ButtonHTMLAttributes<HTMLButtonElement> & {
+type ButtonAsButtonProps = CommonProps &
+React.ButtonHTMLAttributes<HTMLButtonElement> & {
   href?: undefined;
 };
 
@@ -25,12 +32,11 @@ export const Button: React.FC<ButtonAsLinkProps | ButtonAsButtonProps> = (props)
     className,
     variant = 'default',
     isSmall = false,
+    squareCorners = false,
+    renderStartIcon,
+    renderEndIcon,
     ...rest
   } = props;
-
-  const base = 'inline-flex items-center justify-center font-semibold rounded-[4px] transition-colors '
-    + 'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 '
-    + 'disabled:opacity-50 disabled:pointer-events-none';
 
   const variants: Record<ButtonVariant, string> = {
     default: 'bg-neutral-900 text-white-0 hover:bg-neutral-800',
@@ -39,34 +45,55 @@ export const Button: React.FC<ButtonAsLinkProps | ButtonAsButtonProps> = (props)
     'outline-black': 'border border-neutral-900 text-neutral-900 bg-white-0',
   };
 
-  const sizes = isSmall
+  const sizeClasses = isSmall
     ? 'h-[32px] px-4 text-xs'
     : 'h-[48px] px-6 text-sm';
 
-  const finalClassName = clsx(base, variants[variant], sizes, className);
+  const baseClasses = clsx(
+    'inline-flex items-center justify-center font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none',
+    !squareCorners && 'rounded-[4px]',
+    variants[variant],
+    sizeClasses,
+    className,
+  );
 
-  if (typeof props.href === 'string') {
-    const isExternal = props.href.startsWith('http');
+  const content = (
+    <>
+      {renderStartIcon && <span className="mr-2">{renderStartIcon}</span>}
+      <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} as="span">
+        {children}
+      </Typography>
+      {!renderStartIcon && renderEndIcon && <span className="ml-2">{renderEndIcon}</span>}
+    </>
+  );
+
+  if ('href' in props) {
+    // используем props.href (гарантированно строка), а не rest.href
+    const { href } = props;
+    const anchorRest = rest as React.AnchorHTMLAttributes<HTMLAnchorElement>;
+    const isExternal = props.href?.startsWith('http') ?? false;
+
     return (
       <a
-        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
-        href={props.href}
-        className={finalClassName}
+        {...anchorRest}
+        href={href}
+        className={baseClasses}
         target={isExternal ? '_blank' : undefined}
         rel={isExternal ? 'noopener noreferrer' : undefined}
       >
-        {children}
+        {content}
       </a>
     );
   }
 
+  const buttonRest = rest as React.ButtonHTMLAttributes<HTMLButtonElement>;
   return (
     <button
-      {...(rest as React.ButtonHTMLAttributes<HTMLButtonElement>)}
-      type={props.type ?? 'button'}
-      className={finalClassName}
+      {...buttonRest}
+      type={buttonRest.type ?? 'button'}
+      className={baseClasses}
     >
-      <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} as="span">{children}</Typography>
+      {content}
     </button>
   );
 };
