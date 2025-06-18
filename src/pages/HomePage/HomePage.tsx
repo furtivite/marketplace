@@ -10,6 +10,7 @@ import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
 import { FeatureList } from './ui/FeatureList';
 import type { TFeatureProps } from './ui/Feature/types';
 import { BestSellingSection } from './ui/BestSellingSection';
+import { FeaturedLatestSection } from './ui/FeaturedLatestSection';
 
 import ellipse from './assets/ellipse.svg';
 import burstPucker from './assets/burst-pucker.svg';
@@ -76,8 +77,9 @@ const featureItems: TFeatureProps[] = [
 ];
 
 export const HomePage: React.FC = () => {
-  // выбираем только товары с id 1–4
   const bestSelling = filterProductsByIds(mockProducts, [1, 2, 3, 4]);
+  const featuredProducts = filterProductsByIds(mockProducts, [5, 6, 7, 8]);
+  const latestProducts = filterProductsByIds(mockProducts, [11, 10, 4, 1]);
 
   return (
     <Layout
@@ -92,10 +94,15 @@ export const HomePage: React.FC = () => {
         title={bannerTitle}
         subtitle={bannerSubtitle}
       />
+
       <Container className="mt-[88px] mb-[128px]">
         <FeatureList items={featureItems} />
-        <BestSellingSection
-          products={bestSelling}
+
+        <BestSellingSection products={bestSelling} />
+
+        <FeaturedLatestSection
+          featured={featuredProducts}
+          latest={latestProducts}
         />
       </Container>
     </Layout>
