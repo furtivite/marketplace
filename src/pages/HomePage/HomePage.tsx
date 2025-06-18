@@ -10,6 +10,8 @@ import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
 import { FeatureList } from './ui/FeatureList';
 import type { TFeatureProps } from './ui/Feature/types';
 import { BestSellingSection } from './ui/BestSellingSection';
+import { FeaturedLatestSection } from './ui/FeaturedLatestSection';
+import { BrowseBanner } from './ui/BrowseBanner';
 
 import ellipse from './assets/ellipse.svg';
 import burstPucker from './assets/burst-pucker.svg';
@@ -18,6 +20,8 @@ import boy1x from './assets/banner-boy.png';
 import delivery from '../../shared/assets/icons/delivery.svg';
 import satisfactionIcon from '../../shared/assets/icons/star-badge.svg';
 import securePaymentIcon from '../../shared/assets/icons/shield-check.svg';
+import poncho1x from './assets/browse-poncho.png';
+import poncho2x from './assets/browse-poncho@2x.png';
 
 const notification: NotificationBarProps = {
   text: 'Get 25% OFF on your first order.',
@@ -75,9 +79,25 @@ const featureItems: TFeatureProps[] = [
   },
 ];
 
+const CategoryBanner: React.FC = () => (
+  <picture>
+    <source srcSet={`${poncho2x} 2x, ${poncho1x} 1x`} />
+    <img src={poncho1x} alt="" width={225} height={311} />
+  </picture>
+);
+
+const categoryContentTitle = 'Browse Our Fashion Paradise!';
+const categoryContentSubtitle = 'Step into a world of style and explore our diverse collection of clothing categories.';
+const categoryContentLink: THomeSectionButtonLink = {
+  text: 'Start Browsing',
+  href: '#',
+  hasArrow: true,
+};
+
 export const HomePage: React.FC = () => {
-  // выбираем только товары с id 1–4
   const bestSelling = filterProductsByIds(mockProducts, [1, 2, 3, 4]);
+  const featuredProducts = filterProductsByIds(mockProducts, [5, 6, 7, 8]);
+  const latestProducts = filterProductsByIds(mockProducts, [11, 10, 4, 1]);
 
   return (
     <Layout
@@ -92,10 +112,24 @@ export const HomePage: React.FC = () => {
         title={bannerTitle}
         subtitle={bannerSubtitle}
       />
-      <Container className="mt-[88px] mb-[128px]">
+
+      <Container className="mt-[88px] mb-[161px]">
         <FeatureList items={featureItems} />
-        <BestSellingSection
-          products={bestSelling}
+
+        <BestSellingSection products={bestSelling} />
+      </Container>
+
+      <BrowseBanner
+        title={categoryContentTitle}
+        subtitle={categoryContentSubtitle}
+        link={categoryContentLink}
+        BannerImage={CategoryBanner}
+      />
+
+      <Container className="mt-[152px] mb-[128px]">
+        <FeaturedLatestSection
+          featured={featuredProducts}
+          latest={latestProducts}
         />
       </Container>
     </Layout>

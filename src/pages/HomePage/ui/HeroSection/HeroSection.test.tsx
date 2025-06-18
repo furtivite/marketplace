@@ -1,8 +1,25 @@
 // src/pages/HomePage/ui/HeroSection.test.tsx
+/**
+ * @vitest-environment jsdom
+ */
 import * as React from 'react';
 import { render, screen, within } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import {
+  describe, it, expect, vi,
+} from 'vitest';
 import { HeroSection } from './HeroSection';
+
+// ────────────────────────────────────────────────────────────
+// mock inline-SVG, чтобы его можно было отловить в тестах
+// ────────────────────────────────────────────────────────────
+vi.mock(
+  '../../../../shared/assets/icons/arrow_right_white.svg?react',
+  () => ({
+    __esModule: true,
+    // eslint-disable-next-line react/display-name
+    default: () => <svg data-testid="arrow-icon" />,
+  }),
+);
 
 const DummyBanner: React.FC = () => <div data-testid="dummy-banner" />;
 
@@ -27,43 +44,24 @@ describe('HeroSection', () => {
   });
 
   it('renders button when buttonLink provided', () => {
-    render(
-      <HeroSection
-        title={defaultTitle}
-        buttonLink={defaultButtonLink}
-      />,
-    );
-    const button = screen.getByText(defaultButtonLink.text);
-    expect(button).toBeInTheDocument();
-    const link = button.closest('a');
+    render(<HeroSection title={defaultTitle} buttonLink={defaultButtonLink} />);
+    const link = screen.getByRole('link', { name: defaultButtonLink.text });
     expect(link).toHaveAttribute('href', defaultButtonLink.href);
   });
 
   it('does not render button when buttonLink not provided', () => {
     render(<HeroSection title={defaultTitle} />);
-    expect(screen.queryByText(defaultButtonLink.text)).toBeNull();
+    expect(screen.queryByRole('link', { name: defaultButtonLink.text })).toBeNull();
   });
 
   it('renders arrow icon inside button when hasArrow is true', () => {
-    render(
-      <HeroSection
-        title={defaultTitle}
-        buttonLink={defaultButtonLink}
-      />,
-    );
-    const button = screen.getByText(defaultButtonLink.text).closest('a')!;
-    // Query by empty alt text, since decorative <img alt=""> will have no accessible name
-    const img = within(button).getByAltText('');
-    expect(img).toHaveAttribute('alt', '');
+    render(<HeroSection title={defaultTitle} buttonLink={defaultButtonLink} />);
+    const link = screen.getByRole('link', { name: defaultButtonLink.text });
+    expect(within(link).getByTestId('arrow-icon')).toBeInTheDocument();
   });
 
   it('renders bannerImage when provided', () => {
-    render(
-      <HeroSection
-        title={defaultTitle}
-        bannerImage={DummyBanner}
-      />,
-    );
+    render(<HeroSection title={defaultTitle} bannerImage={DummyBanner} />);
     expect(screen.getByTestId('dummy-banner')).toBeInTheDocument();
   });
 

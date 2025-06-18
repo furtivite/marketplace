@@ -1,12 +1,12 @@
 // src/pages/HomePage/ui/HeroSection.tsx
+
 import React from 'react';
 import { Container } from '../../../../shared/ui/Container';
 import { Typography, TYPOGRAPHY_TYPES } from '../../../../shared/ui/Typography';
 import { Button } from '../../../../shared/ui/Button';
 import type { HeroSectionProps } from './types';
 
-// Shared arrow icon
-import arrow from '../../../../shared/assets/icons/arrow_right_white.svg';
+import ArrowRightIcon from '../../../../shared/assets/icons/arrow_right_white.svg?react';
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   bannerImage: BannerImage,
@@ -19,7 +19,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <Typography
         type={TYPOGRAPHY_TYPES.H1}
         as="h1"
-        className="text-neutral-900 mb-4"
+        className="mb-4 text-neutral-900"
       >
         {title}
       </Typography>
@@ -28,18 +28,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <Typography
           type={TYPOGRAPHY_TYPES.BODY_REGULAR}
           as="p"
-          className="text-neutral-600 mb-6"
+          className="mb-6 text-neutral-600"
         >
           {subtitle}
         </Typography>
       )}
 
       {buttonLink && (
-        <Button href={buttonLink.href} className="inline-flex items-center px-6 py-3">
+        <Button
+          href={buttonLink.href}
+          renderEndIcon={
+            buttonLink.hasArrow ? (
+              <ArrowRightIcon width={16} height={16} aria-hidden />
+            ) : undefined
+          }
+        >
           {buttonLink.text}
-          {buttonLink.hasArrow && (
-            <img src={arrow} alt="" className="ml-2 w-4 h-4" />
-          )}
         </Button>
       )}
 
