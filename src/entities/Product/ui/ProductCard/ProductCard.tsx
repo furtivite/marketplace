@@ -1,6 +1,7 @@
 // src/entities/product/ui/ProductCard/ProductCard.tsx
 
 import * as React from 'react';
+import clsx from 'clsx';
 import { Typography, TYPOGRAPHY_TYPES } from '../../../../shared/ui/Typography';
 import { Button } from '../../../../shared/ui/Button';
 import { IProduct } from '../../model/types';
@@ -13,12 +14,14 @@ type ProductCardProps = {
   product: IProduct;
   onAddToCart?: () => void;
   onToggleLike?: () => void;
+  showStockStatus?: boolean;
 };
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onAddToCart,
   onToggleLike,
+  showStockStatus = true,
 }) => {
   const {
     id,
@@ -34,14 +37,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       role="group"
       aria-labelledby={`product-title-${id}`}
       className="
-        max-w-[264px] h-[475px] group relative rounded-lg bg-white-0 overflow-hidden
+        max-w-[264px] h-[434px] group relative rounded-lg bg-white-0 overflow-hidden
+        flex flex-col justify-between
         transition-shadow
         group-hover:shadow-lg
+        outline-transparent
       "
     >
-      <div className="rounded-lg overflow-hidden">
+      <div className="relative rounded-lg bg-white-100 h-[312px] overflow-hidden">
         {/* Image + semi-transparent overlay */}
-        <div className="relative h-[260px] overflow-hidden">
+        <div
+          className={clsx(
+            isInStock ? 'h-[260px]' : 'h-full',
+            'relative bg-white-100 overflow-hidden',
+          )}
+        >
           <img
             src={image}
             alt={title}
@@ -57,20 +67,27 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           />
         </div>
 
-        {/* Add to cart button (reserved space, appears on hover or focus-within) */}
-        <div className="h-12">
+        {/* Add to cart button (always in DOM but visually hidden when out of stock) */}
+        <div className="h-12 w-full absolute left-0 bottom-0">
           <Button
             onClick={onAddToCart}
             disabled={!isInStock}
+            aria-disabled={!isInStock}
             squareCorners
             renderStartIcon={<ShoppingCartIcon className="h-5 w-5" aria-hidden="true" />}
-            className="
-              w-full opacity-0 transition-opacity
-              group-hover:opacity-100 group-focus-within:opacity-100
-            "
-            aria-label={`Add ${title} to cart`}
+            className={clsx(
+              'w-full transition-opacity',
+              isInStock
+                ? 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100'
+                : 'sr-only',
+            )}
+            aria-label={
+              isInStock
+                ? `Add ${title} to cart`
+                : `${title} is out of stock`
+            }
           >
-            Add to cart
+            {isInStock ? 'Add to cart' : 'Out of stock'}
           </Button>
         </div>
       </div>
@@ -78,21 +95,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Content */}
       <div className="p-4">
         <Typography
-          as="h2"
+          as="h1"
           id={`product-title-${id}`}
-          type={TYPOGRAPHY_TYPES.H5}
-          className="mb-2 text-black"
+          type={TYPOGRAPHY_TYPES.BODY_MEDIUM}
+          className="mb-2 text-neutral-900"
         >
           {title}
         </Typography>
-        <div className="flex items-center justify-between">
-          <Typography
-            type={TYPOGRAPHY_TYPES.LABEL_UPPERCASE}
-            className="px-2 py-0.5 border border-secondary rounded-lg"
-          >
-            {isInStock ? 'In Stock' : 'Out of Stock'}
-          </Typography>
-          <Typography type={TYPOGRAPHY_TYPES.BODY_REGULAR} className="text-primary">
+        <div className="flex items-center justify-start gap-4">
+          {showStockStatus && (
+            <Typography
+              type={TYPOGRAPHY_TYPES.LABEL_UPPERCASE}
+              className="px-4 py-0.5 border border-secondary rounded-full"
+            >
+              {isInStock ? 'In Stock' : 'Out of Stock'}
+            </Typography>
+          )}
+          <Typography type={TYPOGRAPHY_TYPES.BODY_REGULAR} className="text-neutral-600">
             $
             {price.toFixed(2)}
           </Typography>
@@ -104,7 +123,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         type="button"
         onClick={onToggleLike}
         aria-pressed={isLiked}
-        aria-label={isLiked ? `Remove ${title} from favorites` : `Add ${title} to favorites`}
+        aria-label={
+          isLiked
+            ? `Remove ${title} from favorites`
+            : `Add ${title} to favorites`
+        }
         className="
           absolute top-2 right-2 opacity-0 transition-opacity
           group-hover:opacity-100 group-focus-within:opacity-100
