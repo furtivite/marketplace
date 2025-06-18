@@ -1,4 +1,5 @@
 // src/entities/product/ui/ProductCard/ProductCard.tsx
+
 import * as React from 'react';
 import clsx from 'clsx';
 import { IProduct } from '../../model/types';
@@ -20,12 +21,11 @@ export const ProductCard: React.FC<Props> = ({
   showStockStatus = true,
 }) => (
   <article
-    role="group"
     aria-labelledby={`product-title-${product.id}`}
     className={clsx(
       'max-w-[264px] h-[434px] group relative rounded-lg bg-white-0 overflow-hidden',
       'flex flex-col justify-between transition-shadow',
-      'group-hover:shadow-lg outline-transparent',
+      'group-hover:shadow-lg',
     )}
   >
     <ProductCardImage

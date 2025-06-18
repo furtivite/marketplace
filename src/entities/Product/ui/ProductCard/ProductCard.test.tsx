@@ -31,6 +31,12 @@ describe('ProductCard', () => {
     isLiked: false,
   };
 
+  it('renders the article with correct aria-labelledby', () => {
+    render(<ProductCard product={baseProduct} />);
+    const card = screen.getByLabelText(baseProduct.title);
+    expect(card).toHaveAttribute('aria-labelledby', `product-title-${baseProduct.id}`);
+  });
+
   it('renders the image with correct src and alt', () => {
     render(<ProductCard product={baseProduct} />);
     const img = screen.getByAltText(baseProduct.title);
@@ -56,8 +62,8 @@ describe('ProductCard', () => {
   it('calls onAddToCart when the Add to cart button is clicked', () => {
     const onAdd = vi.fn();
     render(<ProductCard product={baseProduct} onAddToCart={onAdd} />);
-    // reveal the button
-    fireEvent.mouseOver(screen.getByRole('group'));
+    const card = screen.getByLabelText(baseProduct.title);
+    fireEvent.mouseOver(card);
     const btn = screen.getByRole('button', { name: `Add ${baseProduct.title} to cart` });
     fireEvent.click(btn);
     expect(onAdd).toHaveBeenCalledOnce();
@@ -66,6 +72,8 @@ describe('ProductCard', () => {
   it('renders a disabled sr-only Add to cart button when out of stock', () => {
     const oos = { ...baseProduct, isInStock: false };
     render(<ProductCard product={oos} />);
+    const card = screen.getByLabelText(oos.title);
+    fireEvent.mouseOver(card);
     const btn = screen.getByRole('button', { name: `${oos.title} is out of stock` });
     expect(btn).toBeDisabled();
     expect(btn).toHaveClass('sr-only');
@@ -74,7 +82,8 @@ describe('ProductCard', () => {
   it('calls onToggleLike when the like button is clicked', () => {
     const onToggle = vi.fn();
     render(<ProductCard product={baseProduct} onToggleLike={onToggle} />);
-    fireEvent.mouseOver(screen.getByRole('group'));
+    const card = screen.getByLabelText(baseProduct.title);
+    fireEvent.mouseOver(card);
     const likeBtn = screen.getByRole('button', { name: `Add ${baseProduct.title} to favorites` });
     fireEvent.click(likeBtn);
     expect(onToggle).toHaveBeenCalledOnce();
@@ -83,13 +92,15 @@ describe('ProductCard', () => {
   it('shows filled heart icon when isLiked=true', () => {
     const liked = { ...baseProduct, isLiked: true };
     render(<ProductCard product={liked} />);
-    fireEvent.mouseOver(screen.getByRole('group'));
+    const card = screen.getByLabelText(liked.title);
+    fireEvent.mouseOver(card);
     expect(screen.getByTestId('heart-filled-icon')).toBeInTheDocument();
   });
 
   it('shows unfilled heart icon when isLiked=false', () => {
     render(<ProductCard product={baseProduct} />);
-    fireEvent.mouseOver(screen.getByRole('group'));
+    const card = screen.getByLabelText(baseProduct.title);
+    fireEvent.mouseOver(card);
     expect(screen.getByTestId('heart-unfilled-icon')).toBeInTheDocument();
   });
 });

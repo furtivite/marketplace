@@ -1,4 +1,5 @@
 // src/pages/HomePage/HomePage.test.tsx
+
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import {
@@ -17,13 +18,11 @@ beforeAll(() => {
     ) {
       return;
     }
-    // всё остальное — на обычный warn
     warn(...args);
   });
 });
 
 afterAll(() => {
-  // Восстанавливаем оригинальный console.warn
   vi.restoreAllMocks();
 });
 
@@ -69,6 +68,14 @@ vi.mock('./ui/FeatureList', () => ({
   FeatureList: () => <div data-testid="feature-list" />,
 }));
 
+// Mock BestSellingSection to inspect products prop
+vi.mock('./ui/BestSellingSection', () => ({
+  __esModule: true,
+  BestSellingSection: ({ products }: { products: { id: number }[] }) => (
+    <div data-testid="best-selling-section" data-product-ids={JSON.stringify(products.map((p) => p.id))} />
+  ),
+}));
+
 describe('HomePage', () => {
   it('renders Layout with correct props and children', () => {
     render(<HomePage />);
@@ -91,5 +98,13 @@ describe('HomePage', () => {
     const container = screen.getByTestId('container');
     const featureList = screen.getByTestId('feature-list');
     expect(container).toContainElement(featureList);
+  });
+
+  it('renders BestSellingSection with first 4 product ids', () => {
+    render(<HomePage />);
+    const best = screen.getByTestId('best-selling-section');
+    const ids = JSON.parse(best.getAttribute('data-product-ids')!);
+    expect(Array.isArray(ids)).toBe(true);
+    expect(ids).toEqual([1, 2, 3, 4]);
   });
 });

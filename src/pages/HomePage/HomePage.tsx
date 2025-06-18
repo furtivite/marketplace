@@ -1,15 +1,15 @@
 // src/pages/HomePage/HomePage.tsx
+
 import React from 'react';
 import { Layout } from '../../widgets/Layout/Layout';
 import type { NotificationBarProps } from '../../widgets/Layout/ui/NotificationBar/types';
 import { Container } from '../../shared/ui/Container';
+import { mockProducts } from '../../entities/Product/model/mockProducts';
+import { filterProductsByIds } from '../../shared/utils/filterProductsByIds';
 import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
 import { FeatureList } from './ui/FeatureList';
 import type { TFeatureProps } from './ui/Feature/types';
-
-// import { BestSellingSection } from './ui/BestSellingSection'
-// import { BrowseCategorySection } from './ui/BrowseCategorySection'
-// import { FeaturedTabsSection } from './ui/FeaturedTabsSection'
+import { BestSellingSection } from './ui/BestSellingSection';
 
 import ellipse from './assets/ellipse.svg';
 import burstPucker from './assets/burst-pucker.svg';
@@ -29,21 +29,16 @@ const notification: NotificationBarProps = {
 
 const BannerImage: React.FC = () => (
   <>
-    {/* Background circle */}
     <img
       src={ellipse}
       alt=""
       className="absolute right-3 -bottom-2 transform w-[340px] h-[340px]"
     />
-
-    {/* Decorative star */}
     <img
       src={burstPucker}
       alt=""
       className="absolute right-[310px] bottom-[310px] w-6 h-6"
     />
-
-    {/* Hero boy image */}
     <img
       srcSet={`${boy2x} 2x, ${boy1x} 1x`}
       src={boy1x}
@@ -80,24 +75,29 @@ const featureItems: TFeatureProps[] = [
   },
 ];
 
-export const HomePage: React.FC = () => (
-  <Layout
-    hasFooter
-    hasNewsletter
-    hasFullWidth
-    notificationBar={notification}
-  >
-    <HeroSection
-      bannerImage={BannerImage}
-      buttonLink={bannerButton}
-      title={bannerTitle}
-      subtitle={bannerSubtitle}
-    />
-    <Container className="mt-[88px] mb-[128px]">
-      <FeatureList items={featureItems} />
-    </Container>
-    {/* <BestSellingSection /> */}
-    {/* <BrowseCategorySection /> */}
-    {/* <FeaturedTabsSection /> */}
-  </Layout>
-);
+export const HomePage: React.FC = () => {
+  // выбираем только товары с id 1–4
+  const bestSelling = filterProductsByIds(mockProducts, [1, 2, 3, 4]);
+
+  return (
+    <Layout
+      hasFooter
+      hasNewsletter
+      hasFullWidth
+      notificationBar={notification}
+    >
+      <HeroSection
+        bannerImage={BannerImage}
+        buttonLink={bannerButton}
+        title={bannerTitle}
+        subtitle={bannerSubtitle}
+      />
+      <Container className="mt-[88px] mb-[128px]">
+        <FeatureList items={featureItems} />
+        <BestSellingSection
+          products={bestSelling}
+        />
+      </Container>
+    </Layout>
+  );
+};
