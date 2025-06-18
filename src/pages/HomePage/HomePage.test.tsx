@@ -12,9 +12,9 @@ import {
 
 import { HomePage } from './HomePage';
 
-/* ------------------------------------------------------------------ */
-/*  suppress React-Router noisy warnings                              */
-/* ------------------------------------------------------------------ */
+/* ------------------------------------------------------------
+ * suppress noisy React-Router warnings
+ * ---------------------------------------------------------- */
 beforeAll(() => {
   const { warn } = console;
   vi.spyOn(console, 'warn').mockImplementation((...args) => {
@@ -37,10 +37,9 @@ afterAll(() => {
   vi.restoreAllMocks();
 });
 
-/* ------------------------------------------------------------------ */
-/*  Mocks                                                             */
-/* ------------------------------------------------------------------ */
-// Mock Layout to capture props & render children
+/* ------------------------------------------------------------
+ * mocks
+ * ---------------------------------------------------------- */
 vi.mock('../../widgets/Layout/Layout', () => ({
   __esModule: true,
   Layout: ({
@@ -62,7 +61,6 @@ vi.mock('../../widgets/Layout/Layout', () => ({
   ),
 }));
 
-// Mock HeroSection
 vi.mock('./ui/HeroSection', () => ({
   __esModule: true,
   HeroSection: (props: any) => (
@@ -74,7 +72,6 @@ vi.mock('./ui/HeroSection', () => ({
   ),
 }));
 
-// Mock Container
 vi.mock('../../shared/ui/Container', () => ({
   __esModule: true,
   Container: ({ children }: any) => (
@@ -82,13 +79,11 @@ vi.mock('../../shared/ui/Container', () => ({
   ),
 }));
 
-// Mock FeatureList
 vi.mock('./ui/FeatureList', () => ({
   __esModule: true,
   FeatureList: () => <div data-testid="feature-list" />,
 }));
 
-// Mock BestSellingSection to inspect product ids
 vi.mock('./ui/BestSellingSection', () => ({
   __esModule: true,
   BestSellingSection: ({ products }: { products: { id: number }[] }) => (
@@ -99,7 +94,6 @@ vi.mock('./ui/BestSellingSection', () => ({
   ),
 }));
 
-// Mock FeaturedLatestSection to inspect featured/latest ids
 vi.mock('./ui/FeaturedLatestSection', () => ({
   __esModule: true,
   FeaturedLatestSection: ({
@@ -117,9 +111,20 @@ vi.mock('./ui/FeaturedLatestSection', () => ({
   ),
 }));
 
-/* ------------------------------------------------------------------ */
-/*  Tests                                                             */
-/* ------------------------------------------------------------------ */
+vi.mock('./ui/BrowseBanner', () => ({
+  __esModule: true,
+  BrowseBanner: (props: any) => (
+    <div
+      data-testid="browse-banner"
+      data-title={props.title}
+      data-subtitle={props.subtitle}
+    />
+  ),
+}));
+
+/* ------------------------------------------------------------
+ * tests
+ * ---------------------------------------------------------- */
 describe('HomePage', () => {
   it('renders Layout with correct flags', () => {
     render(<HomePage />);
@@ -142,15 +147,16 @@ describe('HomePage', () => {
     );
   });
 
-  it('places FeatureList inside Container', () => {
+  it('places FeatureList inside the first Container', () => {
     render(<HomePage />);
-    const container = screen.getByTestId('container');
+    const containers = screen.getAllByTestId('container');
+    const featureContainer = containers[0];
     const featureList = screen.getByTestId('feature-list');
 
-    expect(container).toContainElement(featureList);
+    expect(featureContainer).toContainElement(featureList);
   });
 
-  it('passes correct product ids to BestSellingSection', () => {
+  it('passes correct IDs to BestSellingSection', () => {
     render(<HomePage />);
     const best = screen.getByTestId('best-selling-section');
     const ids = JSON.parse(best.getAttribute('data-product-ids')!);
@@ -158,7 +164,21 @@ describe('HomePage', () => {
     expect(ids).toEqual([1, 2, 3, 4]);
   });
 
-  it('passes correct product ids to FeaturedLatestSection', () => {
+  it('renders BrowseBanner with proper text', () => {
+    render(<HomePage />);
+    const banner = screen.getByTestId('browse-banner');
+
+    expect(banner).toHaveAttribute(
+      'data-title',
+      'Browse Our Fashion Paradise!',
+    );
+    expect(banner).toHaveAttribute(
+      'data-subtitle',
+      'Step into a world of style and explore our diverse collection of clothing categories.',
+    );
+  });
+
+  it('passes correct arrays to FeaturedLatestSection', () => {
     render(<HomePage />);
     const section = screen.getByTestId('featured-latest-section');
 
