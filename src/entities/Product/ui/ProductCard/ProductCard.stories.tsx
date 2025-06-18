@@ -1,3 +1,5 @@
+// src/entities/product/ui/ProductCard/ProductCard.stories.tsx
+
 import type { Meta, StoryObj } from '@storybook/react';
 import { ProductCard } from './ProductCard';
 import { mockProducts } from '../../model/mockProducts';
@@ -8,10 +10,15 @@ const meta: Meta<typeof ProductCard> = {
   tags: ['autodocs'],
   args: {
     product: mockProducts[0],
+    showStockStatus: true,
   },
   argTypes: {
     onAddToCart: { action: 'add-to-cart' },
     onToggleLike: { action: 'toggle-like' },
+    showStockStatus: {
+      control: 'boolean',
+      description: 'Показывать ли статус наличия товара',
+    },
   },
 };
 
@@ -29,5 +36,11 @@ export const Liked: Story = {
 export const OutOfStock: Story = {
   args: {
     product: { ...mockProducts[0], isInStock: false },
+  },
+};
+
+export const WithoutStockStatus: Story = {
+  args: {
+    showStockStatus: false,
   },
 };
