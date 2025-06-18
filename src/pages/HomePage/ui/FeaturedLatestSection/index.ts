@@ -1,0 +1,1 @@
+export { FeaturedLatestSection } from './FeaturedLatestSection';
