@@ -1,8 +1,7 @@
 import * as React from 'react';
+import ChevronRightIcon from '@/shared/assets/icons/chevron-right.svg?react';
 import { Container } from '../../../../shared/ui/Container';
 import { Typography, TYPOGRAPHY_TYPES } from '../../../../shared/ui/Typography';
-
-import ChevronRightIcon from '@/shared/assets/icons/chevron-right.svg?react';
 
 type BreadcrumbItem = {
   label: string;

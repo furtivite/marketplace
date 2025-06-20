@@ -1,8 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
-
 import ChevronDownIcon from '@/shared/assets/icons/chevron-down.svg?react';
+import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
 
 type SortOrder = 'asc' | 'desc';
 

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
 
 import ChevronLeftIcon from '@/shared/assets/icons/chevron-left.svg?react';
 import ChevronRightIcon from '@/shared/assets/icons/chevron-right.svg?react';
+import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
 
 interface PaginationProps {
   /** Номер текущей страницы (нумерация с 1) */

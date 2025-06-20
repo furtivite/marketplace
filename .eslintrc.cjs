@@ -24,6 +24,11 @@ module.exports = {
     react: { version: 'detect' },
     'import/resolver': {
       node: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
+      // ✅ Добавлено: typescript для алиасов и расширений
+      typescript: {
+        alwaysTryTypes: true,
+        project: './tsconfig.app.json',
+      },
     },
   },
   rules: {
@@ -68,7 +73,6 @@ module.exports = {
     }],
   },
   overrides: [
-    // TypeScript files in src: use tsconfig.app.json
     {
       files: ['**/*.ts', '**/*.tsx'],
       excludedFiles: ['vite.config.ts', 'playwright.config.ts', 'vitest.setup.ts'],
@@ -101,7 +105,6 @@ module.exports = {
         'react/no-array-index-key': 'off',
       },
     },
-    // JS/JSX files: no TS project
     {
       files: ['**/*.js', '**/*.jsx'],
       parserOptions: { project: undefined },
@@ -112,7 +115,6 @@ module.exports = {
         'object-curly-spacing': 'off',
       },
     },
-    // Tools folder: no TS project
     {
       files: ['tools/**/*.{js,mjs}'],
       parserOptions: { project: undefined },
@@ -122,7 +124,6 @@ module.exports = {
         'no-console': 'off',
       },
     },
-    // Vite config: no TS project
     {
       files: ['vite.config.ts'],
       parserOptions: { project: undefined },
@@ -136,7 +137,6 @@ module.exports = {
         }],
       },
     },
-    // Playwright config: no TS project
     {
       files: ['playwright.config.ts'],
       parserOptions: { project: undefined },
@@ -148,7 +148,6 @@ module.exports = {
         }],
       },
     },
-    // Vitest setup: no TS project
     {
       files: ['vitest.setup.ts'],
       parserOptions: { project: undefined },
@@ -160,7 +159,6 @@ module.exports = {
         }],
       },
     },
-    // Vitest config files: no TS project
     {
       files: ['vitest.config.ts', 'vitest.config.cjs', 'vitest.workspace.ts'],
       parserOptions: { project: undefined },
@@ -172,14 +170,12 @@ module.exports = {
         }],
       },
     },
-    // Test files: disable layer-imports
     {
       files: ['**/*.test.*', '**/*.spec.*'],
       rules: {
         'fsd-projects/layer-imports': 'off',
       },
     },
-    // ESLint config itself: ease spacing
     {
       files: ['.eslintrc.cjs'],
       rules: {
