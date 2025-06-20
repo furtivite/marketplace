@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { Layout } from '../../widgets/Layout/Layout';
-import type { NotificationBarProps } from '../../widgets/Layout/ui/NotificationBar/types';
 import { Container } from '../../shared/ui/Container';
 import { mockProducts } from '../../entities/Product/model/mockProducts';
 import { filterProductsByIds } from '../../shared/utils/filterProductsByIds';
+import { useGetNotificationQuery } from '../../shared/api/notificationApi';
 import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
 import { FeatureList } from './ui/FeatureList';
 import type { TFeatureProps } from './ui/Feature/types';
@@ -22,14 +22,6 @@ import satisfactionIcon from '../../shared/assets/icons/star-badge.svg';
 import securePaymentIcon from '../../shared/assets/icons/shield-check.svg';
 import poncho1x from './assets/browse-poncho.png';
 import poncho2x from './assets/browse-poncho@2x.png';
-
-const notification: NotificationBarProps = {
-  text: 'Get 25% OFF on your first order.',
-  link: {
-    text: 'Order Now',
-    href: '#',
-  },
-};
 
 const BannerImage: React.FC = () => (
   <>
@@ -95,6 +87,7 @@ const categoryContentLink: THomeSectionButtonLink = {
 };
 
 export const HomePage: React.FC = () => {
+  const { data: notification } = useGetNotificationQuery();
   const bestSelling = filterProductsByIds(mockProducts, [1, 2, 3, 4]);
   const featuredProducts = filterProductsByIds(mockProducts, [5, 6, 7, 8]);
   const latestProducts = filterProductsByIds(mockProducts, [11, 10, 4, 1]);
