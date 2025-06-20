@@ -47,7 +47,7 @@ const BannerImage: React.FC = () => (
 
 const bannerButton: THomeSectionButtonLink = {
   text: 'View Collection',
-  href: '#',
+  href: '/catalog',
   hasArrow: true,
 };
 
@@ -83,7 +83,7 @@ const categoryContentTitle = 'Browse Our Fashion Paradise!';
 const categoryContentSubtitle = 'Step into a world of style and explore our diverse collection of clothing categories.';
 const categoryContentLink: THomeSectionButtonLink = {
   text: 'Start Browsing',
-  href: '#',
+  href: '/catalog',
   hasArrow: true,
 };
 
