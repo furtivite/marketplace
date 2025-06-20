@@ -3,9 +3,7 @@
 import * as React from 'react';
 import { useGetProductsQuery } from '@/entities/Product/api/productApi';
 import { filterProductsByIds } from '@/shared/utils/filterProductsByIds';
-import { Layout } from '../../widgets/Layout/Layout';
 import { Container } from '../../shared/ui/Container';
-import { useGetNotificationQuery } from '../../shared/api/notificationApi';
 
 import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
 import { FeatureList } from './ui/FeatureList';
@@ -88,7 +86,6 @@ const categoryContentLink: THomeSectionButtonLink = {
 };
 
 export const HomePage: React.FC = () => {
-  const { data: notification } = useGetNotificationQuery();
   const { data: products, isLoading, isError } = useGetProductsQuery();
 
   const bestSelling = React.useMemo(
@@ -111,12 +108,7 @@ export const HomePage: React.FC = () => {
   if (!products) return <div>No products found</div>;
 
   return (
-    <Layout
-      hasFooter
-      hasNewsletter
-      hasFullWidth
-      notificationBar={notification}
-    >
+    <>
       <HeroSection
         bannerImage={BannerImage}
         buttonLink={bannerButton}
@@ -142,6 +134,6 @@ export const HomePage: React.FC = () => {
           latest={latestProducts}
         />
       </Container>
-    </Layout>
+    </>
   );
 };

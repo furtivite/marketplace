@@ -14,7 +14,7 @@ type HeaderProps = {
   className?: string;
 };
 
-export const Header: React.FC<HeaderProps> = ({ className }) => {
+export const Header: React.FC<HeaderProps> = React.memo(({ className }) => {
   const { pathname } = useLocation();
   const isHome = pathname === '/';
 
@@ -55,4 +55,4 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
       </Container>
     </header>
   );
-};
+});
