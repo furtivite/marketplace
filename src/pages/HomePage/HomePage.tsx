@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useGetProductsQuery } from '@/entities/Product/api/productApi';
+import { filterProductsByIds } from '@/shared/utils/filterProductsByIds';
 import { Layout } from '../../widgets/Layout/Layout';
 import { Container } from '../../shared/ui/Container';
 import { useGetNotificationQuery } from '../../shared/api/notificationApi';
@@ -91,17 +92,17 @@ export const HomePage: React.FC = () => {
   const { data: products, isLoading, isError } = useGetProductsQuery();
 
   const bestSelling = React.useMemo(
-    () => products?.filter((p) => [1, 2, 3, 4].includes(p.id)) ?? [],
+    () => filterProductsByIds(products ?? [], [1, 2, 3, 4]),
     [products],
   );
 
   const featuredProducts = React.useMemo(
-    () => products?.filter((p) => [5, 6, 7, 8].includes(p.id)) ?? [],
+    () => filterProductsByIds(products ?? [], [5, 6, 7, 8]),
     [products],
   );
 
   const latestProducts = React.useMemo(
-    () => products?.filter((p) => [11, 10, 4, 1].includes(p.id)) ?? [],
+    () => filterProductsByIds(products ?? [], [11, 10, 4, 1]),
     [products],
   );
 
