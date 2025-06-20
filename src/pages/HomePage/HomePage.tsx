@@ -1,11 +1,11 @@
 // src/pages/HomePage/HomePage.tsx
 
-import React from 'react';
+import * as React from 'react';
+import { useGetProductsQuery } from '@/entities/Product/api/productApi';
 import { Layout } from '../../widgets/Layout/Layout';
 import { Container } from '../../shared/ui/Container';
-import { mockProducts } from '../../entities/Product/model/mockProducts';
-import { filterProductsByIds } from '../../shared/utils/filterProductsByIds';
 import { useGetNotificationQuery } from '../../shared/api/notificationApi';
+
 import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
 import { FeatureList } from './ui/FeatureList';
 import type { TFeatureProps } from './ui/Feature/types';
@@ -88,9 +88,26 @@ const categoryContentLink: THomeSectionButtonLink = {
 
 export const HomePage: React.FC = () => {
   const { data: notification } = useGetNotificationQuery();
-  const bestSelling = filterProductsByIds(mockProducts, [1, 2, 3, 4]);
-  const featuredProducts = filterProductsByIds(mockProducts, [5, 6, 7, 8]);
-  const latestProducts = filterProductsByIds(mockProducts, [11, 10, 4, 1]);
+  const { data: products, isLoading, isError } = useGetProductsQuery();
+
+  const bestSelling = React.useMemo(
+    () => products?.filter((p) => [1, 2, 3, 4].includes(p.id)) ?? [],
+    [products],
+  );
+
+  const featuredProducts = React.useMemo(
+    () => products?.filter((p) => [5, 6, 7, 8].includes(p.id)) ?? [],
+    [products],
+  );
+
+  const latestProducts = React.useMemo(
+    () => products?.filter((p) => [11, 10, 4, 1].includes(p.id)) ?? [],
+    [products],
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Failed to load products</div>;
+  if (!products) return <div>No products found</div>;
 
   return (
     <Layout
@@ -108,7 +125,6 @@ export const HomePage: React.FC = () => {
 
       <Container className="mt-[88px] mb-[161px]">
         <FeatureList items={featureItems} />
-
         <BestSellingSection products={bestSelling} />
       </Container>
 
