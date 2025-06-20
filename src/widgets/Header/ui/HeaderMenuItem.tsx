@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useRef, useEffect, useState } from 'react';
-import { Typography, TYPOGRAPHY_TYPES } from '../../../shared/ui/Typography';
-
 import ChevronDownIcon from '@/shared/assets/icons/chevron-down.svg?react';
+import { Typography, TYPOGRAPHY_TYPES } from '../../../shared/ui/Typography';
 
 type Category = {
   id: string;

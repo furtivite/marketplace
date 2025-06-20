@@ -1,11 +1,11 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
 
 import CheckIcon from '@/shared/assets/icons/check.svg?react';
 import InfoIcon from '@/shared/assets/icons/info.svg?react';
 import WarningIcon from '@/shared/assets/icons/warning.svg?react';
 import CloseIcon from '@/shared/assets/icons/close.svg?react';
+import { Typography, TYPOGRAPHY_TYPES } from '../Typography';
 
 type AlertType = 'error' | 'success' | 'info';
 

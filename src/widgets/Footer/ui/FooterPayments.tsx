@@ -1,10 +1,10 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { Typography, TYPOGRAPHY_TYPES } from '../../../shared/ui/Typography';
 
 import AmexIcon from '@/shared/assets/icons/payment/amex.svg?react';
 import VisaIcon from '@/shared/assets/icons/payment/visa.svg?react';
 import MastercardIcon from '@/shared/assets/icons/payment/mastercard.svg?react';
+import { Typography, TYPOGRAPHY_TYPES } from '../../../shared/ui/Typography';
 
 interface PaymentMethod {
   name: string;

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Typography, TYPOGRAPHY_TYPES } from '../../../shared/ui/Typography';
-import { Logo } from '../../../shared/ui/Logo';
 
 import GithubIcon from '@/shared/assets/icons/social/github.svg?react';
 import InstagramIcon from '@/shared/assets/icons/social/instagram.svg?react';
 import YoutubeIcon from '@/shared/assets/icons/social/youtube.svg?react';
+import { Logo } from '../../../shared/ui/Logo';
+import { Typography, TYPOGRAPHY_TYPES } from '../../../shared/ui/Typography';
 
 interface SocialLink {
   href: string;
