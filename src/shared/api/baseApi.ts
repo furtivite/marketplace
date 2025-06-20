@@ -6,4 +6,5 @@ export const baseApi = createApi({
     baseUrl: '/api',
   }),
   endpoints: () => ({}),
+  keepUnusedDataFor: 300,
 });

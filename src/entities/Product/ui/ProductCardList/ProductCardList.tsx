@@ -1,20 +1,13 @@
-// src/entities/product/ui/ProductCardList/ProductCardList.tsx
-
 import * as React from 'react';
 import clsx from 'clsx';
-import { ProductCard } from '../../../../entities/Product/ui/ProductCard/ProductCard';
-import { IProduct } from '../../../../entities/Product/model/types';
+import { ProductCard } from '../ProductCard/ProductCard';
+import { IProduct } from '../../model/types';
 
 interface ProductCardListProps {
-  /** Массив продуктов для отображения */
   products: IProduct[];
-  /** Описание списка для скринридеров */
   ariaLabel: string;
-  /** Дополнительные классы Tailwind для кастомизации сетки */
   className?: string;
-  /** Обработчик клика «Add to cart» */
   onAddToCart?: (product: IProduct) => void;
-  /** Обработчик клика «Like» */
   onToggleLike?: (product: IProduct) => void;
 }
 
@@ -29,9 +22,6 @@ export const ProductCardList: React.FC<ProductCardListProps> = React.memo(({
     return null;
   }
 
-  // Показываем не более 4 карточек
-  const displayedProducts = products.slice(0, 4);
-
   return (
     <ol
       aria-label={ariaLabel}
@@ -40,7 +30,7 @@ export const ProductCardList: React.FC<ProductCardListProps> = React.memo(({
         className,
       )}
     >
-      {displayedProducts.map((product) => (
+      {products.map((product) => (
         <li
           key={product.id}
           role="group"

@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Container } from '../../../../shared/ui/Container';
 import { Typography, TYPOGRAPHY_TYPES } from '../../../../shared/ui/Typography';
 import { IProduct } from '../../../../entities/Product/model/types';
-import { ProductCardList } from '../ProductCardList';
+import { ProductCardList } from '../../../../entities/Product/ui/ProductCardList/ProductCardList';
 
 interface BestSellingSectionProps {
   products: IProduct[];
@@ -45,7 +45,7 @@ export const BestSellingSection: React.FC<BestSellingSectionProps> = ({
         </header>
 
         <ProductCardList
-          products={products}
+          products={products.slice(0, 4)}
           ariaLabel="Список самых продаваемых товаров"
           onAddToCart={onAddToCart}
           onToggleLike={onToggleLike}
