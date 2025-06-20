@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
-import { ProductCard } from '../../../../entities/Product/ui/ProductCard/ProductCard';
-import { IProduct } from '../../../../entities/Product/model/types';
+import { ProductCard } from '../ProductCard/ProductCard';
+import { IProduct } from '../../model/types';
 
 interface ProductCardListProps {
   /** Массив продуктов для отображения */
