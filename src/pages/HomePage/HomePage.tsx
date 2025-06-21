@@ -1,11 +1,10 @@
 // src/pages/HomePage/HomePage.tsx
 
-import React from 'react';
-import { Layout } from '../../widgets/Layout/Layout';
-import type { NotificationBarProps } from '../../widgets/Layout/ui/NotificationBar/types';
+import * as React from 'react';
+import { useGetProductsQuery } from '@/entities/Product/api/productApi';
+import { filterProductsByIds } from '@/shared/utils/filterProductsByIds';
 import { Container } from '../../shared/ui/Container';
-import { mockProducts } from '../../entities/Product/model/mockProducts';
-import { filterProductsByIds } from '../../shared/utils/filterProductsByIds';
+
 import { HeroSection, type THomeSectionButtonLink } from './ui/HeroSection';
 import { FeatureList } from './ui/FeatureList';
 import type { TFeatureProps } from './ui/Feature/types';
@@ -22,14 +21,6 @@ import satisfactionIcon from '../../shared/assets/icons/star-badge.svg';
 import securePaymentIcon from '../../shared/assets/icons/shield-check.svg';
 import poncho1x from './assets/browse-poncho.png';
 import poncho2x from './assets/browse-poncho@2x.png';
-
-const notification: NotificationBarProps = {
-  text: 'Get 25% OFF on your first order.',
-  link: {
-    text: 'Order Now',
-    href: '#',
-  },
-};
 
 const BannerImage: React.FC = () => (
   <>
@@ -54,7 +45,7 @@ const BannerImage: React.FC = () => (
 
 const bannerButton: THomeSectionButtonLink = {
   text: 'View Collection',
-  href: '#',
+  href: '/catalog',
   hasArrow: true,
 };
 
@@ -90,22 +81,34 @@ const categoryContentTitle = 'Browse Our Fashion Paradise!';
 const categoryContentSubtitle = 'Step into a world of style and explore our diverse collection of clothing categories.';
 const categoryContentLink: THomeSectionButtonLink = {
   text: 'Start Browsing',
-  href: '#',
+  href: '/catalog',
   hasArrow: true,
 };
 
 export const HomePage: React.FC = () => {
-  const bestSelling = filterProductsByIds(mockProducts, [1, 2, 3, 4]);
-  const featuredProducts = filterProductsByIds(mockProducts, [5, 6, 7, 8]);
-  const latestProducts = filterProductsByIds(mockProducts, [11, 10, 4, 1]);
+  const { data: products, isLoading, isError } = useGetProductsQuery();
+
+  const bestSelling = React.useMemo(
+    () => filterProductsByIds(products ?? [], [1, 2, 3, 4]),
+    [products],
+  );
+
+  const featuredProducts = React.useMemo(
+    () => filterProductsByIds(products ?? [], [5, 6, 7, 8]),
+    [products],
+  );
+
+  const latestProducts = React.useMemo(
+    () => filterProductsByIds(products ?? [], [11, 10, 4, 1]),
+    [products],
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Failed to load products</div>;
+  if (!products) return <div>No products found</div>;
 
   return (
-    <Layout
-      hasFooter
-      hasNewsletter
-      hasFullWidth
-      notificationBar={notification}
-    >
+    <>
       <HeroSection
         bannerImage={BannerImage}
         buttonLink={bannerButton}
@@ -115,7 +118,6 @@ export const HomePage: React.FC = () => {
 
       <Container className="mt-[88px] mb-[161px]">
         <FeatureList items={featureItems} />
-
         <BestSellingSection products={bestSelling} />
       </Container>
 
@@ -132,6 +134,6 @@ export const HomePage: React.FC = () => {
           latest={latestProducts}
         />
       </Container>
-    </Layout>
+    </>
   );
 };

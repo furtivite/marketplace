@@ -1,124 +1,122 @@
 // src/pages/HomePage/ui/FeaturedLatestSection/FeaturedLatestSection.test.tsx
-
-/**
- * @vitest-environment jsdom
- */
-
-import React from 'react';
+import * as React from 'react';
 import {
-  describe, it, expect, beforeEach,
-} from 'vitest';
-import { render, screen } from '@testing-library/react';
+  render,
+  screen,
+  fireEvent,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
+import {
+  describe, it, expect, vi,
+} from 'vitest';
 import { FeaturedLatestSection } from './FeaturedLatestSection';
-import type { IProduct } from '../../../../entities/Product/model/types';
 
-/* ------------------------------------------------------------------ */
-/*  MOCK PRODUCTCARDLIST (чтобы не тянуть SVG-иконки и <img />)       */
-/* ------------------------------------------------------------------ */
-vi.mock('../ProductCardList', () => ({
-  __esModule: true,
-  // eslint-disable-next-line react/display-name
-  ProductCardList: ({ products }: { products: IProduct[] }) => (
-    <div data-testid="product-card-list" data-count={products.length} />
-  ),
-}));
-
-/* ------------------------------------------------------------------ */
-/*  helpers                                                           */
-/* ------------------------------------------------------------------ */
-const makeProduct = (id: number, title: string): IProduct => ({
-  id,
-  title,
-  price: 10,
-  image: `img${id}.png`,
-});
-
-const featured: IProduct[] = Array.from({ length: 4 }).map((_, i) => makeProduct(i + 1, `Featured ${i + 1}`));
-
-const latest: IProduct[] = Array.from({ length: 4 }).map((_, i) => makeProduct(i + 5, `Latest ${i + 1}`));
-
-const setup = () => render(
-  <FeaturedLatestSection
-    featured={featured}
-    latest={latest}
-    onAddToCart={vi.fn()}
-    onToggleLike={vi.fn()}
-  />,
+// Stub ProductCardList
+vi.mock(
+  '@/entities/Product/ui/ProductCardList/ProductCardList',
+  () => ({
+    __esModule: true,
+    ProductCardList: ({
+      products,
+      ariaLabel,
+      onAddToCart,
+      onToggleLike,
+    }: any) => (
+      <div
+        data-testid="product-card-list"
+        data-count={products.length}
+        data-aria-label={ariaLabel}
+        data-has-add={typeof onAddToCart === 'function' ? 'true' : 'false'}
+        data-has-like={typeof onToggleLike === 'function' ? 'true' : 'false'}
+      />
+    ),
+  }),
 );
 
-/**
- * Возвращает тот список карточек, чей родитель-tabpanel
- * **не** скрыт атрибутом `hidden`.
- */
-const getVisibleList = () => screen
-  .getAllByTestId('product-card-list')
-  .find(
-    (el) => !el.closest<HTMLDivElement>('[role="tabpanel"]')?.hasAttribute('hidden'),
-  ) as HTMLElement;
+describe('FeaturedLatestSection', () => {
+  const products = Array.from({ length: 5 }, (_, i) => ({
+    id: i + 1,
+    title: `Product ${i + 1}`,
+    price: (i + 1) * 10,
+    image: `img${i + 1}.png`,
+  }));
 
-/* ------------------------------------------------------------------ */
-/*  tests                                                             */
-/* ------------------------------------------------------------------ */
-describe('<FeaturedLatestSection />', () => {
-  beforeEach(() => {
-    setup();
-  });
+  it('shows Featured tab and first 4 featured products by default', () => {
+    render(<FeaturedLatestSection featured={products} latest={products} />);
 
-  it('показывает вкладку "Featured" по умолчанию', () => {
-    const featuredTab = screen.getByRole('tab', { name: /featured/i });
+    const featuredTab = screen.getByRole('tab', { name: 'Featured' });
+    const latestTab = screen.getByRole('tab', { name: 'Latest' });
+
     expect(featuredTab).toHaveAttribute('aria-selected', 'true');
-
-    const latestTab = screen.getByRole('tab', { name: /latest/i });
+    expect(featuredTab).toHaveAttribute('tabindex', '0');
     expect(latestTab).toHaveAttribute('aria-selected', 'false');
+    expect(latestTab).toHaveAttribute('tabindex', '-1');
 
-    // видимый список — именно featured-товары
-    const list = getVisibleList();
+    const visiblePanel = screen.getByRole('tabpanel');
+    const list = within(visiblePanel).getByTestId('product-card-list');
     expect(list).toHaveAttribute('data-count', '4');
-    expect(
-      list.closest<HTMLDivElement>('[role="tabpanel"]'),
-    ).toHaveAccessibleName(/featured/i);
+    expect(list).toHaveAttribute('data-aria-label', 'Список избранных товаров');
   });
 
-  it('переключается на "Latest" по клику', async () => {
-    const latestTab = screen.getByRole('tab', { name: /latest/i });
+  it('switches to Latest tab on click and shows latest products', async () => {
+    render(<FeaturedLatestSection featured={products} latest={products} />);
+
+    const latestTab = screen.getByRole('tab', { name: 'Latest' });
     await userEvent.click(latestTab);
 
     expect(latestTab).toHaveAttribute('aria-selected', 'true');
+    expect(latestTab).toHaveAttribute('tabindex', '0');
 
-    const list = getVisibleList();
+    const visiblePanel = screen.getByRole('tabpanel');
+    const list = within(visiblePanel).getByTestId('product-card-list');
+    expect(list).toHaveAttribute('data-aria-label', 'Список последних товаров');
     expect(list).toHaveAttribute('data-count', '4');
-    expect(
-      list.closest<HTMLDivElement>('[role="tabpanel"]'),
-    ).toHaveAccessibleName(/latest/i);
   });
 
-  it('стрелки ←/→ переключают вкладки', async () => {
-    const featuredTab = screen.getByRole('tab', { name: /featured/i });
+  it('navigates tabs with ArrowRight and ArrowLeft keys', () => {
+    render(<FeaturedLatestSection featured={products} latest={products} />);
+
+    const featuredTab = screen.getByRole('tab', { name: 'Featured' });
+    const latestTab = screen.getByRole('tab', { name: 'Latest' });
+
     featuredTab.focus();
+    fireEvent.keyDown(featuredTab, { key: 'ArrowRight' });
+    expect(latestTab).toHaveFocus();
+    expect(latestTab).toHaveAttribute('aria-selected', 'true');
 
-    await userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByRole('tab', { name: /latest/i })).toHaveAttribute(
-      'aria-selected',
-      'true',
-    );
+    let visiblePanel = screen.getByRole('tabpanel');
+    let list = within(visiblePanel).getByTestId('product-card-list');
+    expect(list).toHaveAttribute('data-aria-label', 'Список последних товаров');
 
-    await userEvent.keyboard('{ArrowLeft}');
+    fireEvent.keyDown(latestTab, { key: 'ArrowLeft' });
+    expect(featuredTab).toHaveFocus();
     expect(featuredTab).toHaveAttribute('aria-selected', 'true');
+
+    visiblePanel = screen.getByRole('tabpanel');
+    list = within(visiblePanel).getByTestId('product-card-list');
+    expect(list).toHaveAttribute('data-aria-label', 'Список избранных товаров');
   });
 
-  it('Home / End прыгают к первой / последней вкладке', async () => {
-    const latestTab = screen.getByRole('tab', { name: /latest/i });
+  it('jumps to first/last tab with Home and End keys', () => {
+    render(<FeaturedLatestSection featured={products} latest={products} />);
+
+    const featuredTab = screen.getByRole('tab', { name: 'Featured' });
+    const latestTab = screen.getByRole('tab', { name: 'Latest' });
+
     latestTab.focus();
+    fireEvent.keyDown(latestTab, { key: 'Home' });
+    expect(featuredTab).toHaveFocus();
+    expect(featuredTab).toHaveAttribute('aria-selected', 'true');
+    let visiblePanel = screen.getByRole('tabpanel');
+    let list = within(visiblePanel).getByTestId('product-card-list');
+    expect(list).toHaveAttribute('data-aria-label', 'Список избранных товаров');
 
-    await userEvent.keyboard('{Home}');
-    expect(screen.getByRole('tab', { name: /featured/i })).toHaveAttribute(
-      'aria-selected',
-      'true',
-    );
-
-    await userEvent.keyboard('{End}');
+    fireEvent.keyDown(featuredTab, { key: 'End' });
+    expect(latestTab).toHaveFocus();
     expect(latestTab).toHaveAttribute('aria-selected', 'true');
+    visiblePanel = screen.getByRole('tabpanel');
+    list = within(visiblePanel).getByTestId('product-card-list');
+    expect(list).toHaveAttribute('data-aria-label', 'Список последних товаров');
   });
 });

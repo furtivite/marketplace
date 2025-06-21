@@ -1,104 +1,54 @@
 // src/widgets/Layout/Layout.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
-import { Layout } from './Layout';
-import type { NotificationBarProps } from './ui/NotificationBar/types';
+import * as React from 'react';
+import { Meta, StoryObj } from '@storybook/react';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { Layout, LayoutProps } from './Layout';
 
-const meta: Meta<typeof Layout> = {
+const meta: Meta<LayoutProps> = {
   title: 'widgets/Layout',
   component: Layout,
-  tags: ['autodocs'],
-  argTypes: {
-    withoutHeader: { control: 'boolean' },
-    notificationBar: { control: 'object' },
-    hasFooter: { control: 'boolean' },
-    hasNewsletter: { control: 'boolean' },
-    hasFullWidth: { control: 'boolean' },
-  },
+  decorators: [
+    (Story, context) => (
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route element={<Layout {...context.args} />}>
+            <Route path="/" element={<Story />} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    ),
+  ],
 };
 
 export default meta;
-type Story = StoryObj<typeof Layout>;
+type Story = StoryObj<LayoutProps>;
 
 export const Default: Story = {
-  render: (args) => (
-    <div style={{ height: '100vh', overflowY: 'auto' }}>
-      <Layout {...args} />
-    </div>
-  ),
-  args: {
-    children: (
-      <div style={{ height: 1200, backgroundColor: '#f0f0f0' }}>
-        <p>Main content area with scroll</p>
-      </div>
-    ),
-    withoutHeader: false,
-    notificationBar: undefined,
-    hasFooter: false,
-    hasNewsletter: false,
-    hasFullWidth: false,
-  },
+  args: {},
+  render: () => <div>Page content</div>,
 };
 
-export const WithNotificationBarAndFooter: Story = {
-  render: (args) => (
-    <div style={{ height: '100vh', overflowY: 'auto' }}>
-      <Layout {...args} />
-    </div>
-  ),
+export const WithoutHeader: Story = {
+  args: { withoutHeader: true },
+  render: () => <div>Page content</div>,
+};
+
+export const WithNotificationBar: Story = {
   args: {
-    children: (
-      <div style={{ height: 1200, backgroundColor: '#f0f0f0' }}>
-        <p>Main content with NotificationBar and Footer</p>
-      </div>
-    ),
-    withoutHeader: false,
     notificationBar: {
-      text: 'Special offer: 25% off!',
-      link: { text: 'Order now', href: 'https://example.com' },
-    } as NotificationBarProps,
-    hasFooter: true,
-    hasNewsletter: true,
-    hasFullWidth: false,
+      text: 'Hello world!',
+      link: { href: '#', text: 'Read more' },
+    },
   },
+  render: () => <div>Page content</div>,
 };
 
-export const WithoutHeaderWithFooter: Story = {
-  render: (args) => (
-    <div style={{ height: '100vh', overflowY: 'auto' }}>
-      <Layout {...args} />
-    </div>
-  ),
-  args: {
-    children: (
-      <div style={{ height: 1200, backgroundColor: '#f0f0f0' }}>
-        <p>Layout without Header but with Footer</p>
-      </div>
-    ),
-    withoutHeader: true,
-    notificationBar: undefined,
-    hasFooter: true,
-    hasNewsletter: false,
-    hasFullWidth: false,
-  },
+export const FullWidth: Story = {
+  args: { hasFullWidth: true },
+  render: () => <div>Full-width page content</div>,
 };
 
-export const FullWidthContent: Story = {
-  render: (args) => (
-    <div style={{ height: '100vh', overflowY: 'auto' }}>
-      <Layout {...args} />
-    </div>
-  ),
-  args: {
-    children: (
-      <div style={{ height: 1200, backgroundColor: '#e0e0e0' }}>
-        <p>Full-width content without Container wrapper</p>
-      </div>
-    ),
-    withoutHeader: false,
-    notificationBar: undefined,
-    hasFooter: false,
-    hasNewsletter: false,
-    hasFullWidth: true,
-  },
+export const WithFooter: Story = {
+  args: { hasFooter: true, hasNewsletter: true },
+  render: () => <div>Page content</div>,
 };

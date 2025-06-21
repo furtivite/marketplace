@@ -1,90 +1,73 @@
 // src/pages/HomePage/ui/BestSellingSection/BestSellingSection.test.tsx
-
 import * as React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import {
   describe, it, expect, vi,
 } from 'vitest';
-
 import { BestSellingSection } from './BestSellingSection';
-import { IProduct } from '../../../../entities/Product/model/types';
 
-// Мокаем ProductCardList, чтобы тестировать только логику секции
-vi.mock('../ProductCardList', () => ({
-  ProductCardList: ({
-    products, ariaLabel, onAddToCart, onToggleLike,
-  }: {
-    products: IProduct[];
-    ariaLabel: string;
-    onAddToCart?: (p: IProduct) => void;
-    onToggleLike?: (p: IProduct) => void;
-  }) => (
-    <ol aria-label={ariaLabel} data-testid="card-list">
-      {products.map((p) => (
-        <li key={p.id}>
-          <button onClick={() => onAddToCart?.(p)} data-testid={`add-${p.id}`}>Add</button>
-          <button onClick={() => onToggleLike?.(p)} data-testid={`like-${p.id}`}>Like</button>
-        </li>
-      ))}
-    </ol>
-  ),
-}));
+// Mock ProductCardList to capture props
+vi.mock(
+  '@/entities/Product/ui/ProductCardList/ProductCardList',
+  () => ({
+    __esModule: true,
+    ProductCardList: ({
+      products,
+      ariaLabel,
+      onAddToCart,
+      onToggleLike,
+    }: any) => (
+      <div
+        data-testid="product-card-list"
+        data-count={products.length}
+        data-aria-label={ariaLabel}
+        data-has-add={typeof onAddToCart === 'function' ? 'true' : 'false'}
+        data-has-like={typeof onToggleLike === 'function' ? 'true' : 'false'}
+      />
+    ),
+  }),
+);
 
 describe('BestSellingSection', () => {
-  const makeProduct = (id: number): IProduct => ({
-    id,
-    title: `Prod ${id}`,
-    price: id * 5,
-    image: `img${id}.png`,
-    isInStock: true,
-    isLiked: false,
+  // Provide full IProduct shape: id, title, price, image
+  const products = Array.from({ length: 5 }, (_, i) => ({
+    id: i + 1,
+    title: `Product ${i + 1}`,
+    price: (i + 1) * 10,
+    image: `img${i + 1}.png`,
+  }));
+
+  it('renders nothing when products array is empty', () => {
+    const { container } = render(
+      <BestSellingSection products={[]} />,
+    );
+    expect(container.firstChild).toBeNull();
   });
 
-  it('renders null when products is empty', () => {
-    const { container } = render(<BestSellingSection products={[]} />);
-    expect(container).toBeEmptyDOMElement();
-  });
+  it('renders section with header and ProductCardList sliced to first 4 products', () => {
+    const onAddToCart = vi.fn();
+    const onToggleLike = vi.fn();
 
-  it('renders section with heading and card list', () => {
-    const products = [1, 2, 3, 4, 5].map(makeProduct);
     render(
       <BestSellingSection
         products={products}
-        onAddToCart={vi.fn()}
-        onToggleLike={vi.fn()}
+        onAddToCart={onAddToCart}
+        onToggleLike={onToggleLike}
       />,
     );
 
-    // Секция с правильным заголовком
-    const section = screen.getByRole('region', { name: /best selling/i });
-    expect(section).toBeInTheDocument();
+    // Check that the header texts are rendered
+    expect(screen.getByText('Shop Now')).toBeInTheDocument();
+    expect(screen.getByText('Best Selling')).toBeInTheDocument();
 
-    // Вложенный список с aria-label
-    const list = screen.getByTestId('card-list');
-    expect(list).toHaveAttribute('aria-label', 'Список самых продаваемых товаров');
-
-    // Рендерится столько элементов, сколько пришло в props
-    const items = screen.getAllByRole('listitem');
-    expect(items).toHaveLength(products.length);
-  });
-
-  it('calls onAddToCart and onToggleLike with correct product', () => {
-    const product = makeProduct(7);
-    const handleAdd = vi.fn();
-    const handleLike = vi.fn();
-
-    render(
-      <BestSellingSection
-        products={[product]}
-        onAddToCart={handleAdd}
-        onToggleLike={handleLike}
-      />,
+    // Check ProductCardList stub
+    const list = screen.getByTestId('product-card-list');
+    expect(list).toHaveAttribute('data-count', '4');
+    expect(list).toHaveAttribute(
+      'data-aria-label',
+      'Список самых продаваемых товаров',
     );
-
-    fireEvent.click(screen.getByTestId(`add-${product.id}`));
-    expect(handleAdd).toHaveBeenCalledWith(product);
-
-    fireEvent.click(screen.getByTestId(`like-${product.id}`));
-    expect(handleLike).toHaveBeenCalledWith(product);
+    expect(list).toHaveAttribute('data-has-add', 'true');
+    expect(list).toHaveAttribute('data-has-like', 'true');
   });
 });

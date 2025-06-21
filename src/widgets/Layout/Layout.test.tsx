@@ -2,98 +2,93 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import {
-  describe, it, expect, vi,
+  describe, it, expect, vi, beforeAll, afterAll,
 } from 'vitest';
-import { Layout } from './Layout';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { Layout, LayoutProps } from './Layout';
 
-/* ==== mocks ============================================================= */
+beforeAll(() => {
+  const { warn } = console;
+  vi.spyOn(console, 'warn').mockImplementation((...args: any[]) => {
+    const msg = args[0] as string;
+    if (msg.includes('React Router Future Flag Warning')) return;
+    warn(...args);
+  });
+});
 
+afterAll(() => {
+  vi.restoreAllMocks();
+});
+
+// Stub Header to avoid its internal SVG imports and subcomponents
 vi.mock('../Header', () => ({
   __esModule: true,
-  Header: (props: any) => <header data-testid="header" {...props} />,
+  Header: (props: any) => <header role="banner" {...props}>Header</header>,
 }));
 
-vi.mock('../Footer', () => ({
-  __esModule: true,
-  Footer: ({ hasNewsletter }: { hasNewsletter?: boolean }) => (
-    <footer
-      data-testid="footer"
-      data-hasnewsletter={hasNewsletter ? 'true' : 'false'}
-    />
-  ),
-}));
-
+// Stub NotificationBar to render text and link
 vi.mock('./ui/NotificationBar', () => ({
   __esModule: true,
-  NotificationBar: ({ text }: { text: string }) => (
-    <div data-testid="notification">{text}</div>
-  ),
-}));
-
-// Mock Container to detect wrapping and className
-vi.mock('../../shared/ui/Container', () => ({
-  __esModule: true,
-  Container: ({ children, className }: any) => (
-    <div data-testid="container" data-class={className}>
-      {children}
+  NotificationBar: ({ text, link }: any) => (
+    <div data-testid="notification-bar">
+      <span>{text}</span>
+      <a href={link.href}>{link.text}</a>
     </div>
   ),
 }));
 
-/* ==== tests ============================================================ */
+// Stub Footer to render a <footer> with contentinfo role and newsletter text
+vi.mock('../Footer', () => ({
+  __esModule: true,
+  Footer: ({ hasNewsletter }: any) => (
+    <footer role="contentinfo">
+      {hasNewsletter && 'newsletter'}
+    </footer>
+  ),
+}));
 
-describe('Layout component', () => {
-  it('renders header by default and shows its children', () => {
-    render(<Layout>Inner content</Layout>);
-    expect(screen.getByTestId('header')).toBeInTheDocument();
-    expect(screen.getByText('Inner content')).toBeInTheDocument();
-    expect(screen.queryByTestId('notification')).toBeNull();
-    expect(screen.queryByTestId('footer')).toBeNull();
+const renderLayout = (props: LayoutProps = {}) => {
+  render(
+    <MemoryRouter initialEntries={['/']}>
+      <Routes>
+        <Route element={<Layout {...props} />}>
+          <Route path="/" element={<div>Test Content</div>} />
+        </Route>
+      </Routes>
+    </MemoryRouter>,
+  );
+};
+
+describe('Layout', () => {
+  it('renders routed content via Outlet', () => {
+    renderLayout();
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
-  it('omits header when withoutHeader is true', () => {
-    render(<Layout withoutHeader>Child</Layout>);
-    expect(screen.queryByTestId('header')).toBeNull();
+  it('omits Header when withoutHeader is true and no notification', () => {
+    renderLayout({ withoutHeader: true });
+    expect(screen.queryByRole('banner')).toBeNull();
   });
 
-  it('renders notification bar when notificationBar prop is provided', () => {
-    render(
-      <Layout notificationBar={{ text: 'Big sale!', link: { href: '#', text: 'Shop' } }}>
-        Child
-      </Layout>,
-    );
-    const note = screen.getByTestId('notification');
-    expect(note).toBeInTheDocument();
-    expect(note).toHaveTextContent('Big sale!');
+  it('shows NotificationBar when notificationBar prop is set', () => {
+    const notification = { text: 'Heads up!', link: { href: '/foo', text: 'Learn more' } };
+    renderLayout({ notificationBar: notification });
+    expect(screen.getByText('Heads up!')).toBeInTheDocument();
+    expect(screen.getByText('Learn more')).toBeInTheDocument();
   });
 
-  it('renders footer when hasFooter is true (without newsletter)', () => {
-    render(<Layout hasFooter>Child</Layout>);
-    const footer = screen.getByTestId('footer');
-    expect(footer).toBeInTheDocument();
-    expect(footer).toHaveAttribute('data-hasnewsletter', 'false');
+  it('includes Header by default', () => {
+    renderLayout();
+    expect(screen.getByRole('banner')).toBeInTheDocument();
   });
 
-  it('passes hasNewsletter flag to footer', () => {
-    render(
-      <Layout hasFooter hasNewsletter>
-        Child
-      </Layout>,
-    );
-    const footer = screen.getByTestId('footer');
-    expect(footer).toHaveAttribute('data-hasnewsletter', 'true');
+  it('renders Footer when hasFooter is true', () => {
+    renderLayout({ hasFooter: true });
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 
-  it('wraps children with Container by default', () => {
-    render(<Layout>Child</Layout>);
-    const container = screen.getByTestId('container');
-    expect(container).toBeInTheDocument();
-    expect(container).toHaveAttribute('data-class', expect.stringContaining('py-8'));
-  });
-
-  it('renders children full width when hasFullWidth is true', () => {
-    render(<Layout hasFullWidth>Child</Layout>);
-    expect(screen.getByText('Child')).toBeInTheDocument();
-    expect(screen.queryByTestId('container')).toBeNull();
+  it('passes hasNewsletter to Footer', () => {
+    renderLayout({ hasFooter: true, hasNewsletter: true });
+    expect(screen.getByText('newsletter')).toBeInTheDocument();
   });
 });

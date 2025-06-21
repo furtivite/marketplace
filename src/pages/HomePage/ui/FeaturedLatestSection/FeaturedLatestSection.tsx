@@ -4,7 +4,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { Container } from '../../../../shared/ui/Container';
 import { IProduct } from '../../../../entities/Product/model/types';
-import { ProductCardList } from '../ProductCardList';
+import { ProductCardList } from '../../../../entities/Product/ui/ProductCardList/ProductCardList';
 
 enum TabType {
   FEATURED = 'featured',
