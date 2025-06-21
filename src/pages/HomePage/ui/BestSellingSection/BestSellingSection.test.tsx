@@ -29,7 +29,13 @@ vi.mock(
 );
 
 describe('BestSellingSection', () => {
-  const products = Array.from({ length: 5 }, (_, i) => ({ id: i + 1 }));
+  // Provide full IProduct shape: id, title, price, image
+  const products = Array.from({ length: 5 }, (_, i) => ({
+    id: i + 1,
+    title: `Product ${i + 1}`,
+    price: (i + 1) * 10,
+    image: `img${i + 1}.png`,
+  }));
 
   it('renders nothing when products array is empty', () => {
     const { container } = render(
