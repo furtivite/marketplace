@@ -1,0 +1,20 @@
+# netlify.toml
+
+[build]
+  command   = "npm run build"
+  publish   = "dist"
+
+# Билд для production-контекста (слияния в main)
+[context.production]
+  command   = "npm run build"
+  publish   = "dist"
+
+# Пропустить сборку для Deploy Previews
+[context.deploy-preview]
+  command   = "echo \"Skipping deploy preview\" && exit 0"
+  publish   = "dist"
+
+# Пропустить сборку для любых других веток, если нужно
+[context.branch-deploy]
+  command   = "echo \"Skipping branch deploy\" && exit 0"
+  publish   = "dist"
