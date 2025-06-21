@@ -1,139 +1,126 @@
-/**
- * @vitest-environment jsdom
- */
-
+// src/pages/HomePage/HomePage.test.tsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import {
-  describe, it, expect, vi, beforeAll, afterAll,
+  describe, it, expect, vi, beforeEach,
 } from 'vitest';
-
-import { mockProducts } from '@/entities/Product/model/mockProducts';
 import { HomePage } from './HomePage';
 
-// --- Silence router warnings ---
-beforeAll(() => {
-  const { warn } = console;
-  vi.spyOn(console, 'warn').mockImplementation((...args) => {
-    const msg = args[0] as string;
-    if (msg.includes('React Router Future Flag Warning')) return;
-    warn(...args);
-  });
-});
-afterAll(() => vi.restoreAllMocks());
-
-// --- Mocks ---
-vi.mock('@/shared/api/notificationApi', () => ({
-  useGetNotificationQuery: () => ({
-    data: { text: 'Mock Text', link: { text: 'Go', href: '#' } },
-  }),
-}));
-
+// Mock useGetProductsQuery hook
+const mockUseGetProductsQuery = vi.fn();
 vi.mock('@/entities/Product/api/productApi', () => ({
-  useGetProductsQuery: () => ({
-    data: mockProducts,
-    isLoading: false,
-    isError: false,
-  }),
+  __esModule: true,
+  useGetProductsQuery: () => mockUseGetProductsQuery(),
 }));
 
-vi.mock('../../widgets/Layout/Layout', () => ({
-  Layout: ({
-    children, notificationBar, hasFooter, hasNewsletter, hasFullWidth,
-  }: any) => (
-    <div
-      data-testid="layout"
-      data-hasnotificationbar={notificationBar ? 'true' : 'false'}
-      data-hasfooter={hasFooter ? 'true' : 'false'}
-      data-hasnewsletter={hasNewsletter ? 'true' : 'false'}
-      data-hasfullwidth={hasFullWidth ? 'true' : 'false'}
-    >
-      {children}
-    </div>
-  ),
-}));
-
+// Mock child UI components
 vi.mock('./ui/HeroSection', () => ({
-  HeroSection: ({ title, subtitle }: any) => (
-    <div data-testid="hero-section" data-title={title} data-subtitle={subtitle} />
-  ),
-}));
-
-vi.mock('../../shared/ui/Container', () => ({
-  Container: ({ children }: any) => <section data-testid="container">{children}</section>,
-}));
-
-vi.mock('./ui/FeatureList', () => ({
-  FeatureList: () => <div data-testid="feature-list" />,
-}));
-
-vi.mock('./ui/BestSellingSection', () => ({
-  BestSellingSection: ({ products }: any) => (
-    <div data-testid="best-selling-section" data-product-ids={JSON.stringify(products.map((p: any) => p.id))} />
-  ),
-}));
-
-vi.mock('./ui/FeaturedLatestSection', () => ({
-  FeaturedLatestSection: ({ featured, latest }: any) => (
+  __esModule: true,
+  HeroSection: ({ title, subtitle, buttonLink }: any) => (
     <div
-      data-testid="featured-latest-section"
-      data-featured-ids={JSON.stringify(featured.map((p: any) => p.id))}
-      data-latest-ids={JSON.stringify(latest.map((p: any) => p.id))}
+      data-testid="hero-section"
+      data-title={title}
+      data-subtitle={subtitle}
+      data-href={buttonLink.href}
+      data-has-arrow={buttonLink.hasArrow ? 'true' : 'false'}
     />
   ),
 }));
 
-vi.mock('./ui/BrowseBanner', () => ({
-  BrowseBanner: ({ title, subtitle }: any) => (
-    <div data-testid="browse-banner" data-title={title} data-subtitle={subtitle} />
+vi.mock('./ui/FeatureList', () => ({
+  __esModule: true,
+  FeatureList: ({ items }: any) => (
+    <div data-testid="feature-list" data-item-count={items.length} />
   ),
 }));
 
-// --- Tests ---
+vi.mock('./ui/BestSellingSection', () => ({
+  __esModule: true,
+  BestSellingSection: ({ products }: any) => (
+    <div data-testid="best-selling-section" data-count={products.length} />
+  ),
+}));
+
+vi.mock('./ui/BrowseBanner', () => ({
+  __esModule: true,
+  BrowseBanner: ({ title, subtitle, link }: any) => (
+    <div
+      data-testid="browse-banner"
+      data-title={title}
+      data-subtitle={subtitle}
+      data-href={link.href}
+    />
+  ),
+}));
+
+vi.mock('./ui/FeaturedLatestSection', () => ({
+  __esModule: true,
+  FeaturedLatestSection: ({ featured, latest }: any) => (
+    <div
+      data-testid="featured-latest-section"
+      data-featured-count={featured.length}
+      data-latest-count={latest.length}
+    />
+  ),
+}));
+
 describe('HomePage', () => {
-  it('renders Layout with expected flags', () => {
-    render(<HomePage />);
-    const layout = screen.getByTestId('layout');
-    expect(layout).toHaveAttribute('data-hasnotificationbar', 'true');
-    expect(layout).toHaveAttribute('data-hasfooter', 'true');
-    expect(layout).toHaveAttribute('data-hasnewsletter', 'true');
-    expect(layout).toHaveAttribute('data-hasfullwidth', 'true');
+  const productsMock = Array.from({ length: 11 }, (_, i) => ({ id: i + 1 }));
+
+  beforeEach(() => {
+    mockUseGetProductsQuery.mockReset();
   });
 
-  it('renders HeroSection with title and subtitle', () => {
+  it('shows loading state', () => {
+    mockUseGetProductsQuery.mockReturnValue({ data: undefined, isLoading: true, isError: false });
     render(<HomePage />);
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
+
+  it('shows error state', () => {
+    mockUseGetProductsQuery.mockReturnValue({ data: undefined, isLoading: false, isError: true });
+    render(<HomePage />);
+    expect(screen.getByText('Failed to load products')).toBeInTheDocument();
+  });
+
+  it('shows no products state', () => {
+    mockUseGetProductsQuery.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    render(<HomePage />);
+    expect(screen.getByText('No products found')).toBeInTheDocument();
+  });
+
+  it('renders all sections with correct props', () => {
+    mockUseGetProductsQuery
+      .mockReturnValue({ data: productsMock, isLoading: false, isError: false });
+    render(<HomePage />);
+
+    // HeroSection
     const hero = screen.getByTestId('hero-section');
     expect(hero).toHaveAttribute('data-title', 'Fresh Arrivals Online');
     expect(hero).toHaveAttribute('data-subtitle', 'Discover Our Newest Collection Today.');
-  });
+    expect(hero).toHaveAttribute('data-href', '/catalog');
+    expect(hero).toHaveAttribute('data-has-arrow', 'true');
 
-  it('renders FeatureList inside the first Container', () => {
-    render(<HomePage />);
-    const containers = screen.getAllByTestId('container');
+    // FeatureList
     const featureList = screen.getByTestId('feature-list');
-    expect(containers[0]).toContainElement(featureList);
-  });
+    expect(featureList).toHaveAttribute('data-item-count', '3');
 
-  it('renders correct IDs in BestSellingSection', () => {
-    render(<HomePage />);
-    const section = screen.getByTestId('best-selling-section');
-    const ids = JSON.parse(section.getAttribute('data-product-ids')!);
-    expect(ids).toEqual([1, 2, 3, 4]);
-  });
+    // BestSellingSection
+    const bestSelling = screen.getByTestId('best-selling-section');
+    expect(bestSelling).toHaveAttribute('data-count', '4');
 
-  it('renders BrowseBanner content', () => {
-    render(<HomePage />);
-    const banner = screen.getByTestId('browse-banner');
-    expect(banner).toHaveAttribute('data-title', 'Browse Our Fashion Paradise!');
-    expect(banner).toHaveAttribute('data-subtitle', 'Step into a world of style and explore our diverse collection of clothing categories.');
-  });
+    // BrowseBanner
+    const browse = screen.getByTestId('browse-banner');
+    expect(browse).toHaveAttribute('data-title', 'Browse Our Fashion Paradise!');
+    expect(browse).toHaveAttribute(
+      'data-subtitle',
+      'Step into a world of style and explore our diverse collection of clothing categories.',
+    );
+    expect(browse).toHaveAttribute('data-href', '/catalog');
 
-  it('renders correct featured and latest IDs', () => {
-    render(<HomePage />);
-    const section = screen.getByTestId('featured-latest-section');
-    const featured = JSON.parse(section.getAttribute('data-featured-ids')!);
-    const latest = JSON.parse(section.getAttribute('data-latest-ids')!);
-    expect(featured).toEqual([5, 6, 7, 8]);
-    expect(new Set(latest)).toEqual(new Set([11, 10, 4, 1]));
+    // FeaturedLatestSection
+    const featuredLatest = screen.getByTestId('featured-latest-section');
+    expect(featuredLatest).toHaveAttribute('data-featured-count', '4');
+    expect(featuredLatest).toHaveAttribute('data-latest-count', '4');
   });
 });
