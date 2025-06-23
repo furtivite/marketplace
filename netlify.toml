@@ -1,27 +1,40 @@
-# Общие настройки
-[build]
-  command = "npm run build"
-  publish = "dist"
+name: Deploy Storybook to 'storybook' branch
 
-# === Основной проект: frtvt-marketplace ===
-[context.production]
-  command = "npm run build"
-  publish = "dist"
+on:
+  push:
+    branches:
+      - main
 
-[context.deploy-preview]
-  command = "mkdir -p dist && echo 'Skipping deploy preview' && exit 0"
-  publish = "dist"
+jobs:
+  build-and-deploy-storybook:
+    runs-on: ubuntu-latest
 
-[context.branch-deploy]
-  command = "mkdir -p dist && echo 'Skipping branch deploy' && exit 0"
-  publish = "dist"
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-# === Storybook-проект: frtvt-marketplace-storybook ===
-[context."branch=storybook"]
-  command = "npm run build-storybook"
-  publish = "storybook-static"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-  [[context."branch=storybook".redirects]]
-    from = "/*"
-    to = "/index.html"
-    status = 200
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - name: Deploy to storybook branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -B storybook
+          git add -f storybook-static
+          git commit -m "chore(storybook): deploy storybook [auto]" || echo "Nothing to commit"
+
+          git push -f https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} storybook
