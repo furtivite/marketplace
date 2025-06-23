@@ -37,4 +37,4 @@ jobs:
           git add -f storybook-static
           git commit -m "chore(storybook): deploy storybook [auto]" || echo "Nothing to commit"
 
-          git push -f https://x-access-token:${{ env.GITHUB_TOKEN }}@github.com/${{ github.repository }} storybook
+          git push -f --set-upstream https://x-access-token:${{ env.GITHUB_TOKEN }}@github.com/${{ github.repository }} storybook
