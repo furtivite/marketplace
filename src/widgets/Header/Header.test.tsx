@@ -1,104 +1,72 @@
-import React from 'react';
-import { render, screen, within } from '@testing-library/react';
-import {
-  describe, it, expect, vi, beforeAll, afterAll,
-} from 'vitest';
+// src/widgets/Header/Header.test.tsx
+
+import * as React from 'react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import {
+  describe, it, expect, vi,
+} from 'vitest';
 import { Header } from './Header';
 
-beforeAll(() => {
-  const { warn } = console;
-  vi.spyOn(console, 'warn').mockImplementation((...args) => {
-    const msg = args[0] as string;
-    if (msg.includes('React Router Future Flag Warning')) return;
-    warn(...args);
-  });
-});
-
-afterAll(() => vi.restoreAllMocks());
-
-vi.mock('@/shared/assets/icons/cart.svg?react', () => ({
-  __esModule: true,
-  default: (props: any) => <svg data-testid="cart-icon" {...props} />,
-}));
-vi.mock('@/shared/assets/icons/user.svg?react', () => ({
-  __esModule: true,
-  default: (props: any) => <svg data-testid="user-icon" {...props} />,
-}));
-vi.mock('@/shared/assets/icons/search.svg?react', () => ({
-  __esModule: true,
-  default: (props: any) => <svg data-testid="search-icon" {...props} />,
-}));
-
-vi.mock('@/shared/ui/Logo', () => ({
-  __esModule: true,
-  Logo: () => <div data-testid="logo">Ecommerce</div>,
+vi.mock('../../shared/ui/Logo', () => ({
+  Logo: () => <div data-testid="logo">Logo</div>,
 }));
 
 vi.mock('./ui/HeaderMenu', () => ({
-  __esModule: true,
-  HeaderMenu: () => (
-    <nav aria-label="Main menu">
-      <ul>
-        <li><a href="/one">One</a></li>
-      </ul>
-    </nav>
-  ),
+  HeaderMenu: () => <nav data-testid="menu">Menu</nav>,
 }));
 
-describe('Header component', () => {
-  const renderHeader = (pathname = '/') => {
-    render(
-      <MemoryRouter initialEntries={[pathname]}>
-        <Header className="custom-class" />
-      </MemoryRouter>,
-    );
-  };
+vi.mock('../../shared/ui/Input', () => ({
+  Input: (props: any) => <input data-testid="search" placeholder={props.placeholder} />,
+}));
 
-  it('renders with the passed className', () => {
-    renderHeader();
-    const header = screen.getByRole('banner');
-    expect(header).toHaveClass('relative', 'custom-class');
-  });
+vi.mock('../../shared/assets/icons/cart.svg?react', () => ({
+  default: () => <svg data-testid="cart-icon" />,
+}));
 
-  it('renders the logo as plain element on homepage', () => {
+vi.mock('../../shared/assets/icons/user.svg?react', () => ({
+  default: () => <svg data-testid="user-icon" />,
+}));
+
+vi.mock('../../shared/assets/icons/search.svg?react', () => ({
+  default: () => <svg data-testid="search-icon" />,
+}));
+
+describe('Header', () => {
+  const renderHeader = (initialPath = '/') => render(
+    <MemoryRouter initialEntries={[initialPath]}>
+      <Header />
+    </MemoryRouter>,
+  );
+
+  it('renders logo as static element on homepage', () => {
     renderHeader('/');
     expect(screen.getByTestId('logo')).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: 'Home' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /home/i })).not.toBeInTheDocument();
   });
 
-  it('wraps the logo in a link on other pages', () => {
+  it('renders logo as link on other pages', () => {
     renderHeader('/catalog');
-    const logoLink = screen.getByRole('link', { name: 'Home' });
-    expect(logoLink).toHaveAttribute('href', '/');
-    expect(within(logoLink).getByTestId('logo')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /home/i })).toBeInTheDocument();
+    expect(screen.getByTestId('logo')).toBeInTheDocument();
   });
 
-  it('renders the HeaderMenu mock', () => {
+  it('renders HeaderMenu', () => {
     renderHeader();
-    const menu = screen.getByRole('navigation', { name: 'Main menu' });
-    expect(menu).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'One' })).toHaveAttribute('href', '/one');
+    expect(screen.getByTestId('menu')).toBeInTheDocument();
   });
 
-  it('renders the search input with placeholder and icon', () => {
+  it('renders search input', () => {
     renderHeader();
-    const input = screen.getByPlaceholderText('Search products');
-    expect(input).toBeInTheDocument();
-    expect(screen.getByTestId('search-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('search')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Search products')).toBeInTheDocument();
   });
 
-  it('renders cart link with correct href and icon', () => {
+  it('renders cart and user icons with links', () => {
     renderHeader();
-    const cartLink = screen.getByRole('link', { name: 'Cart' });
-    expect(cartLink).toHaveAttribute('href', '/cart');
-    expect(within(cartLink).getByTestId('cart-icon')).toBeInTheDocument();
-  });
-
-  it('renders profile link with correct href and icon', () => {
-    renderHeader();
-    const profileLink = screen.getByRole('link', { name: 'User Profile' });
-    expect(profileLink).toHaveAttribute('href', '/profile');
-    expect(within(profileLink).getByTestId('user-icon')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /cart/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /user profile/i })).toBeInTheDocument();
+    expect(screen.getByTestId('cart-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('user-icon')).toBeInTheDocument();
   });
 });

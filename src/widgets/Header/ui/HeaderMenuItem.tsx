@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useRef, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import ChevronDownIcon from '@/shared/assets/icons/chevron-down.svg?react';
 import { Typography, TYPOGRAPHY_TYPES } from '../../../shared/ui/Typography';
 
@@ -85,11 +86,11 @@ export const HeaderMenuItem: React.FC<MenuItemProps> = ({
 
   return (
     <li>
-      <a href={href} className="text-neutral-500 cursor-pointer font-medium">
+      <Link to={href || ''} className="text-neutral-500 cursor-pointer font-medium">
         <Typography type={TYPOGRAPHY_TYPES.BODY_MEDIUM} className="text-neutral-500">
           {label}
         </Typography>
-      </a>
+      </Link>
     </li>
   );
 };
