@@ -1,29 +1,27 @@
+# Общие настройки
 [build]
   command = "npm run build"
   publish = "dist"
 
-# Production build (only after merge to main)
+# === Основной проект: frtvt-marketplace ===
 [context.production]
   command = "npm run build"
   publish = "dist"
 
-# Skip all Deploy Previews (e.g., Merge Requests)
 [context.deploy-preview]
-  command = "echo \"Skipping deploy preview\" && exit 0"
+  command = "mkdir -p dist && echo 'Skipping deploy preview' && exit 0"
   publish = "dist"
 
-# Skip all branch builds by default
 [context.branch-deploy]
-  command = "echo \"Skipping branch deploy\" && exit 0"
+  command = "mkdir -p dist && echo 'Skipping branch deploy' && exit 0"
   publish = "dist"
 
-# Only run Storybook build on storybook branch (but not as preview or MR)
+# === Storybook-проект: frtvt-marketplace-storybook ===
 [context."branch=storybook"]
   command = "npm run build-storybook"
   publish = "storybook-static"
 
-[context."deploy-preview".environment]
-  SHOW_STORYBOOK = "false"
-
-[context."branch-deploy".environment]
-  SHOW_STORYBOOK = "false"
+  [[context."branch=storybook".redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
