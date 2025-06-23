@@ -2,22 +2,28 @@
   command = "npm run build"
   publish = "dist"
 
-# Production build (merge into main)
+# Production build (only after merge to main)
 [context.production]
   command = "npm run build"
   publish = "dist"
 
-# Skip builds for Deploy Previews
+# Skip all Deploy Previews (e.g., Merge Requests)
 [context.deploy-preview]
   command = "echo \"Skipping deploy preview\" && exit 0"
   publish = "dist"
 
-# Skip builds for all other branches by default
+# Skip all branch builds by default
 [context.branch-deploy]
   command = "echo \"Skipping branch deploy\" && exit 0"
   publish = "dist"
 
-# Run Storybook build on the `storybook` branch
+# Only run Storybook build on storybook branch (but not as preview or MR)
 [context."branch=storybook"]
   command = "npm run build-storybook"
   publish = "storybook-static"
+
+[context."deploy-preview".environment]
+  SHOW_STORYBOOK = "false"
+
+[context."branch-deploy".environment]
+  SHOW_STORYBOOK = "false"
