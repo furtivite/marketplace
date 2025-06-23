@@ -1,0 +1,38 @@
+name: Deploy Storybook to 'storybook' branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy-storybook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - name: Deploy to storybook branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -B storybook
+          git add -f storybook-static
+          git commit -m "chore(storybook): deploy storybook [auto]" || echo "Nothing to commit"
+
+          git push -f origin storybook
