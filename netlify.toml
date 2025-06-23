@@ -1,20 +1,27 @@
-# netlify.toml
-
+# Общие настройки
 [build]
-  command   = "npm run build"
-  publish   = "dist"
+  command = "npm run build"
+  publish = "dist"
 
-# Билд для production-контекста (слияния в main)
+# === Основной проект: frtvt-marketplace ===
 [context.production]
-  command   = "npm run build"
-  publish   = "dist"
+  command = "npm run build"
+  publish = "dist"
 
-# Пропустить сборку для Deploy Previews
 [context.deploy-preview]
-  command   = "echo \"Skipping deploy preview\" && exit 0"
-  publish   = "dist"
+  command = "mkdir -p dist && echo 'Skipping deploy preview' && exit 0"
+  publish = "dist"
 
-# Пропустить сборку для любых других веток, если нужно
 [context.branch-deploy]
-  command   = "echo \"Skipping branch deploy\" && exit 0"
-  publish   = "dist"
+  command = "mkdir -p dist && echo 'Skipping branch deploy' && exit 0"
+  publish = "dist"
+
+# === Storybook-проект: frtvt-marketplace-storybook ===
+[context."branch=storybook"]
+  command = "npm run build-storybook"
+  publish = "storybook-static"
+
+  [[context."branch=storybook".redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
