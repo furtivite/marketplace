@@ -3,9 +3,6 @@
 [build]
   command = "npm run netlify-build"
   publish = "dist"
-git add netlify.toml
-git commit -m "fix(netlify): add redirect for /storybook root path"
-git push
 
 [[redirects]]
   from = "/storybook"
