@@ -1,0 +1,11 @@
+# netlify.toml
+
+[build]
+  command = "npm run netlify-build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/storybook/*"
+  to = "/storybook/index.html"
+  status = 200
+  force = true
