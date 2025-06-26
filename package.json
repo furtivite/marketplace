@@ -45,6 +45,7 @@
     "@storybook/addon-links": "^8.6.14",
     "@storybook/addon-onboarding": "^8.6.14",
     "@storybook/blocks": "^8.6.14",
+    "@storybook/builder-vite": "^8.6.14",
     "@storybook/experimental-addon-test": "^8.6.14",
     "@storybook/react-vite": "^8.6.14",
     "@storybook/test": "^8.6.14",

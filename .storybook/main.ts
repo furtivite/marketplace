@@ -15,7 +15,11 @@ const config: StorybookConfig = {
     autodocs: 'tag',
   },
 
-  viteFinal: async (config) => {
+  viteFinal: async (config, { configType }) => {
+    if (configType === 'PRODUCTION') {
+      config.base = '/storybook/';
+    }
+
     config.resolve ??= {};
     config.resolve.alias = {
       ...(config.resolve.alias ?? {}),
