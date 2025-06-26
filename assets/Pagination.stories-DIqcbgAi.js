@@ -1,0 +1,23 @@
+import{j as s}from"./jsx-runtime-D_zvdyIk.js";import{r as f}from"./index-D4lIrffr.js";import{c as l}from"./clsx-B-dksMZM.js";import{S as G}from"./chevron-right-xzR91iHf.js";import{T as b,a as v}from"./Typography-DJ2vrFdG.js";const K=r=>f.createElement("svg",{width:24,height:24,viewBox:"0 0 24 24",fill:"none",xmlns:"http://www.w3.org/2000/svg",...r},f.createElement("path",{fillRule:"evenodd",clipRule:"evenodd",d:"M9.18832 12.5327C8.93905 12.2557 8.93697 11.8042 9.18367 11.5243L14.0514 6L14.954 7.00331L10.5328 12.0207L15 16.9863L14.1068 18L9.18832 12.5327Z",fill:"#5C5F6A"})),I=({page:r,total:t,visiblePages:o=4,onChange:i,disabled:a,className:R})=>{const A=f.useCallback(()=>{if(t<=o+2)return Array.from({length:t},(c,V)=>V+1);const e=[],n=Math.max(2,r-Math.floor(o/2)),h=Math.min(t-1,n+o-1),x=Math.max(2,h-o+1);e.push(1),x>2&&e.push("ellipsis");for(let c=x;c<=h;c++)e.push(c);return h<t-1&&e.push("ellipsis"),e.push(t),e},[r,t,o])(),Y=()=>!a&&r>1&&i(r-1),B=()=>!a&&r<t&&i(r+1),O=e=>n=>{(n.key==="Enter"||n.key===" ")&&i(e)};return s.jsxs("nav",{className:l("flex items-center gap-1 select-none",R),role:"navigation","aria-label":"Pagination",children:[s.jsx("button",{type:"button",className:l("flex items-center justify-center w-8 h-8 rounded transition",r===1||a?"text-neutral-300 pointer-events-none":"hover:bg-neutral-100 active:bg-neutral-200"),onClick:Y,"aria-label":"Previous page",disabled:r===1||a,tabIndex:0,children:s.jsx(K,{className:"w-5 h-5"})}),A.map((e,n)=>e==="ellipsis"?s.jsx(b,{as:"span",type:v.BODY_MEDIUM,className:"mx-1 px-2 text-neutral-300 select-none","aria-hidden":"true",children:"..."},`ellipsis-${n}`):s.jsx("button",{type:"button",className:l("w-8 h-8 flex items-center justify-center rounded transition font-medium text-base outline-none",r===e?"bg-neutral-100 text-neutral-900 cursor-default":"hover:bg-neutral-100 text-neutral-400 hover:text-neutral-900",a&&"pointer-events-none opacity-60",r===e&&"aria-current"),"aria-label":`Go to page ${e}`,"aria-current":r===e?"page":void 0,onClick:()=>e!==r&&i(e),onKeyDown:O(e),disabled:a||r===e,tabIndex:0,children:s.jsx(b,{as:"span",type:v.LABEL,children:e})},e)),s.jsx("button",{type:"button",className:l("flex items-center justify-center w-8 h-8 rounded transition",r===t||a?"text-neutral-300 pointer-events-none":"hover:bg-neutral-100 active:bg-neutral-200"),onClick:B,"aria-label":"Next page",disabled:r===t||a,tabIndex:0,children:s.jsx(G,{className:"w-5 h-5"})})]})};I.__docgenInfo={description:"",methods:[],displayName:"Pagination",props:{page:{required:!0,tsType:{name:"number"},description:"Номер текущей страницы (нумерация с 1)"},total:{required:!0,tsType:{name:"number"},description:"Всего страниц"},visiblePages:{required:!1,tsType:{name:"number"},description:"Сколько страниц показывать между первой и последней (по умолчанию 4)",defaultValue:{value:"4",computed:!1}},onChange:{required:!0,tsType:{name:"signature",type:"function",raw:"(page: number) => void",signature:{arguments:[{type:{name:"number"},name:"page"}],return:{name:"void"}}},description:"Срабатывает при смене страницы"},disabled:{required:!1,tsType:{name:"boolean"},description:"Отключить всю пагинацию"},className:{required:!1,tsType:{name:"string"},description:""}}};const J={title:"shared/Pagination",component:I,tags:["autodocs"],args:{total:24,onChange:()=>{}}},u={args:{page:1}},m={args:{page:12}},d={args:{page:24}},p={args:{page:10,visiblePages:6}},g={args:{page:3,disabled:!0}};var y,j,w;u.parameters={...u.parameters,docs:{...(y=u.parameters)==null?void 0:y.docs,source:{originalSource:`{
+  args: {
+    page: 1
+  }
+}`,...(w=(j=u.parameters)==null?void 0:j.docs)==null?void 0:w.source}}};var P,E,N;m.parameters={...m.parameters,docs:{...(P=m.parameters)==null?void 0:P.docs,source:{originalSource:`{
+  args: {
+    page: 12
+  }
+}`,...(N=(E=m.parameters)==null?void 0:E.docs)==null?void 0:N.source}}};var L,T,C;d.parameters={...d.parameters,docs:{...(L=d.parameters)==null?void 0:L.docs,source:{originalSource:`{
+  args: {
+    page: 24
+  }
+}`,...(C=(T=d.parameters)==null?void 0:T.docs)==null?void 0:C.source}}};var M,S,D;p.parameters={...p.parameters,docs:{...(M=p.parameters)==null?void 0:M.docs,source:{originalSource:`{
+  args: {
+    page: 10,
+    visiblePages: 6
+  }
+}`,...(D=(S=p.parameters)==null?void 0:S.docs)==null?void 0:D.source}}};var _,k,q;g.parameters={...g.parameters,docs:{...(_=g.parameters)==null?void 0:_.docs,source:{originalSource:`{
+  args: {
+    page: 3,
+    disabled: true
+  }
+}`,...(q=(k=g.parameters)==null?void 0:k.docs)==null?void 0:q.source}}};const Q=["Default","Middle","End","CustomVisiblePages","Disabled"];export{p as CustomVisiblePages,u as Default,g as Disabled,d as End,m as Middle,Q as __namedExportsOrder,J as default};

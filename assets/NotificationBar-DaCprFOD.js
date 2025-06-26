@@ -1,0 +1,4 @@
+import{j as e}from"./jsx-runtime-D_zvdyIk.js";import{T as t,a as s}from"./Typography-DJ2vrFdG.js";import{C as n}from"./Container-CaYFRYVz.js";const a=({text:i,link:r})=>e.jsx("div",{className:"bg-neutral-900 text-white-0",children:e.jsxs(n,{className:"flex justify-center",children:[e.jsxs(t,{type:s.BODY_REGULAR,className:"inline",children:[i," "]}),r&&e.jsx(t,{type:s.BODY_MEDIUM,as:"span",className:"inline-block ml-2",children:e.jsx("a",{href:r.href,target:"_blank",rel:"noopener noreferrer",children:r.text})})]})});a.__docgenInfo={description:"",methods:[],displayName:"NotificationBar",props:{text:{required:!0,tsType:{name:"string"},description:""},link:{required:!1,tsType:{name:"signature",type:"object",raw:`{
+  text: string;
+  href: string;
+}`,signature:{properties:[{key:"text",value:{name:"string",required:!0}},{key:"href",value:{name:"string",required:!0}}]}},description:""}}};export{a as N};
