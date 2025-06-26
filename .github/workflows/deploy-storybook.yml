@@ -42,12 +42,16 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Переключаем/создаём ветку storybook
-          git checkout -B storybook
+          # Создаём чистую orphan-ветку storybook
+          git checkout --orphan storybook
+          git reset --hard
 
-          # Добавляем все изменения (в т.ч. storybook-static) к коммиту
-          git commit --all -m "chore(storybook): deploy storybook [auto]" || echo "Nothing to commit"
+          # Копируем в корень только статические файлы Storybook
+          cp -R storybook-static/* .
 
-          # Пушим в ветку storybook с помощью GITHUB_TOKEN
+          # Добавляем и коммитим
+          git add .
+          git commit -m "chore(ci): deploy only Storybook static files [auto]"
+
+          # Принудительно пушим ветку storybook
           git push -f --set-upstream https://x-access-token:${{ env.GITHUB_TOKEN }}@github.com/${{ github.repository }} storybook
-пш
