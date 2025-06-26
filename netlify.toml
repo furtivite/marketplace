@@ -8,10 +8,8 @@
   from = "/storybook"
   to = "/storybook/index.html"
   status = 200
-  force = true
 
 [[redirects]]
   from = "/storybook/*"
   to = "/storybook/index.html"
   status = 200
-  force = true
